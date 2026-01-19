@@ -7,7 +7,7 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "Stonepedia-Seller",
+  title: "Seller_Platform",
   description: "Stonepedia Seller Platform",
 };
 
