@@ -3,11 +3,11 @@ import Image from 'next/image'
 
 const Hero = () => {
   return (
-    <div className='pt-14 lg:min-h-screen px-6 md:px-10'>
+    <div className='pt-14 lg:min-h-screen p-6 md:p-10'>
       <div className='max-w-[1728px] mx-auto'>
         <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-12 xl:gap-16'>
           {/* Left Content - Text Section */}
-          <div className='flex flex-col gap-6 lg:gap-8 lg:max-w-[840px] order-1 lg:order-1 pt-5 xl:pl-5 2xl:pl-10'>
+          <div className='flex flex-col gap-6 lg:gap-8 lg:max-w-[840px] order-1 lg:order-1 pt-5 md:pt-12 xl:pl-5 2xl:pl-10'>
             {/* Badge */}
             <div className='inline-flex items-center justify-center px-4 py-2 border border-[#871b58] rounded-[73px] w-fit'>
               <p className='text-lg font-medium'>
