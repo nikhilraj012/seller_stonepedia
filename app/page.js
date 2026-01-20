@@ -1,11 +1,9 @@
-import Navbar from "./components/Navbar";
-import Landing from "./landing/page";
+import Hero from "./components/landing/Hero";
 
 export default function Home() {
   return (
    <div>
-    <Navbar />
-    <Landing />
+    <Hero />
    </div>
   );
 }
