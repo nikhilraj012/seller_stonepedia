@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-outfit: var(--font-outfit);
+}
+
 body {
   font-family: var(--font-poppins), system-ui, sans-serif;
 }

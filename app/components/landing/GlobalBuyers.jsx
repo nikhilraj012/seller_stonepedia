@@ -27,7 +27,7 @@ const GlobalBuyers = () => {
         {/* Bottom Section - Large Text */}
         <div className='flex flex-col justify-center w-full'>
           <div className='text-[#393939]'>
-            <span className='text-6xl md:text-8xl font-semibold'>
+            <span className='text-6xl md:text-8xl font-semibold font-outfit'>
               190+
             </span>
             <span className='text-xl md:text-4xl lg:text-[70px] font-medium'>
