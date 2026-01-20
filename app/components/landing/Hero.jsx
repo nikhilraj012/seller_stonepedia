@@ -42,7 +42,7 @@ const Hero = () => {
           <div className='relative w-full hidden lg:flex-1 order-2 lg:order-2 lg:flex items-center justify-center '>
             <div className='relative w-full md:max-w-[500px] lg:-mt-4 xl:-mt-6 2xl:-mt-8 lg:max-w-[600px] 2xl:max-w-[650px] aspect-718/795'>
               <Image
-                src='/images/hero.webp'
+                src='/images/hero/hero.webp'
                 alt='Stone business growth visualization'
                 fill
                 className='object-contain'
