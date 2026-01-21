@@ -43,9 +43,9 @@ const StonePlatform = () => {
           {categories.map((category, index) => (
             <div
               key={index}
-              className="bg-white rounded-[24px] shadow-[0px_0px_60px_0px_rgba(0,0,0,0.06)] h-[280px] md:h-[350px] lg:h-[400px] xl:h-[450px] 2xl:h-[550px] flex flex-col"
+              className="bg-white rounded-[24px] shadow-[0px_0px_60px_0px_rgba(0,0,0,0.06)] overflow-hidden h-[450px] md:h-[550px] flex flex-col"
             >
-              <div className="w-full h-[70%]">
+              <div className="relative w-full h-[280px] md:h-[371px] overflow-hidden rounded-t-[24px]">
                 <Image
                   src={category.image}
                   alt={category.title}
@@ -54,19 +54,19 @@ const StonePlatform = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-4 p-6 md:p-8 h-[30%]">
+              <div className="flex flex-col gap-4 px-[33px] py-6 flex-1">
                 <div className="flex items-center gap-4">
-                  <div className="bg-[#1e1e1e] rounded-[20px] w-[24px] h-[24px] 2xl:w-[40px] 2xl:h-[40px] flex items-center justify-center">
-                    <p className="text-white 2xl:text-[16px] text-xs font-normal">
+                  <div className="bg-[#1e1e1e] rounded-[20px] w-[40px] h-[40px] flex items-center justify-center shrink-0">
+                    <p className="text-white text-[16px] font-normal">
                       {category.number}
                     </p>
                   </div>
-                  <h3 className="text-[#4a4a4a] text-[20px] 2xl:text-[24px] font-normal">
+                  <h3 className="text-[#4a4a4a] text-[24px] font-normal">
                     {category.title}
                   </h3>
                 </div>
 
-                <p className="text-[#4a4a4a] text-[16px] 2xl:text-[18px] font-normal leading-normal">
+                <p className="text-[#4a4a4a] text-[18px] font-normal leading-normal">
                   {category.description}
                 </p>
               </div>
