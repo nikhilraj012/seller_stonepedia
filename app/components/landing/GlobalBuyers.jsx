@@ -3,9 +3,9 @@ import React from "react";
 const GlobalBuyers = () => {
   return (
     <div className="bg-[#1e1e1e] px-6 pt-6 md:px-10 md:pt-10">
-      <div className="max-w-[1728px] mx-auto flex flex-col gap-6 lg:gap-16 overflow-hidden">
+      <div className="max-w-[1800px] mx-auto flex flex-col gap-8 md:gap-10 lg:gap-10 xl:gap-14 2xl:gap-16 overflow-hidden">
         {/* Top Section */}
-        <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between gap-8">
+        <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between gap-4">
           {/* Left - Heading */}
           <div className="flex flex-col md:max-w-[696px]">
             <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold text-white leading-tight lg:leading-normal">
