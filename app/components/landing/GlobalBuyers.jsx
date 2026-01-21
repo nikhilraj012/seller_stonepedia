@@ -14,24 +14,24 @@ const GlobalBuyers = () => {
           </div>
 
           {/* Right - 24x7 Card */}
-          <div className="flex flex-col gap-4 border-2 border-[#8e8e8e] rounded-[20px] md:rounded-3xl p-4 md:p-5 w-full md:w-sm">
-            <p className="text-[#b4b4b4] text-2xl md:text-3xl lg:text-5xl xl:text-6xl font-medium">
+          <div className="flex flex-col gap-4 border-2 border-[#8e8e8e] rounded-[20px] md:rounded-3xl p-4 md:p-5 w-full md:w-sm lg:w-md">
+            <p className="text-[#b4b4b4] text-3xl md:text-5xl lg:text-7xl xl:text-[86px] font-medium">
               24x7
             </p>
-            <p className="text-[#686868] text-xl md:text-2xl lg:text-4xl font-normal">
+            <p className="text-[#686868] text-2xl md:text-3xl lg:text-4xl xl:text-[54px] font-normal">
               Online Visibility
             </p>
           </div>
         </div>
 
         {/* Bottom Section - Large Text */}
-        <div className="-mb-2 md:-mb-3 lg:-mb-4">
+        <div className="-mb-2 md:-mb-5 lg:-mb-6 xl:-mb-8.5">
           <div className="flex flex-col justify-center w-full">
             <div className="text-[#393939]">
-              <span className="text-6xl md:text-8xl lg:text-9xl xl:text-10xl font-semibold font-outfit">
+              <span className="text-6xl md:text-[160px] lg:text-[200px] xl:text-[270px] font-semibold font-outfit">
                 190+
               </span>
-              <span className="text-2xl md:text-4xl lg:text-6xl xl:text-7xl font-medium font-outfit">
+              <span className="text-2xl md:text-[40px] lg:text-6xl xl:text-[90px] font-medium font-outfit">
                 Countries Visibility
               </span>
             </div>
