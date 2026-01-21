@@ -5,12 +5,12 @@ const Hero = () => {
   return (
     <div className='pt-14 lg:min-h-screen p-6 md:p-10'>
       <div className='max-w-[1728px] mx-auto'>
-        <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-12 xl:gap-16'>
+        <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between'>
           {/* Left Content - Text Section */}
-          <div className='flex flex-col gap-6 lg:gap-8 lg:max-w-[840px] order-1 lg:order-1 pt-5 md:pt-12 xl:pl-5 2xl:pl-10'>
+          <div className='flex flex-col gap-6 lg:gap-8 xl:gap-12 lg:max-w-[840px] order-1 lg:order-1 pt-5 md:pt-12'>
             {/* Badge */}
-            <div className='inline-flex items-center justify-center px-4 py-2 border border-[#871b58] rounded-[73px] w-fit'>
-              <p className='text-lg font-medium'>
+            <div className='inline-flex items-center justify-center px-4 py-2 xl:py-4 2xl:px-8 border border-[#871b58] rounded-[73px] w-fit'>
+              <p className='text-base xl:text-2xl font-medium'>
                 <span className='text-black'>Sell on </span>
                 <span className='bg-linear-to-r from-[#871b58] to-[#fbad30] bg-clip-text text-transparent'>
                   Stonepedia. In
@@ -19,10 +19,10 @@ const Hero = () => {
             </div>
 
             {/* Main Content */}
-            <div className='flex flex-col items-start gap-6 lg:gap-7 xl:gap-12 2xl:gap-14 max-sm:max-w-xs max-md:max-w-md max-lg:max-w-xl lg:max-w-xl'>
+            <div className='flex flex-col items-start gap-6 lg:gap-7 xl:gap-24 max-sm:max-w-xs max-md:max-w-md max-lg:max-w-xl lg:max-w-xl xl:max-w-3xl'>
               {/* Heading */}
               <div >
-                <h1 className='text-xl sm:text-2xl md:text-4xl font-semibold text-[#383838] leading-tight lg:leading-12'>
+                <h1 className='text-xl sm:text-2xl md:text-4xl xl:text-5xl font-semibold text-[#383838] leading-tight lg:leading-12'>
                   <span>Your Global Online Stone </span>
                   <span className='text-[#871b58]'>Sell</span>
                   <span> Partner - </span>
@@ -32,7 +32,7 @@ const Hero = () => {
               </div>
 
               {/* CTA Button */}
-              <button className='bg-[#1e1e1e] border border-black text-white px-4 py-1.5 lg:px-6 lg:py-2 rounded-[10px] text-base lg:text-lg hover:bg-[#2e2e2e] transition-colors'>
+              <button className='bg-[#1e1e1e] cursor-pointer border border-black text-white xl:w-[200px] xl:h-[60px] rounded-[10px] text-base lg:text-lg xl:text-xl hover:bg-[#2e2e2e] transition-colors'>
                 Get in Touch
               </button>
             </div>
