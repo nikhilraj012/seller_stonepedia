@@ -6,9 +6,10 @@ const Footer = () => {
     <div>
       <div className="p-6 md:px-10">
         <div className="max-w-[1800px] mx-auto">
-          <h1 className="text-[#979797] font-extrabold text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl">
-            Connect. Grow. <br />
-            Boost Your Stone Business Globally.
+          <h1 className="text-[#979797] font-extrabold text-2xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl">
+            <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl">Scale Your Stone Business Globally.</span>
+            <br />
+            <span>Connect, Build & Grow</span>
           </h1>
         </div>
       </div>

@@ -35,7 +35,7 @@ const AboutBusiness = () => {
   ];
 
   return (
-    <div className="p-6 md:p-10">
+    <div className="p-6 md:p-10 2xl:my-40">
       <div className="max-w-[1800px] mx-auto space-y-10">
         {/* Header Section */}
         <div className="flex flex-col gap-6 md:gap-8 lg:gap-12 xl:gap-16 md:flex-row md:items-center">

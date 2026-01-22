@@ -106,7 +106,7 @@ const AiBenefits = () => {
           </div>
         </div>
 
-        <div className="max-md:hidden relative w-full h-[200px] md:h-[250px] lg:h-[300px] xl:h-[350px] md:mt-8 lg:mt-10 xl:mt-12 ">
+        <div className="max-md:hidden relative w-full h-[200px] md:h-[250px] lg:h-[300px] xl:h-[350px] md:my-20 lg:my-28 xl:my-32 2xl:my-40 ">
           <Image
             src="/images/aiBenefits/stonepedia.png"
             alt="Ai Benefits"

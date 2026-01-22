@@ -29,7 +29,7 @@ const GlobalBuyers = () => {
           <div className="flex flex-col justify-center w-full">
             <div className="text-[#393939]">
               <span className="text-6xl md:text-[160px] lg:text-[200px] xl:text-[270px] font-semibold font-outfit">
-                190+
+                150+
               </span>
               <span className="text-2xl md:text-[40px] lg:text-6xl xl:text-[90px] font-medium font-outfit">
                 Countries Visibility
