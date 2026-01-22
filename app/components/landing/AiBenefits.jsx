@@ -86,10 +86,10 @@ const AiBenefits = () => {
           <h2 className="text-[#1e1e1e] font-semibold text-lg text-center">
             Stonepedia Ecosystem from Extraction to Delivery
           </h2>
-          
+
           <div className="relative flex flex-col gap-10">
             <div className="absolute left-[16px] top-0 bottom-0 w-px border-l-2 border-dashed border-gray-300"></div>
-            
+
             {ecosystemSteps.map((step, index) => (
               <div key={index} className="flex items-center gap-3 relative">
                 <div className="bg-white border-2 border-dashed border-[#871b58] rounded-full w-8 h-8 flex items-center justify-center shadow-[0px_0px_6px_0px_rgba(135,27,88,0.25)] shrink-0 z-10">
@@ -97,13 +97,23 @@ const AiBenefits = () => {
                     {step.number}
                   </span>
                 </div>
-                
+
                 <p className="text-[#871b58] font-medium text-sm tracking-tight">
                   {step.label}
                 </p>
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="max-md:hidden relative w-full h-[200px] md:h-[250px] lg:h-[300px] xl:h-[350px] md:mt-8 lg:mt-10 xl:mt-12 ">
+          <Image
+            src="/images/aiBenefits/stonepedia.png"
+            alt="Ai Benefits"
+            fill
+            className="object-contain"
+            priority
+          />
         </div>
       </div>
     </div>
