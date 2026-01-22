@@ -82,27 +82,23 @@ const AiBenefits = () => {
           </div>
         </div>
 
-        {/* Mobile Ecosystem Timeline - Hidden on md and above */}
-        <div className="md:hidden mt-6">
-          <h2 className="text-[#1e1e1e] font-semibold text-lg mb-4">
+        <div className="md:hidden mt-6 flex flex-col items-center gap-4">
+          <h2 className="text-[#1e1e1e] font-semibold text-lg text-center">
             Stonepedia Ecosystem from Extraction to Delivery
           </h2>
           
           <div className="relative flex flex-col gap-10">
-            {/* Vertical Dashed Line */}
             <div className="absolute left-[16px] top-0 bottom-0 w-px border-l-2 border-dashed border-gray-300"></div>
             
             {ecosystemSteps.map((step, index) => (
               <div key={index} className="flex items-center gap-3 relative">
-                {/* Numbered Badge */}
-                <div className="bg-white border-2 border-dashed border-[#871b58] rounded-full w-8 h-8 flex items-center justify-center shadow-[0px_0px_6px_0px_rgba(135,27,88,0.25)] flex-shrink-0 z-10">
+                <div className="bg-white border-2 border-dashed border-[#871b58] rounded-full w-8 h-8 flex items-center justify-center shadow-[0px_0px_6px_0px_rgba(135,27,88,0.25)] shrink-0 z-10">
                   <span className="text-[#2d2d2d] font-semibold text-xs">
                     {step.number}
                   </span>
                 </div>
                 
-                {/* Label */}
-                <p className="text-[#871b58] font-medium text-xs tracking-tight">
+                <p className="text-[#871b58] font-medium text-sm tracking-tight">
                   {step.label}
                 </p>
               </div>
