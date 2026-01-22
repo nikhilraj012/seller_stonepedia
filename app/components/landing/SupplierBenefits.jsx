@@ -29,7 +29,7 @@ const SupplierBenefits = () => {
   ];
 
   return (
-    <div className="p-6 md:p-10 2xl:my-40">
+    <div className="p-6 md:p-10 my-16 md:my-20 lg:my-28 xl:my-36 2xl:my-40">
       <div className="max-w-[1800px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-10 xl:gap-12 items-center">
           {/* Left Side - Image */}

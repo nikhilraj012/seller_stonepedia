@@ -39,7 +39,7 @@ const AiBenefits = () => {
   return (
     <div className="relative w-full overflow-hidden p-6 md:p-10">
       <div className="max-w-[1800px] mx-auto ">
-        <div className="space-y-2 md:space-y-4 lg:space-y-6 xl:space-y-8 2xl:space-y-10">
+        <div className="space-y-8 md:space-y-16 lg:space-y-20 xl:space-y-24 2xl:space-y-28">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-5 lg:gap-7 xl:gap-8">
             <h1 className="text-[#141414] text-xl md:text-xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-semibold">
               Free Additional AI Benefits

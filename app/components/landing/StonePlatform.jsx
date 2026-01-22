@@ -28,7 +28,7 @@ const StonePlatform = () => {
 
   return (
     <div className="p-6 md:p-10">
-      <div className="max-w-[1800px] mx-auto space-y-8 md:space-y-16 lg:space-y-20">
+      <div className="max-w-[1800px] mx-auto space-y-8 md:space-y-16 lg:space-y-20 xl:space-y-24 2xl:space-y-28">
         <div className="max-md:space-y-4 md:flex justify-between gap-6">
           <h1 className="text-[#141414] text-xl md:text-xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-semibold">
             Stone Business on Stone Platform
