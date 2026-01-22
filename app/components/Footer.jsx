@@ -4,7 +4,7 @@ import React from "react";
 const Footer = () => {
   return (
     <div>
-      <div className="p-6 md:p-10">
+      <div className="p-6 md:px-10">
         <div className="max-w-[1800px] mx-auto">
           <h1 className="text-[#979797] font-extrabold text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl">
             Connect. Grow. <br />

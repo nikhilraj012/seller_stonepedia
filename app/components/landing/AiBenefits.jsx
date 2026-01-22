@@ -77,9 +77,7 @@ const AiBenefits = () => {
           </div>
         </div>
 
-        <div>
-
-        </div>
+        <div></div>
       </div>
     </div>
   );
