@@ -25,6 +25,17 @@ const AiBenefits = () => {
     },
   ];
 
+  const ecosystemSteps = [
+    { number: "01", label: "Stone Extraction" },
+    { number: "02", label: "Block Selection" },
+    { number: "03", label: "Stone Processing" },
+    { number: "04", label: "Finishing" },
+    { number: "05", label: "Quality Check" },
+    { number: "06", label: "Packaging" },
+    { number: "07", label: "Logistics" },
+    { number: "08", label: "Doorstep Delivery" },
+  ];
+
   return (
     <div className="relative w-full overflow-hidden p-6 md:p-10">
       <div className="max-w-[1800px] mx-auto ">
@@ -71,7 +82,33 @@ const AiBenefits = () => {
           </div>
         </div>
 
-        <div></div>
+        {/* Mobile Ecosystem Timeline - Hidden on md and above */}
+        <div className="md:hidden mt-6">
+          <h2 className="text-[#1e1e1e] font-semibold text-lg mb-4">
+            Stonepedia Ecosystem from Extraction to Delivery
+          </h2>
+          
+          <div className="relative flex flex-col gap-10">
+            {/* Vertical Dashed Line */}
+            <div className="absolute left-[16px] top-0 bottom-0 w-px border-l-2 border-dashed border-gray-300"></div>
+            
+            {ecosystemSteps.map((step, index) => (
+              <div key={index} className="flex items-center gap-3 relative">
+                {/* Numbered Badge */}
+                <div className="bg-white border-2 border-dashed border-[#871b58] rounded-full w-8 h-8 flex items-center justify-center shadow-[0px_0px_6px_0px_rgba(135,27,88,0.25)] flex-shrink-0 z-10">
+                  <span className="text-[#2d2d2d] font-semibold text-xs">
+                    {step.number}
+                  </span>
+                </div>
+                
+                {/* Label */}
+                <p className="text-[#871b58] font-medium text-xs tracking-tight">
+                  {step.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
