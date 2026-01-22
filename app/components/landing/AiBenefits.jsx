@@ -39,8 +39,8 @@ const AiBenefits = () => {
           </p>
         </div>
 
-        <div className="md:flex items-center justify-between">
-          <div className="space-y-3">
+        <div className="relative">
+          <div className="space-y-3 md:w-[55%] lg:w-[50%] xl:w-[45%]">
             {benefits.map((benefit, index) => (
               <div key={index} className="space-y-1">
                 <h2 className="text-[#141414] text-base md:text-lg lg:text-xl xl:text-2xl font-semibold">
@@ -52,13 +52,16 @@ const AiBenefits = () => {
               </div>
             ))}
           </div>
-          <div className="relative h-full hidden md:block aspect-square overflow-hidden">
-            <Image
-              src="/images/aiBenefits/ai.webp"
-              alt="AI Benefits"
-              fill
-              className=""
-            />
+          <div className="hidden md:block absolute right-0 top-0 md:w-[50%] lg:w-[55%] xl:w-[60%] h-full">
+            <div className="relative w-full h-full">
+              <Image
+                src="/images/aiBenefits/AiBenefits.webp"
+                alt="AI Benefits"
+                width={500}
+                height={500}
+                className="object-contain object-right"
+              />
+            </div>
           </div>
         </div>
       </div>
