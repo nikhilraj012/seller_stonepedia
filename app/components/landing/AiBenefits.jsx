@@ -28,7 +28,6 @@ const AiBenefits = () => {
   return (
     <div className="relative w-full overflow-hidden p-6 md:p-10">
       <div className="max-w-[1800px] mx-auto ">
-        {/* Header Section */}
         <div>
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 md:gap-8 lg:gap-12 xl:gap-16 mb-12 md:mb-16 lg:mb-20 xl:mb-24 2xl:mb-32">
             <h1 className="text-[#141414] font-semibold leading-tight md:text-[32px] lg:text-[40px] xl:text-[48px] 2xl:text-[58px] md:shrink-0 md:max-w-[45%] lg:max-w-[40%] xl:max-w-[38%]">
@@ -41,9 +40,8 @@ const AiBenefits = () => {
             </p>
           </div>
 
-          {/* Content Section with Image */}
+
           <div className="relative">
-            {/* Benefits List */}
             <div className="md:max-w-[52%] lg:max-w-[48%] xl:max-w-[45%] 2xl:max-w-[656px]">
               {benefits.map((benefit, index) => (
                 <div key={index}>
@@ -62,7 +60,6 @@ const AiBenefits = () => {
               ))}
             </div>
 
-            {/* Robot Hand Image */}
             <div className="hidden md:block absolute md:right-[-6%] lg:right-[-3%] xl:right-0 2xl:right-[5%] md:top-[-50px] lg:top-[-60px] xl:top-[-70px] 2xl:top-[-80px] md:w-[600px] xl:w-[900px] 2xl:w-[1050px] md:h-[300px] lg:h-[600px] xl:h-[700px] 2xl:h-[800px] pointer-events-none">
               <div className="relative w-full h-full">
                 <Image
