@@ -22,10 +22,10 @@ const Navbar = () => {
             />
           </div>
 
-          <div className="hidden md:flex text-xs lg:text-sm space-x-4 lg:space-x-6 xl:space-x-8">
-            <button>Sellers Advantages</button>
-            <button>Suppliers Benefits</button>
+          <div className="hidden md:flex text-xs lg:text-sm space-x-4 lg:space-x-6 xl:space-x-10 2xl:space-x-14">
+            <button>About Business</button>
             <button>Products</button>
+            <button>Supplier Benefits</button>
             <button>AI Benefits</button>
           </div>
 
