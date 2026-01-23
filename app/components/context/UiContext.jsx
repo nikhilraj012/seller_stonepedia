@@ -6,9 +6,23 @@ const UiContext = createContext();
 
 export const UiProvider = ({ children }) => {
   const [isGetInTouchOpen, setIsGetInTouchOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [loginState, setLoginState] = useState('login');
 
   const openGetInTouch = () => setIsGetInTouchOpen(true);
   const closeGetInTouch = () => setIsGetInTouchOpen(false);
+
+  const openLogin = () => {
+    setLoginState('login');
+    setIsLoginOpen(true);
+  };
+
+  const openSignup = () => {
+    setLoginState('register');
+    setIsLoginOpen(true);
+  };
+
+  const closeLogin = () => setIsLoginOpen(false);
 
   return (
     <UiContext.Provider
@@ -16,6 +30,12 @@ export const UiProvider = ({ children }) => {
         isGetInTouchOpen,
         openGetInTouch,
         closeGetInTouch,
+        isLoginOpen,
+        loginState,
+        setLoginState,
+        openLogin,
+        openSignup,
+        closeLogin,
       }}
     >
       {children}

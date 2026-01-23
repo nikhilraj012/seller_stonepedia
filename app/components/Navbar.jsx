@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { useState } from "react";
 import { RxHamburgerMenu, RxCross2 } from "react-icons/rx";
+import { useUi } from "./context/UiContext";
 
 const Navbar = () => {
+  const { openLogin, openSignup } = useUi();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -30,8 +32,8 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex text-xs lg:text-sm space-x-4 lg:space-x-6 xl:space-x-8">
-            <button>Log in</button>
-            <button className="bg-[#1E1E1E] text-white px-4 py-2 rounded">
+            <button onClick={openLogin}>Log in</button>
+            <button onClick={openSignup} className="bg-[#1E1E1E] text-white px-4 py-2 rounded">
               Sign up
             </button>
           </div>
@@ -78,10 +80,10 @@ const Navbar = () => {
           <button className="text-left">Products</button>
           <button className="text-left">AI Benefits</button>
 
-          <button className="bg-[#1E1E1E] text-white py-2 rounded">
+          <button onClick={openLogin} className="bg-[#1E1E1E] text-white py-2 rounded">
             Log in
           </button>
-          <button className="bg-[#1E1E1E] text-white py-2 rounded">
+          <button onClick={openSignup} className="bg-[#1E1E1E] text-white py-2 rounded">
             Sign up
           </button>
         </div>

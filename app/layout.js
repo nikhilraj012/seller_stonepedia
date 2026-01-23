@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { UiProvider } from "./components/context/UiContext";
 import GetInTouch from "./components/common/GetInTouch";
+import Login from "./components/Login";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
           {children}
           <Footer />
           <GetInTouch />
+          <Login />
         </UiProvider>
       </body>
     </html>

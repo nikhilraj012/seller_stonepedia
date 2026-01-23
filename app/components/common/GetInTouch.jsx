@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useUi } from '../context/UiContext';
+import { Country } from 'country-state-city';
 
 const GetInTouch = () => {
   const { isGetInTouchOpen, closeGetInTouch } = useUi();
@@ -13,6 +14,8 @@ const GetInTouch = () => {
     gstNo: '',
     message: '',
   });
+
+  const countries = useMemo(() => Country.getAllCountries(), []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -104,11 +107,11 @@ const GetInTouch = () => {
                   className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[11.5px] py-1 h-[36px] md:h-[31.5px] text-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-[#871b58] appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMuNSA1LjI1TDcgOC43NUwxMC41IDUuMjUiIHN0cm9rZT0iIzcxNzE4MiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K')] bg-position-[right_0.5rem_center] bg-no-repeat"
                 >
                   <option value="">Select your country</option>
-                  <option value="india">India</option>
-                  <option value="usa">United States</option>
-                  <option value="uk">United Kingdom</option>
-                  <option value="canada">Canada</option>
-                  <option value="australia">Australia</option>
+                  {countries.map((country) => (
+                    <option key={country.isoCode} value={country.isoCode}>
+                      {country.flag} {country.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
