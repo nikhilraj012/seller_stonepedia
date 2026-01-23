@@ -5,30 +5,13 @@ import { useState } from "react";
 import { RxHamburgerMenu, RxCross2 } from "react-icons/rx";
 import { useUi } from "./context/UiContext";
 
-const navLinks = [
-  { href: "#about-business", label: "About Business" },
-  { href: "#products", label: "Products" },
-  { href: "#supplier-benefits", label: "Supplier Benefits" },
-  { href: "#ai-benefits", label: "AI Benefits" },
-];
-
 const Navbar = () => {
-  const { openLogin, openSignup } = useUi();
+  const { openLogin, openSignup, navLinks, handleNavClick } = useUi();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleNavClick = (href) => {
+  const handleNavClickAndClose = (href) => {
     setIsMenuOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      const navbarHeight = 56;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - navbarHeight;
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
+    handleNavClick(href);
   };
 
   return (
@@ -83,13 +66,13 @@ const Navbar = () => {
       >
 
         <div className="flex items-center justify-between h-14 px-4 border-b border-gray-200">
-          <div className="relative h-8 w-28 sm:h-9 sm:w-32 md:h-10 md:w-32 lg:w-36" onClick={() => handleNavClick("#hero")} >
+          <div className="relative h-8 w-28 sm:h-9 sm:w-32 md:h-10 md:w-32 lg:w-36" onClick={() => handleNavClickAndClose("#hero")} >
             <Image
               src="/images/logo.png"
               alt="Stonepedia Logo"
               fill
               priority
-              className="object-contain"
+              className="object-contain cursor-pointer"
             />
           </div>
           <button onClick={() => setIsMenuOpen(false)}>
@@ -99,7 +82,7 @@ const Navbar = () => {
 
         <div className="flex flex-col p-4 space-y-4 text-sm">
           {navLinks.map((link) => (
-            <button className="text-left cursor-pointer hover:text-[#871b58]" key={link.label} onClick={() => handleNavClick(link.href)}>
+            <button className="text-left cursor-pointer hover:text-[#871b58]" key={link.label} onClick={() => handleNavClickAndClose(link.href)}>
               {link.label}
             </button>
           ))}

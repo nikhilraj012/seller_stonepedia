@@ -4,7 +4,7 @@ import React from "react";
 import { useUi } from "./context/UiContext";
 
 const Footer = () => {
-  const { openGetInTouch } = useUi();
+  const { openGetInTouch, navLinks, handleNavClick } = useUi();
   return (
     <div>
       <div className="p-6 md:px-10">
@@ -19,7 +19,7 @@ const Footer = () => {
 
       <div className="bg-[#101010] p-4 max-md:space-y-4 md:flex md:justify-between md:items-center">
         <div className="flex items-center justify-between">
-          <div className="relative h-8 w-28 sm:h-9 sm:w-32 md:h-10 md:w-32 lg:w-36">
+          <div className="relative h-8 w-28 sm:h-9 sm:w-32 md:h-10 md:w-32 lg:w-36 cursor-pointer" onClick={() => handleNavClick("#hero")}>
             <Image
               src="/images/logo.png"
               alt="Stonepedia Logo"
@@ -33,10 +33,11 @@ const Footer = () => {
           </button>
         </div>
         <div className="grid grid-cols-2 text-white text-xs lg:text-sm gap-2 md:flex md:gap-4 lg:gap-6 xl:gap-10 2xl:gap-14">
-          <button className="max-md:text-left">About Business</button>
-          <button className="max-md:text-left">Products</button>
-          <button className="max-md:text-left">Supplier Benefits</button>
-          <button className="max-md:text-left">AI Benefits</button>
+          {navLinks.map((link) => (
+            <button key={link.label} className="max-md:text-left cursor-pointer hover:text-[#871b58]" onClick={() => handleNavClick(link.href)}>
+              {link.label}
+            </button>
+          ))}
         </div>
         <button onClick={openGetInTouch} className="max-md:hidden md:block bg-white rounded-[10px] px-4 py-2 lg:px-6 lg:py-3 xl:px-8 text-xs lg:text-sm xl:text-base">
           Get In Touch
