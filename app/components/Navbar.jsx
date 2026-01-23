@@ -5,6 +5,13 @@ import { useState } from "react";
 import { RxHamburgerMenu, RxCross2 } from "react-icons/rx";
 import { useUi } from "./context/UiContext";
 
+const navLinks = [
+  { href: "#about-business", label: "About Business" },
+  { href: "#products", label: "Products" },
+  { href: "#supplier-benefits", label: "Supplier Benefits" },
+  { href: "#ai-benefits", label: "AI Benefits" },
+];
+
 const Navbar = () => {
   const { openLogin, openSignup } = useUi();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,10 +32,11 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex text-xs lg:text-sm space-x-4 lg:space-x-6 xl:space-x-10 2xl:space-x-14">
-            <button>About Business</button>
-            <button>Products</button>
-            <button>Supplier Benefits</button>
-            <button>AI Benefits</button>
+            {navLinks.map((link) => (
+              <button key={link.label} onClick={() => setIsMenuOpen(false)}>
+                {link.label}
+              </button>
+            ))}
           </div>
 
           <div className="hidden md:flex text-xs lg:text-sm space-x-4 lg:space-x-6 xl:space-x-8">
@@ -75,12 +83,13 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-col p-4 space-y-4 text-sm">
-          <button className="text-left">Sellers Advantages</button>
-          <button className="text-left">Suppliers Benefits</button>
-          <button className="text-left">Products</button>
-          <button className="text-left">AI Benefits</button>
+          {navLinks.map((link) => (
+            <button className="text-left" key={link.label} onClick={() => setIsMenuOpen(false)}>
+              {link.label}
+            </button>
+          ))}
 
-          <button onClick={openLogin} className="bg-[#1E1E1E] text-white py-2 rounded">
+          <button onClick={openLogin} className="py-2 rounded">
             Log in
           </button>
           <button onClick={openSignup} className="bg-[#1E1E1E] text-white py-2 rounded">
