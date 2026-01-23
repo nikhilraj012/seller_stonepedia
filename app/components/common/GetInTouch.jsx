@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useUi } from '../context/UiContext';
 import { Country } from 'country-state-city';
 
@@ -16,6 +16,21 @@ const GetInTouch = () => {
   });
 
   const countries = useMemo(() => Country.getAllCountries(), []);
+  const [countrySearch, setCountrySearch] = useState('');
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch) return countries;
+    return countries.filter(country => 
+      country.name.toLowerCase().includes(countrySearch.toLowerCase())
+    );
+  }, [countries, countrySearch]);
+
+  const handleCountrySelect = (country) => {
+    setFormData(prev => ({ ...prev, country: country.isoCode }));
+    setCountrySearch(country.name);
+    setShowCountryDropdown(false);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,6 +42,16 @@ const GetInTouch = () => {
     console.log('Form submitted:', formData);
     closeGetInTouch();
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (showCountryDropdown && !e.target.closest('.country-dropdown-container')) {
+        setShowCountryDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showCountryDropdown]);
 
   if (!isGetInTouchOpen) return null;
 
@@ -99,20 +124,35 @@ const GetInTouch = () => {
                 <label className="text-[#364153] font-medium text-[11px] md:text-[12.25px] tracking-[-0.02px]">
                   Country *
                 </label>
-                <select
-                  name="country"
-                  value={formData.country}
-                  onChange={handleChange}
-                  required
-                  className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[11.5px] py-1 h-[36px] md:h-[31.5px] text-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-[#871b58] appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMuNSA1LjI1TDcgOC43NUwxMC41IDUuMjUiIHN0cm9rZT0iIzcxNzE4MiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K')] bg-position-[right_0.5rem_center] bg-no-repeat"
-                >
-                  <option value="">Select your country</option>
-                  {countries.map((country) => (
-                    <option key={country.isoCode} value={country.isoCode}>
-                      {country.flag} {country.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative country-dropdown-container">
+                  <input
+                    type="text"
+                    name="countrySearch"
+                    value={countrySearch}
+                    onChange={(e) => {
+                      setCountrySearch(e.target.value);
+                      setShowCountryDropdown(true);
+                    }}
+                    onFocus={() => setShowCountryDropdown(true)}
+                    placeholder="Select your country"
+                    required={!formData.country}
+                    className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[11.5px] py-1 h-[36px] md:h-[31.5px] text-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-primary w-full"
+                  />
+                  {showCountryDropdown && (
+                    <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-[6px] max-h-[200px] overflow-y-auto shadow-lg">
+                      {filteredCountries.map((country) => (
+                        <div
+                          key={country.isoCode}
+                          onClick={() => handleCountrySelect(country)}
+                          className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-[11px] md:text-[12.25px] flex items-center gap-2"
+                        >
+                          <span>{country.flag}</span>
+                          <span>{country.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 

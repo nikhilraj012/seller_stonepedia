@@ -16,32 +16,47 @@ const Navbar = () => {
   const { openLogin, openSignup } = useUi();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const handleNavClick = (href) => {
+    setIsMenuOpen(false);
+    const element = document.querySelector(href);
+    if (element) {
+      const navbarHeight = 56;
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - navbarHeight;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-50 bg-white w-full border-b border-gray-200 h-14">
         <div className="flex items-center justify-between h-full px-4">
 
-          <div className="relative h-8 w-28 sm:h-9 sm:w-32 md:h-10 md:w-32 lg:w-36">
+          <div className="relative h-8 w-28 sm:h-9 sm:w-32 md:h-10 md:w-32 lg:w-36" onClick={() => handleNavClick("#hero")}>
             <Image
               src="/images/logo.png"
               alt="Stonepedia Logo"
               fill
               priority
-              className="object-contain"
+              className="object-contain cursor-pointer"
             />
           </div>
 
           <div className="hidden md:flex text-xs lg:text-sm space-x-4 lg:space-x-6 xl:space-x-10 2xl:space-x-14">
             {navLinks.map((link) => (
-              <button key={link.label} onClick={() => setIsMenuOpen(false)}>
+              <button className="cursor-pointer hover:text-[#871b58]" key={link.label} onClick={() => handleNavClick(link.href)}>
                 {link.label}
               </button>
             ))}
           </div>
 
           <div className="hidden md:flex text-xs lg:text-sm space-x-4 lg:space-x-6 xl:space-x-8">
-            <button onClick={openLogin}>Log in</button>
-            <button onClick={openSignup} className="bg-[#1E1E1E] text-white px-4 py-2 rounded">
+            <button className="cursor-pointer hover:text-[#871b58]" onClick={openLogin}>Log in</button>
+            <button onClick={openSignup} className="bg-[#1E1E1E] text-white px-4 py-2 rounded cursor-pointer">
               Sign up
             </button>
           </div>
@@ -68,7 +83,7 @@ const Navbar = () => {
       >
 
         <div className="flex items-center justify-between h-14 px-4 border-b border-gray-200">
-          <div className="relative h-8 w-28 sm:h-9 sm:w-32 md:h-10 md:w-32 lg:w-36">
+          <div className="relative h-8 w-28 sm:h-9 sm:w-32 md:h-10 md:w-32 lg:w-36" onClick={() => handleNavClick("#hero")} >
             <Image
               src="/images/logo.png"
               alt="Stonepedia Logo"
@@ -84,15 +99,15 @@ const Navbar = () => {
 
         <div className="flex flex-col p-4 space-y-4 text-sm">
           {navLinks.map((link) => (
-            <button className="text-left" key={link.label} onClick={() => setIsMenuOpen(false)}>
+            <button className="text-left cursor-pointer hover:text-[#871b58]" key={link.label} onClick={() => handleNavClick(link.href)}>
               {link.label}
             </button>
           ))}
 
-          <button onClick={openLogin} className="py-2 rounded">
+          <button onClick={openLogin} className="py-2 rounded cursor-pointer">
             Log in
           </button>
-          <button onClick={openSignup} className="bg-[#1E1E1E] text-white py-2 rounded">
+          <button onClick={openSignup} className="bg-[#1E1E1E] text-white py-2 rounded cursor-pointer">
             Sign up
           </button>
         </div>

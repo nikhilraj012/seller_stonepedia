@@ -8,12 +8,22 @@ import AiBenefits from "./components/landing/AiBenefits";
 export default function Home() {
   return (
     <div>
-      <Hero />
+      <div id="hero">
+        <Hero />
+      </div>
       <GlobalBuyers />
-      <AboutBusiness />
-      <StonePlatform />
-      <SupplierBenefits />
-      <AiBenefits />
+      <div id="about-business">
+        <AboutBusiness />
+      </div>
+      <div id="products">
+        <StonePlatform />
+      </div>
+      <div id="supplier-benefits">
+        <SupplierBenefits />
+      </div>
+      <div id="ai-benefits">
+        <AiBenefits />
+      </div>
     </div>
   );
 }
