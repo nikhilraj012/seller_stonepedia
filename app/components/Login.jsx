@@ -56,8 +56,8 @@ const Login = () => {
           <Image
             src="/images/logo.png"
             alt="Stonepedia Logo"
-            width={100}
-            height={100}
+            width={150}
+            height={150}
           />
           {loginState !== "login" && loginState !== "forgotPassword" && (
             <p className="text-xs text-center font-semibold text-gray-500">

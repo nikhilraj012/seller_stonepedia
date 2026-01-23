@@ -87,10 +87,10 @@ const Navbar = () => {
             </button>
           ))}
 
-          <button onClick={openLogin} className="py-2 rounded cursor-pointer">
+          <button onClick={() => { setIsMenuOpen(false); openLogin(); }} className="py-2 rounded cursor-pointer">
             Log in
           </button>
-          <button onClick={openSignup} className="bg-[#1E1E1E] text-white py-2 rounded cursor-pointer">
+          <button onClick={() => { setIsMenuOpen(false); openSignup(); }} className="bg-[#1E1E1E] text-white py-2 rounded cursor-pointer">
             Sign up
           </button>
         </div>

@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import { UiProvider } from "./components/context/UiContext";
 import GetInTouch from "./components/common/GetInTouch";
 import Login from "./components/Login";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${poppins.variable} ${outfit.variable} font-poppins`}>
       <body className="antialiased">
+        <Toaster />
         <UiProvider>
           <Navbar />
           {children}

@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useUi } from '../context/UiContext';
 import { Country } from 'country-state-city';
+import toast from 'react-hot-toast';
 
 const GetInTouch = () => {
   const { isGetInTouchOpen, closeGetInTouch } = useUi();
@@ -21,8 +22,9 @@ const GetInTouch = () => {
 
   const filteredCountries = useMemo(() => {
     if (!countrySearch) return countries;
+    const searchLower = countrySearch.toLowerCase();
     return countries.filter(country => 
-      country.name.toLowerCase().includes(countrySearch.toLowerCase())
+      country.name.toLowerCase().startsWith(searchLower)
     );
   }, [countries, countrySearch]);
 
@@ -40,6 +42,10 @@ const GetInTouch = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
+    toast.success('Thank you! We will get back to you soon.', {
+      duration: 4000,
+      position: 'top-center',
+    });
     closeGetInTouch();
   };
 
@@ -84,7 +90,7 @@ const GetInTouch = () => {
                   onChange={handleChange}
                   placeholder="Your first name"
                   required
-                  className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[10.5px] py-1 md:py-[3.5px] h-[36px] md:h-[31.5px] text-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-[#871b58]"
+                  className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[10.5px] py-1 md:py-[3.5px] h-[36px] md:h-[31.5px] text-black placeholder-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-[#871b58]"
                 />
               </div>
 
@@ -99,7 +105,7 @@ const GetInTouch = () => {
                   onChange={handleChange}
                   placeholder="Your last name"
                   required
-                  className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[10.5px] py-1 md:py-[3.5px] h-[36px] md:h-[31.5px] text-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-[#871b58]"
+                  className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[10.5px] py-1 md:py-[3.5px] h-[36px] md:h-[31.5px] text-black placeholder-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-[#871b58]"
                 />
               </div>
             </div>
@@ -116,7 +122,7 @@ const GetInTouch = () => {
                   onChange={handleChange}
                   placeholder="Your company name"
                   required
-                  className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[10.5px] py-1 md:py-[3.5px] h-[36px] md:h-[31.5px] text-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-[#871b58]"
+                  className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[10.5px] py-1 md:py-[3.5px] h-[36px] md:h-[31.5px] text-black placeholder-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-[#871b58]"
                 />
               </div>
 
@@ -136,7 +142,7 @@ const GetInTouch = () => {
                     onFocus={() => setShowCountryDropdown(true)}
                     placeholder="Select your country"
                     required={!formData.country}
-                    className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[11.5px] py-1 h-[36px] md:h-[31.5px] text-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-primary w-full"
+                    className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[11.5px] py-1 h-[36px] md:h-[31.5px] text-black placeholder-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-[#871b58] w-full"
                   />
                   {showCountryDropdown && (
                     <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-[6px] max-h-[200px] overflow-y-auto shadow-lg">
@@ -146,7 +152,6 @@ const GetInTouch = () => {
                           onClick={() => handleCountrySelect(country)}
                           className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-[11px] md:text-[12.25px] flex items-center gap-2"
                         >
-                          <span>{country.flag}</span>
                           <span>{country.name}</span>
                         </div>
                       ))}
@@ -166,7 +171,7 @@ const GetInTouch = () => {
                 value={formData.gstNo}
                 onChange={handleChange}
                 placeholder="GJDN785940EN"
-                className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[10.5px] py-1 md:py-[3.5px] h-[36px] md:h-[31.5px] text-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-[#871b58]"
+                className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[10.5px] py-1 md:py-[3.5px] h-[36px] md:h-[31.5px] text-black placeholder-[#717182] text-[11px] md:text-[12.25px] tracking-[-0.02px] focus:outline-none focus:border-[#871b58]"
               />
             </div>
 
@@ -181,7 +186,7 @@ const GetInTouch = () => {
                 placeholder="Tell us more about your needs and how we can help you..."
                 required
                 rows="3"
-                className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[10.5px] py-1.5 md:py-[7px] text-[#717182] text-[11px] md:text-[12.25px] leading-[17.5px] tracking-[-0.02px] resize-none focus:outline-none focus:border-[#871b58]"
+                className="bg-[#f5f5f5] border border-transparent rounded-[6px] md:rounded-[6.75px] px-2.5 md:px-[10.5px] py-1.5 md:py-[7px] text-black placeholder-[#717182] text-[11px] md:text-[12.25px] leading-[17.5px] tracking-[-0.02px] resize-none focus:outline-none focus:border-[#871b58]"
               />
             </div>
 
