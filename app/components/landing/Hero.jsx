@@ -1,7 +1,12 @@
+'use client';
+
 import React from 'react'
 import Image from 'next/image'
+import { useUi } from '../context/UiContext'
 
 const Hero = () => {
+  const { openGetInTouch } = useUi();
+
   return (
     <div className='pt-14 lg:min-h-screen p-6 md:p-10'>
       <div className='max-w-[1800px] mx-auto'>
@@ -32,7 +37,10 @@ const Hero = () => {
               </div>
 
               {/* CTA Button */}
-              <button className='bg-[#1e1e1e] cursor-pointer border border-black text-white max-md:w-[120px] max-md:h-[40px] md:w-[140px] md:h-[45px] xl:w-[180px] xl:h-[50px] 2xl:w-[200px] 2xl:h-[60px] rounded-[10px] text-sm md:text-base lg:text-lg xl:text-xl hover:bg-[#2e2e2e] transition-colors'>
+              <button 
+                onClick={openGetInTouch}
+                className='bg-[#1e1e1e] cursor-pointer border border-black text-white max-md:w-[120px] max-md:h-[40px] md:w-[140px] md:h-[45px] xl:w-[180px] xl:h-[50px] 2xl:w-[200px] 2xl:h-[60px] rounded-[10px] text-sm md:text-base lg:text-lg xl:text-xl hover:bg-[#2e2e2e] transition-colors'
+              >
                 Get in Touch
               </button>
             </div>

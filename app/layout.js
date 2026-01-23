@@ -2,6 +2,8 @@ import { Poppins, Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import { UiProvider } from "./components/context/UiContext";
+import GetInTouch from "./components/common/GetInTouch";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -24,9 +26,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${poppins.variable} ${outfit.variable} font-poppins`}>
       <body className="antialiased">
-        <Navbar />
-        {children}
-        <Footer />
+        <UiProvider>
+          <Navbar />
+          {children}
+          <Footer />
+          <GetInTouch />
+        </UiProvider>
       </body>
     </html>
   );

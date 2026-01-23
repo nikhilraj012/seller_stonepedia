@@ -1,7 +1,12 @@
+
+'use client';
 import React from "react";
 import Image from "next/image";
+import { useUi } from "../context/UiContext";
 
 const SupplierBenefits = () => {
+  const { openGetInTouch } = useUi();
+
   const benefits = [
     {
       title: "Worldwide Market Access",
@@ -93,7 +98,7 @@ const SupplierBenefits = () => {
 
             {/* CTA Button */}
             <div className="flex justify-end">
-              <button className="bg-[#1e1e1e] text-[#f6f6f6] px-6 py-2 xl:px-8 xl:py-3 rounded-[10px] text-sm lg:text-base font-normal hover:bg-[#2e2e2e] transition-colors">
+              <button onClick={openGetInTouch} className="bg-[#1e1e1e] text-[#f6f6f6] px-6 py-2 xl:px-8 xl:py-3 rounded-[10px] text-sm lg:text-base font-normal hover:bg-[#2e2e2e] transition-colors">
                 Get in Touch
               </button>
             </div>

@@ -1,7 +1,10 @@
+'use client';
 import Image from "next/image";
 import React from "react";
+import { useUi } from "./context/UiContext";
 
 const Footer = () => {
+  const { openGetInTouch } = useUi();
   return (
     <div>
       <div className="p-6 md:px-10">
@@ -25,7 +28,7 @@ const Footer = () => {
               className="object-contain"
             />
           </div>
-          <button className="bg-white rounded-[10px] px-4 py-2 text-xs md:hidden">
+          <button onClick={openGetInTouch} className="bg-white rounded-[10px] px-4 py-2 text-xs md:hidden">
             Get In Touch
           </button>
         </div>
@@ -35,7 +38,7 @@ const Footer = () => {
           <button className="max-md:text-left">Supplier Benefits</button>
           <button className="max-md:text-left">AI Benefits</button>
         </div>
-        <button className="max-md:hidden md:block bg-white rounded-[10px] px-4 py-2 lg:px-6 lg:py-3 xl:px-8 text-xs lg:text-sm xl:text-base">
+        <button onClick={openGetInTouch} className="max-md:hidden md:block bg-white rounded-[10px] px-4 py-2 lg:px-6 lg:py-3 xl:px-8 text-xs lg:text-sm xl:text-base">
           Get In Touch
         </button>
       </div>
