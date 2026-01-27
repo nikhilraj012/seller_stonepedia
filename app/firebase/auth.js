@@ -16,20 +16,15 @@ export const registerUser = async (email, password, userData) => {
 
     // Update user profile with display name
     await updateProfile(user, {
-      displayName: userData.fullName || `${userData.firstName} ${userData.lastName}`
+      displayName: userData.fullName
     });
 
     // Create seller details in Firestore
     await setDoc(doc(db, "SellerDetails", user.uid), {
-      uid: user.uid,
+      fullName: userData.fullName,
       email: user.email,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      fullName: userData.fullName || `${userData.firstName} ${userData.lastName}`,
-      companyName: userData.companyName || "",
-      phoneNumber: userData.phoneNumber || "",
+      phoneNumber: userData.phoneNumber,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     });
 
     return { success: true, user };

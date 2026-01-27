@@ -50,14 +50,7 @@ const Login = () => {
           return;
         }
 
-        // Split full name into first and last name
-        const nameParts = formData.fname.trim().split(" ");
-        const firstName = nameParts[0] || "";
-        const lastName = nameParts.slice(1).join(" ") || "";
-
         const userData = {
-          firstName,
-          lastName,
           fullName: formData.fname,
           phoneNumber: formData.phone,
         };
