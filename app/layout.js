@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { UiProvider } from "./components/context/UiContext";
+import { AuthProvider } from "./components/context/AuthContext";
 import GetInTouch from "./components/common/GetInTouch";
 import Login from "./components/Login";
 import { Toaster } from "react-hot-toast";
