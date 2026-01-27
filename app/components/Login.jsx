@@ -234,7 +234,7 @@ const Login = () => {
           {isLoading ? (
             <RingLoader color="white" size={30} speedMultiplier={1} />
           ) : loginState === "register" ? (
-            "Create Account"
+            "Register"
           ) : loginState === "forgotPassword" ? (
             "Reset Password"
           ) : (
