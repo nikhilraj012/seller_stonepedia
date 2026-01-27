@@ -102,7 +102,7 @@ const Navbar = () => {
               <>
                 <button className="cursor-pointer hover:text-[#871b58]" onClick={openLogin}>Log in</button>
                 <button onClick={openSignup} className="bg-[#1E1E1E] text-white px-4 py-2 rounded cursor-pointer">
-                  Sign up
+                  Register
                 </button>
               </>
             )}
