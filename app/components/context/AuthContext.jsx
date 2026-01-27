@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
       const result = await loginUser(email, password);
       
       if (result.success) {
-        toast.success("Login successful! Welcome back!", {
+        toast.success("Login successful!", {
           duration: 4000,
           position: "top-center",
         });
