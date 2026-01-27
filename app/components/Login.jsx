@@ -3,10 +3,12 @@ import { useState, useEffect, useCallback } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Image from "next/image";
 import { useUi } from "./context/UiContext";
+import { useAuth } from "./context/AuthContext";
 import { RingLoader } from "react-spinners";
 
 const Login = () => {
   const { isLoginOpen, closeLogin, loginState, setLoginState } = useUi();
+  const { register, login } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -38,6 +40,50 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
+    try {
+      if (loginState === "register") {
+        // Validate passwords match
+        if (formData.password !== formData.confirmPassword) {
+          alert("Passwords do not match!");
+          setIsLoading(false);
+          return;
+        }
+
+        // Split full name into first and last name
+        const nameParts = formData.fname.trim().split(" ");
+        const firstName = nameParts[0] || "";
+        const lastName = nameParts.slice(1).join(" ") || "";
+
+        const userData = {
+          firstName,
+          lastName,
+          fullName: formData.fname,
+          phoneNumber: formData.phone,
+        };
+
+        const result = await register(formData.email, formData.password, userData);
+        
+        if (result.success) {
+          resetFormFields();
+          closeLogin();
+        }
+      } else if (loginState === "login") {
+        const result = await login(formData.email, formData.password);
+        
+        if (result.success) {
+          resetFormFields();
+          closeLogin();
+        }
+      } else if (loginState === "forgotPassword") {
+        // TODO: Implement forgot password functionality
+        alert("Forgot password functionality coming soon!");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (!isLoginOpen) return null;

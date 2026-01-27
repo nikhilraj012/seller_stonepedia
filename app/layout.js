@@ -29,13 +29,15 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${poppins.variable} ${outfit.variable} font-poppins`}>
       <body className="antialiased">
         <Toaster />
-        <UiProvider>
-          <Navbar />
-          {children}
-          <Footer />
-          <GetInTouch />
-          <Login />
-        </UiProvider>
+        <AuthProvider>
+          <UiProvider>
+            <Navbar />
+            {children}
+            <Footer />
+            <GetInTouch />
+            <Login />
+          </UiProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,18 +1,45 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { RxHamburgerMenu, RxCross2 } from "react-icons/rx";
+import { FaUserCircle } from "react-icons/fa";
 import { useUi } from "./context/UiContext";
+import { useAuth } from "./context/AuthContext";
 
 const Navbar = () => {
   const { openLogin, openSignup, navLinks, handleNavClick } = useUi();
+  const { user, sellerDetails, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleNavClickAndClose = (href) => {
     setIsMenuOpen(false);
     handleNavClick(href);
   };
+
+  const handleLogout = async () => {
+    setShowProfileDropdown(false);
+    await logout();
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowProfileDropdown(false);
+      }
+    };
+
+    if (showProfileDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showProfileDropdown]);
 
   return (
     <>
@@ -38,10 +65,47 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex text-xs lg:text-sm space-x-4 lg:space-x-6 xl:space-x-8">
-            <button className="cursor-pointer hover:text-[#871b58]" onClick={openLogin}>Log in</button>
-            <button onClick={openSignup} className="bg-[#1E1E1E] text-white px-4 py-2 rounded cursor-pointer">
-              Sign up
-            </button>
+            {user ? (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                  className="flex items-center gap-2 cursor-pointer hover:text-[#871b58]"
+                >
+                  <FaUserCircle size={32} className="text-[#871b58]" />
+                </button>
+
+                {showProfileDropdown && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <div className="px-4 py-3 border-b border-gray-200">
+                      <div className="flex items-center gap-3">
+                        <FaUserCircle size={40} className="text-[#871b58]" />
+                        <div className="flex-1">
+                          <p className="font-semibold text-sm text-gray-800">
+                            {sellerDetails?.fullName || user.displayName || "User"}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {user.email}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <button className="cursor-pointer hover:text-[#871b58]" onClick={openLogin}>Log in</button>
+                <button onClick={openSignup} className="bg-[#1E1E1E] text-white px-4 py-2 rounded cursor-pointer">
+                  Sign up
+                </button>
+              </>
+            )}
           </div>
 
           <div className="md:hidden">
@@ -87,12 +151,38 @@ const Navbar = () => {
             </button>
           ))}
 
-          <button onClick={() => { setIsMenuOpen(false); openLogin(); }} className="py-2 rounded cursor-pointer">
-            Log in
-          </button>
-          <button onClick={() => { setIsMenuOpen(false); openSignup(); }} className="bg-[#1E1E1E] text-white py-2 rounded cursor-pointer">
-            Sign up
-          </button>
+          {user ? (
+            <>
+              <div className="border-t border-gray-200 pt-4 mt-4">
+                <div className="flex items-center gap-3 px-2 py-2">
+                  <FaUserCircle size={40} className="text-[#871b58]" />
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm text-gray-800">
+                      {sellerDetails?.fullName || user.displayName || "User"}
+                    </p>
+                    <p className="text-xs text-gray-500 truncate">
+                      {user.email}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => { setIsMenuOpen(false); handleLogout(); }}
+                className="bg-[#1E1E1E] text-white py-2 rounded cursor-pointer"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <button onClick={() => { setIsMenuOpen(false); openLogin(); }} className="py-2 rounded cursor-pointer">
+                Log in
+              </button>
+              <button onClick={() => { setIsMenuOpen(false); openSignup(); }} className="bg-[#1E1E1E] text-white py-2 rounded cursor-pointer">
+                Sign up
+              </button>
+            </>
+          )}
         </div>
       </div>
     </>
