@@ -165,31 +165,29 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-col p-4 space-y-4 text-sm">
-          {navLinks.map((link) => (
-            <button
-              className="text-left cursor-pointer hover:text-[#871b58]"
-              key={link.label}
-              onClick={() => handleNavClickAndClose(link.href)}
-            >
-              {link.label}
-            </button>
-          ))}
+          {!user &&
+            navLinks.map((link) => (
+              <button
+                className="text-left cursor-pointer hover:text-[#871b58]"
+                key={link.label}
+                onClick={() => handleNavClickAndClose(link.href)}
+              >
+                {link.label}
+              </button>
+            ))}
 
           {user ? (
             <>
-              <div className="border-t border-gray-200 pt-4 mt-4">
-                <div className="flex items-center gap-3 px-2 py-2">
-                  <FaUserCircle size={40} className="text-[#871b58]" />
-                  <div className="flex-1">
-                    <p className="font-semibold text-sm text-gray-800">
-                      {sellerDetails?.fullName || user.displayName || "User"}
-                    </p>
-                    <p className="text-xs text-gray-500 truncate">
-                      {user.email}
-                    </p>
-                  </div>
+              <div className="flex items-center gap-3 px-2 py-2">
+                <FaUserCircle size={40} className="text-[#871b58]" />
+                <div className="flex-1">
+                  <p className="font-semibold text-sm text-gray-800">
+                    {sellerDetails?.fullName || user.displayName || "User"}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
                 </div>
               </div>
+
               <button
                 onClick={() => {
                   setIsMenuOpen(false);
