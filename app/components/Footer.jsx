@@ -2,9 +2,16 @@
 import Image from "next/image";
 import React from "react";
 import { useUi } from "./context/UiContext";
+import { useAuth } from "./context/AuthContext";
 
 const Footer = () => {
   const { openGetInTouch, navLinks, handleNavClick } = useUi();
+  const { user } = useAuth();
+
+  if (user) {
+    return null;
+  }
+
   return (
     <div>
       <div className="p-6 md:px-10">

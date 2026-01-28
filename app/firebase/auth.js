@@ -5,7 +5,7 @@ import {
   onAuthStateChanged,
   updateProfile
 } from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "./config";
 
 // Register new user
@@ -24,7 +24,11 @@ export const registerUser = async (email, password, userData) => {
       fullName: userData.fullName,
       email: user.email,
       phoneNumber: userData.phoneNumber,
-      createdAt: new Date().toISOString(),
+      role: "seller",
+      provider: "password",
+      emailVerified: false,
+      accountStatus: "pending",
+      createdAt: serverTimestamp(),
     });
 
     return { success: true, user };
