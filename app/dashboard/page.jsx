@@ -1,9 +1,14 @@
-import React from 'react'
+'use client';
+
+import React from 'react';
+import ProtectedRoute from '../components/common/ProtectedRoute';
 
 const page = () => {
   return (
-    <div>page</div>
-  )
-}
+    <ProtectedRoute>
+      <div>Dashboard Page</div>
+    </ProtectedRoute>
+  );
+};
 
-export default page
+export default page;

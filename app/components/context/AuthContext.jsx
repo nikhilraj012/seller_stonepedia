@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { registerUser, loginUser, logoutUser, getSellerDetails, observeAuthState } from "../../firebase/auth";
 import toast from "react-hot-toast";
 
@@ -10,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [sellerDetails, setSellerDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = observeAuthState(async (firebaseUser) => {
@@ -40,6 +42,7 @@ export const AuthProvider = ({ children }) => {
           duration: 4000,
           position: "top-center",
         });
+        router.push('/dashboard');
         return { success: true };
       } else {
         toast.error(result.error || "Registration failed. Please try again.", {
@@ -66,6 +69,7 @@ export const AuthProvider = ({ children }) => {
           duration: 4000,
           position: "top-center",
         });
+        router.push('/dashboard');
         return { success: true };
       } else {
         toast.error(result.error || "Login failed. Please check your credentials.", {
@@ -92,6 +96,7 @@ export const AuthProvider = ({ children }) => {
           duration: 3000,
           position: "top-center",
         });
+        router.push('/');
         return { success: true };
       } else {
         toast.error("Logout failed. Please try again.", {
