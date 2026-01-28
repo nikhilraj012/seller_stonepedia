@@ -2,11 +2,14 @@
 
 import React from 'react';
 import ProtectedRoute from '../components/common/ProtectedRoute';
+import Dashboard from '../components/dashboard/Dashboard';
 
 const page = () => {
   return (
     <ProtectedRoute>
-      <div>Dashboard Page</div>
+      <div>
+        <Dashboard />
+      </div>
     </ProtectedRoute>
   );
 };
