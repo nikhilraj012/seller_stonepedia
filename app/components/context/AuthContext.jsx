@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [sellerDetails, setSellerDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loggingOut, setLoggingOut] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -89,6 +90,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+      setLoggingOut(true);
       const result = await logoutUser();
       
       if (result.success) {
@@ -99,6 +101,7 @@ export const AuthProvider = ({ children }) => {
         router.push('/');
         return { success: true };
       } else {
+        setLoggingOut(false);
         toast.error("Logout failed. Please try again.", {
           duration: 4000,
           position: "top-center",
@@ -106,6 +109,7 @@ export const AuthProvider = ({ children }) => {
         return { success: false, error: result.error };
       }
     } catch (error) {
+      setLoggingOut(false);
       toast.error("An error occurred during logout.", {
         duration: 4000,
         position: "top-center",
@@ -120,6 +124,7 @@ export const AuthProvider = ({ children }) => {
         user,
         sellerDetails,
         loading,
+        loggingOut,
         register,
         login,
         logout,

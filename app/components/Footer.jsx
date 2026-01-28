@@ -6,9 +6,9 @@ import { useAuth } from "./context/AuthContext";
 
 const Footer = () => {
   const { openGetInTouch, navLinks, handleNavClick } = useUi();
-  const { user } = useAuth();
+  const { user, loggingOut } = useAuth();
 
-  if (user) {
+  if (user || loggingOut) {
     return null;
   }
 
