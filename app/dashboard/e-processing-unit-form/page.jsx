@@ -12,8 +12,8 @@ const page = () => {
   const hasApprovedForm = searchParams.get("hasApprovedForm") === "true";
 
   return (
-    <div className="max-lg:px-4 lg:mx-24 xl:mx-32">
-      <div className="mt-23 md:mt-21 lg:mt-25 xl:mt-27 mx-auto ">
+    <div className="py-16 max-lg:px-4 lg:mx-24 xl:mx-32">
+      <div className="my-3 md:my-5 mx-auto ">
         <div className="space-y-1 lg:space-y-2">
           <h1 className="font-medium text-[#871B58] text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl">
             Stonepedia E - Gallery For Processing Unit
