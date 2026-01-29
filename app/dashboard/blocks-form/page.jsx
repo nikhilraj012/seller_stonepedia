@@ -674,7 +674,7 @@ const page = () => {
                     <label htmlFor="quarryName" className="mb-0.5 text-xs">
                       Quarry / Company Name
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="quarryName"
@@ -705,7 +705,7 @@ const page = () => {
                     <label htmlFor="Quarrypincode" className="mb-0.5 text-xs">
                       Quarry / Company Pincode
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="Quarrypincode"
@@ -734,7 +734,7 @@ const page = () => {
                     <label htmlFor="websiteUrl" className="mb-0.5 text-xs">
                       Website URL
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="websiteUrl"
@@ -758,7 +758,7 @@ const page = () => {
                     <label htmlFor="emailId" className="mb-0.5 text-xs">
                       Email Id
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="emailId"
@@ -843,7 +843,7 @@ const page = () => {
                   <label htmlFor="address" className="mb-0.5 text-xs">
                     Address
                   </label>
-                  <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                  <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                     <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                       <textarea
                         id="address"
@@ -868,7 +868,7 @@ const page = () => {
                     <label htmlFor="name" className="mb-0.5 text-xs">
                       Phone Number
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent ">
                         <div className="flex items-center w-full ">
                           <span className="text-xs text-gray-500 px-2 border-r">
@@ -916,7 +916,7 @@ const page = () => {
                     <label htmlFor="stoneCategory" className="mb-0.5 text-xs">
                       Stone Category
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="stoneCategory"
@@ -941,7 +941,7 @@ const page = () => {
                     <label htmlFor="stoneName" className="mb-0.5 text-xs">
                       Block / Stone Name
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="stoneName"
@@ -984,7 +984,7 @@ const page = () => {
                     <label htmlFor="portName" className="mb-0.5 text-xs">
                       Nearby Port Name
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="portName"
@@ -1035,7 +1035,7 @@ const page = () => {
                     <label htmlFor="height" className="mb-0.5 text-xs">
                       Height
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="height"
@@ -1060,7 +1060,7 @@ const page = () => {
                     <label htmlFor="width" className="mb-0.5 text-xs">
                       Width
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="width"
@@ -1085,7 +1085,7 @@ const page = () => {
                     <label htmlFor="length" className="mb-0.5 text-xs">
                       Length
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="length"
@@ -1115,7 +1115,7 @@ const page = () => {
                     >
                       Supply Capacity
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="supplyCapacity"
@@ -1143,7 +1143,7 @@ const page = () => {
                     >
                       Available Quantity
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="quantityAvailable"
@@ -1168,7 +1168,7 @@ const page = () => {
                     <label htmlFor="minimumOrder" className="mb-0.5 text-xs">
                       Minimum Order
                     </label>
-                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                    <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center justify-between gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="minimumOrder"
@@ -1315,7 +1315,7 @@ const page = () => {
                   </label>
                   <div className="flex gap-4 flex-col md:flex-row">
                     {/* Video upload */}
-                    <label className="flex flex-col items-center justify-center w-full md:w-1/2 border-1 border-dashed border-primary rounded-lg p-6 text-center cursor-pointer hover:bg-gray-50 transition">
+                    <label className="flex flex-col items-center justify-center w-full md:w-1/2 border border-dashed border-primary rounded-lg p-6 text-center cursor-pointer hover:bg-gray-50 transition">
                       <FiUpload size={20} className="mb-2 text-gray-900" />
                       <span className="text-xs font-medium">Upload Videos</span>
                       <span className="text-[8px] text-gray-500">
@@ -1336,7 +1336,7 @@ const page = () => {
                     </label>
 
                     {/* Image upload */}
-                    <label className="flex flex-col items-center justify-center w-full md:w-1/2 border-1 border-dashed border-primary bg-primary/10 rounded-lg p-6 text-center cursor-pointer hover:bg-primary/10 transition">
+                    <label className="flex flex-col items-center justify-center w-full md:w-1/2 border border-dashed border-primary bg-primary/10 rounded-lg p-6 text-center cursor-pointer hover:bg-primary/10 transition">
                       <FiUpload size={20} className="mb-2 text-gray-900" />
                       <span className="text-xs font-medium">Upload Images</span>
                       <span className="text-[8px] text-gray-500">
@@ -1363,7 +1363,7 @@ const page = () => {
                     Upload Block Certificate{" "}
                     <span className="text-[#6D6D6D]">(Approved By NABL)</span>
                   </label>
-                  <label className="flex flex-col items-center justify-center w-full border-1 border-dashed border-primary rounded-lg p-6 text-center cursor-pointer hover:bg-gray-50 transition">
+                  <label className="flex flex-col items-center justify-center w-full border border-dashed border-primary rounded-lg p-6 text-center cursor-pointer hover:bg-gray-50 transition">
                     <FiUpload size={20} className="mb-2 text-gray-900" />
                     <span className="text-xs font-medium">
                       Upload Certificate
