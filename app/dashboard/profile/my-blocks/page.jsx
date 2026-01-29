@@ -146,9 +146,9 @@ const Page = () => {
   }
 
   return (
-    <div className="pt-18 md:pt-22 max-lg:px-4 lg:mx-24 xl:mx-32">
+    <div className="pt-16 px-4 md:px-6 lg:px-24 xl:px-32">
       <div className="flex justify-center my-2">
-        <h1 className="rounded-full border border-primary px-6 py-2 text-primary font-semibold lg:text-xl text-center">
+        <h1 className="rounded-full border border-[#871B58] px-6 py-2 text-[#871B58] font-semibold lg:text-xl text-center">
           My Blocks
         </h1>
       </div>

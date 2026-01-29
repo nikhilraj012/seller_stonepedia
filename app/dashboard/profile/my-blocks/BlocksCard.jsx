@@ -94,14 +94,14 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
       toast.error("Delete failed", { id: toastId });
     }
   };
-  
+
   const handleBlockClick = (name, id) => {
     const urlFriendlyId = name.toString().replace(/\s+/g, "-").toLowerCase();
     router.push(`/dashboard/profile/my-blocks/${id}/${urlFriendlyId}`);
   };
 
   return (
-    <div className="shadow-lg border p-3 rounded-xl border-gray-300">
+    <div>
       {showConfirm && (
         <ConfirmDialog
           message="Do you want to remove this block?"
@@ -302,7 +302,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
 
       <div className="flex justify-between items-center mt-4">
         <h1 className="text-[#000000] font-medium text-sm lg:text-base">
-          Uploaded Slabs
+          Uploaded Blocks
         </h1>
 
         {/* {status.toLowerCase() === "approved" && (
