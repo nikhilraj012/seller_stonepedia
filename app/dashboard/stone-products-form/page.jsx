@@ -158,11 +158,11 @@ const page = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (!isAuthenticated || !uid) {
-      setShowUserLogin(true);
-      toast.error("Please sign in before submitting the form");
-      return setIsSubmitting(false);
-    }
+    // if (!isAuthenticated || !uid) {
+    //   setShowUserLogin(true);
+    //   toast.error("Please sign in before submitting the form");
+    //   return setIsSubmitting(false);
+    // }
 
     try {
       // NEW FORM SUBMISSION
