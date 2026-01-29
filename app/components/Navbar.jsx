@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { RxHamburgerMenu, RxCross2 } from "react-icons/rx";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { useUi } from "./context/UiContext";
@@ -11,6 +12,7 @@ import NavbarProfile from "./NavbarProfile";
 const Navbar = () => {
   const { openLogin, openSignup, navLinks, handleNavClick, isMenuOpen, setIsMenuOpen, showProfileDropdown, setShowProfileDropdown } = useUi();
   const { user } = useAuth();
+  const router = useRouter();
   const photoUrl = user?.photoURL;
 
   const dropdownRef = useRef(null);
@@ -18,6 +20,23 @@ const Navbar = () => {
   const handleNavClickAndClose = (href) => {
     setIsMenuOpen(false);
     handleNavClick(href);
+  };
+
+  const handleLogoClick = () => {
+    if (user) {
+      router.push("/dashboard");
+    } else {
+      handleNavClick("#hero");
+    }
+  };
+
+  const handleLogoClickAndClose = () => {
+    setIsMenuOpen(false);
+    if (user) {
+      router.push("/dashboard");
+    } else {
+      handleNavClick("#hero");
+    }
   };
 
   // Close dropdown when clicking outside
@@ -43,7 +62,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-full px-4">
           <div
             className="relative h-8 w-28 sm:h-9 sm:w-32 md:h-10 md:w-32 lg:w-36"
-            onClick={() => handleNavClick("#hero")}
+            onClick={handleLogoClick}
           >
             <Image
               src="/images/logo.png"
@@ -137,7 +156,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-14 px-4 border-b border-gray-200">
           <div
             className="relative h-8 w-28 sm:h-9 sm:w-32 md:h-10 md:w-32 lg:w-36"
-            onClick={() => handleNavClickAndClose("#hero")}
+            onClick={handleLogoClickAndClose}
           >
             <Image
               src="/images/logo.png"
