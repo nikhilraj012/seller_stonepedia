@@ -3,25 +3,21 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { RxHamburgerMenu, RxCross2 } from "react-icons/rx";
-import { FaUserCircle } from "react-icons/fa";
+import { IoPersonCircleOutline } from "react-icons/io5";
 import { useUi } from "./context/UiContext";
 import { useAuth } from "./context/AuthContext";
 import NavbarProfile from "./NavbarProfile";
 
 const Navbar = () => {
   const { openLogin, openSignup, navLinks, handleNavClick, isMenuOpen, setIsMenuOpen, showProfileDropdown, setShowProfileDropdown } = useUi();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const photoUrl = user?.photoURL;
 
   const dropdownRef = useRef(null);
 
   const handleNavClickAndClose = (href) => {
     setIsMenuOpen(false);
     handleNavClick(href);
-  };
-
-  const handleLogout = async () => {
-    setShowProfileDropdown(false);
-    await logout();
   };
 
   // Close dropdown when clicking outside
@@ -77,9 +73,19 @@ const Navbar = () => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                  className="flex items-center gap-2 cursor-pointer hover:text-[#871b58]"
+                  className="flex items-center gap-2 cursor-pointer"
                 >
-                  <FaUserCircle size={32} className="text-[#871b58]" />
+                  <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border border-gray-200">
+                    {photoUrl ? (
+                      <img
+                        src={photoUrl}
+                        alt="avatar"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <IoPersonCircleOutline size={40} className="text-gray-400" />
+                    )}
+                  </div>
                 </button>
 
                 {showProfileDropdown && (

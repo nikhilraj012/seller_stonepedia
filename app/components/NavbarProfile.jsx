@@ -1,8 +1,8 @@
 import React from "react";
-import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "./context/AuthContext";
 import { useUi } from "./context/UiContext";
 import { useRouter } from "next/navigation";
+import ProfileAvatar from "./common/ProfileAvatar";
 
 const profilePages = [
   {
@@ -50,7 +50,7 @@ const NavbarProfile = ({ isMobile = false }) => {
     return (
       <>
         <div className="flex items-center gap-3 px-2 py-2">
-          <FaUserCircle size={40} className="text-[#871b58]" />
+          <ProfileAvatar size={40} />
           <div className="flex-1">
             <p className="font-semibold text-sm text-gray-800">
               {sellerDetails?.fullName}
@@ -70,7 +70,7 @@ const NavbarProfile = ({ isMobile = false }) => {
             >
               {page.title}
             </button>
-          ))}   
+          ))}
         </div>
 
         <button
@@ -87,7 +87,7 @@ const NavbarProfile = ({ isMobile = false }) => {
     <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
       <div className="px-4 py-3 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <FaUserCircle size={40} className="text-[#871b58]" />
+          <ProfileAvatar size={40} />
           <div className="flex-1">
             <p className="font-semibold text-sm text-gray-800">
               {sellerDetails?.fullName}

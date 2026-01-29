@@ -118,6 +118,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateAppUser = (userData) => {
+    // Update user state with new data (e.g., photoURL)
+    if (userData.photoURL) {
+      setUser(prevUser => ({ ...prevUser, photoURL: userData.photoURL }));
+    }
+    // Update sellerDetails if provided
+    if (userData.sellerDetails) {
+      setSellerDetails(userData.sellerDetails);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -128,6 +139,7 @@ export const AuthProvider = ({ children }) => {
         register,
         login,
         logout,
+        updateAppUser,
       }}
     >
       {children}

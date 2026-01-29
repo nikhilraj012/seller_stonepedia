@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
+import { uploadProfilePhoto } from "../../utils/uploadProfilePhoto";
 
 const UiContext = createContext();
 
@@ -10,6 +11,7 @@ export const UiProvider = ({ children }) => {
   const [loginState, setLoginState] = useState("login");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState(null);
 
   const openGetInTouch = () => setIsGetInTouchOpen(true);
   const closeGetInTouch = () => setIsGetInTouchOpen(false);
@@ -48,6 +50,12 @@ export const UiProvider = ({ children }) => {
     }
   };
 
+  const updateAppUser = (userData) => {
+    // This function will be passed to the uploadProfilePhoto utility
+    // The actual user update is handled in the utility via AuthContext
+    setPhotoUrl(userData.photoURL);
+  };
+
   return (
     <UiContext.Provider
       value={{
@@ -66,6 +74,10 @@ export const UiProvider = ({ children }) => {
         setIsMenuOpen,
         showProfileDropdown,
         setShowProfileDropdown,
+        photoUrl,
+        setPhotoUrl,
+        uploadProfilePhoto,
+        updateAppUser,
       }}
     >
       {children}
