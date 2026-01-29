@@ -33,7 +33,7 @@ const GlobalLoading = ({ children }) => {
     return (
       <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
         <img
-          src="/images/logo.png"
+          src="/images/logo1.png"
           alt="Loading"
           className="w-20 md:w-24 animate-pulse"
         />
