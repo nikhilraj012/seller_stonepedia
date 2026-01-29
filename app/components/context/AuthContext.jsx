@@ -43,6 +43,13 @@ export const AuthProvider = ({ children }) => {
           duration: 4000,
           position: "top-center",
         });
+        
+        // Fetch seller details after successful registration
+        const sellerResult = await getSellerDetails(result.user.uid);
+        if (sellerResult.success) {
+          setSellerDetails(sellerResult.data);
+        }
+        
         router.push('/dashboard');
         return { success: true };
       } else {
