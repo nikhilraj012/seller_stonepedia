@@ -1,9 +1,40 @@
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "./context/AuthContext";
+import { useRouter } from "next/navigation";
 
-const NavbarProfile = ({ isMobile = false, onLogout }) => {
-  const {sellerDetails } = useAuth();
+const profilePages = [
+  {
+    title: "My Blocks",
+    href: "/dashboard/profile/my-blocks",
+  },
+  {
+    title: "My E-Processing Unit",
+    href: "/dashboard/profile/my-e-processing-unit",
+  },
+  {
+    title: "My E-Gallery",
+    href: "/dashboard/profile/my-e-gallery",
+  },
+  {
+    title: "My Stone Products",
+    href: "/dashboard/profile/my-stone-products",
+  },
+];
+
+const NavbarProfile = ({ isMobile = false, setIsMenuOpen }) => {
+  const { sellerDetails, logout, user } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    setIsMenuOpen(false);
+  };
+
+  const handleNavigation = (href) => {
+    router.push(href);
+    setIsMenuOpen(false);
+  };
 
   if (isMobile) {
     return (
@@ -12,14 +43,28 @@ const NavbarProfile = ({ isMobile = false, onLogout }) => {
           <FaUserCircle size={40} className="text-[#871b58]" />
           <div className="flex-1">
             <p className="font-semibold text-sm text-gray-800">
-              {sellerDetails.fullName}
+              {sellerDetails?.fullName}
             </p>
-            <p className="text-xs text-gray-500 truncate">{sellerDetails.email}</p>
+            <p className="text-xs text-gray-500 truncate">
+              {sellerDetails?.email}
+            </p>
           </div>
         </div>
 
+        <div className="space-y-2">
+          {profilePages.map((page) => (
+            <button
+              key={page.href}
+              onClick={() => handleNavigation(page.href)}
+              className="w-full text-left px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded cursor-pointer"
+            >
+              {page.title}
+            </button>
+          ))}   
+        </div>
+
         <button
-          onClick={onLogout}
+          onClick={handleLogout}
           className="bg-[#1E1E1E] text-white py-2 rounded cursor-pointer"
         >
           Logout
@@ -29,21 +74,36 @@ const NavbarProfile = ({ isMobile = false, onLogout }) => {
   }
 
   return (
-    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
       <div className="px-4 py-3 border-b border-gray-200">
         <div className="flex items-center gap-3">
           <FaUserCircle size={40} className="text-[#871b58]" />
           <div className="flex-1">
             <p className="font-semibold text-sm text-gray-800">
-              {sellerDetails.fullName}
+              {sellerDetails?.fullName}
             </p>
-            <p className="text-xs text-gray-500 truncate">{sellerDetails.email}</p>
+            <p className="text-xs text-gray-500 truncate">
+              {sellerDetails?.email}
+            </p>
           </div>
         </div>
       </div>
+
+      <div className="border-t border-gray-100">
+        {profilePages.map((page) => (
+          <button
+            key={page.href}
+            onClick={() => handleNavigation(page.href)}
+            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer active:text-[#871b58]"
+          >
+            {page.title}
+          </button>
+        ))}
+      </div>
+
       <button
-        onClick={onLogout}
-        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+        onClick={handleLogout}
+        className="w-full bg-[#871b58] text-white rounded-md py-2 cursor-pointer mt-2"
       >
         Logout
       </button>

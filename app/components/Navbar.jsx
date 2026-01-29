@@ -10,7 +10,7 @@ import NavbarProfile from "./NavbarProfile";
 
 const Navbar = () => {
   const { openLogin, openSignup, navLinks, handleNavClick } = useUi();
-  const { user, sellerDetails, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const dropdownRef = useRef(null);
@@ -84,7 +84,9 @@ const Navbar = () => {
                 </button>
 
                 {showProfileDropdown && (
-                  <NavbarProfile onLogout={handleLogout} />
+                  <NavbarProfile 
+                    setIsMenuOpen={setShowProfileDropdown} 
+                  />
                 )}
               </div>
             ) : (
@@ -157,11 +159,7 @@ const Navbar = () => {
 
           {user ? (
             <NavbarProfile
-              isMobile={true}
-              onLogout={() => {
-                setIsMenuOpen(false);
-                handleLogout();
-              }}
+              isMobile={true} setIsMenuOpen={setIsMenuOpen}
             />
           ) : (
             <>
