@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { uploadProfilePhoto } from "../../utils/uploadProfilePhoto";
 import { useAuth } from "../context/AuthContext";
+import Image from "next/image";
 
 const ProfileAvatar = ({ size = 40, className = "" }) => {
   const { user, updateAppUser } = useAuth();
@@ -34,10 +35,12 @@ const ProfileAvatar = ({ size = 40, className = "" }) => {
         onClick={handleChangePhotoClick}
       >
         {photoUrl ? (
-          <img
+          <Image
             src={photoUrl}
             alt="avatar"
-            className="w-full h-full object-cover"
+            fill
+            priority
+            className="object-contain"
           />
         ) : (
           <IoPersonCircleOutline size={size} className="text-gray-400" />

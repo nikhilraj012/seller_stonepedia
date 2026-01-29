@@ -75,15 +75,19 @@ const Navbar = () => {
                   onClick={() => setShowProfileDropdown(!showProfileDropdown)}
                   className="flex items-center gap-2 cursor-pointer"
                 >
-                  <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border border-gray-200">
+                  <div className="relative w-10 h-10 rounded-full overflow-hidden border border-gray-200">
                     {photoUrl ? (
-                      <img
+                      <Image
                         src={photoUrl}
                         alt="avatar"
-                        className="w-full h-full object-cover"
+                        fill
+                        priority
+                        className="object-cover"
                       />
                     ) : (
-                      <IoPersonCircleOutline size={40} className="text-gray-400" />
+                      <div className="w-full h-full flex items-center justify-center">
+                        <IoPersonCircleOutline size={40} className="text-gray-400" />
+                      </div>
                     )}
                   </div>
                 </button>
