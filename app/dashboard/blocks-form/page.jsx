@@ -649,7 +649,7 @@ const page = () => {
   };
 
   return (
-    <div className="pt-22 max-lg:px-4 lg:mx-24 xl:mx-32">
+    <div className="py-16 max-lg:px-4 lg:mx-24 xl:mx-32">
       <div className="space-y-1 lg:space-y-2 my-3 md:my-5">
         <h1 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-medium">
           Register your quarry block.
@@ -664,7 +664,7 @@ const page = () => {
           onSubmit={handleSubmit}
           className="max-md:space-y-5 md:flex gap-5 xl:gap-10"
         >
-          <div className="shadow-lg md:shadow-2xl p-4 rounded-lg md:w-3/5 space-y-2 md:space-y-4">
+          <div className="shadow-lg p-4 rounded-lg md:w-3/5 space-y-2 md:space-y-4">
             {/* Company / Quarry Details */}
             <div>
               <h2 className="text-xs font-semibold mb-1">Company Details</h2>
@@ -867,7 +867,6 @@ const page = () => {
                   <div className="w-full flex flex-col">
                     <label htmlFor="name" className="mb-0.5 text-xs">
                       Phone Number
-                      {uid}
                     </label>
                     <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent ">
@@ -1040,7 +1039,8 @@ const page = () => {
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="height"
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           placeholder="Height"
                           value={block.height}
                           onChange={(e) =>
@@ -1064,7 +1064,8 @@ const page = () => {
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="width"
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           placeholder="Width"
                           value={block.width}
                           onChange={(e) =>
@@ -1088,7 +1089,8 @@ const page = () => {
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="length"
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           placeholder="Length"
                           value={block.length}
                           onChange={(e) =>
@@ -1117,7 +1119,8 @@ const page = () => {
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="supplyCapacity"
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           placeholder="Enter in ton"
                           value={block.supplyCapacity}
                           onChange={(e) =>
@@ -1144,7 +1147,8 @@ const page = () => {
                       <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="quantityAvailable"
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           placeholder="Enter in ton"
                           value={block.quantity}
                           onChange={(e) =>
@@ -1168,7 +1172,8 @@ const page = () => {
                       <div className="flex items-center justify-between gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                         <input
                           id="minimumOrder"
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           placeholder="Enter in ton"
                           value={block.minimumOrder}
                           onChange={(e) =>
@@ -1180,22 +1185,6 @@ const page = () => {
                           className="flex-1 w-full bg-transparent outline-none border-0 p-3 text-xs"
                           name="minimumOrder"
                         />
-                        <div className="flex flex-col mr-2">
-                          <button
-                            type="button"
-                            onClick={handleIncrement}
-                            className="cursor-pointer hover:text-primary focus:outline-none"
-                          >
-                            <MdOutlineKeyboardArrowUp size={16} />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={handleDecrement}
-                            className="cursor-pointer hover:text-primary focus:outline-none"
-                          >
-                            <MdOutlineKeyboardArrowDown size={16} />
-                          </button>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -1225,7 +1214,8 @@ const page = () => {
                       />
                       <div>
                         <input
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           className="w-full outline-none h-full text-sm"
                           placeholder="Enter Price"
                           value={block.priceA}
@@ -1263,7 +1253,8 @@ const page = () => {
                       />
                       <div>
                         <input
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           className="w-full outline-none h-full text-sm"
                           placeholder="Enter Price"
                           value={block.priceB}
@@ -1301,7 +1292,8 @@ const page = () => {
                       />
                       <div>
                         <input
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           className="w-full outline-none h-full text-sm"
                           placeholder="Enter Price"
                           value={block.priceC}
