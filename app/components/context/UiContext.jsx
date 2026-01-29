@@ -13,6 +13,7 @@ export const UiProvider = ({ children }) => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [photoUrl, setPhotoUrl] = useState(null);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const openGetInTouch = () => setIsGetInTouchOpen(true);
   const closeGetInTouch = () => setIsGetInTouchOpen(false);
 
@@ -59,6 +60,8 @@ export const UiProvider = ({ children }) => {
   return (
     <UiContext.Provider
       value={{
+        isSubmitting,
+        setIsSubmitting,
         isGetInTouchOpen,
         openGetInTouch,
         closeGetInTouch,

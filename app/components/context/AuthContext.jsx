@@ -2,7 +2,13 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { registerUser, loginUser, logoutUser, getSellerDetails, observeAuthState } from "../../firebase/auth";
+import {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getSellerDetails,
+  observeAuthState,
+} from "../../firebase/auth";
 import toast from "react-hot-toast";
 
 const AuthContext = createContext();
@@ -18,7 +24,7 @@ export const AuthProvider = ({ children }) => {
     const unsubscribe = observeAuthState(async (firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser);
-        
+
         // Fetch seller details
         const result = await getSellerDetails(firebaseUser.uid);
         if (result.success) {
@@ -37,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (email, password, userData) => {
     try {
       const result = await registerUser(email, password, userData);
-      
+
       if (result.success) {
         toast.success("Registration successful! Welcome aboard!", {
           duration: 4000,
@@ -50,7 +56,7 @@ export const AuthProvider = ({ children }) => {
           setSellerDetails(sellerResult.data);
         }
         
-        router.push('/dashboard');
+        router.push("/dashboard");
         return { success: true };
       } else {
         toast.error(result.error || "Registration failed. Please try again.", {
@@ -71,19 +77,22 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const result = await loginUser(email, password);
-      
+
       if (result.success) {
         toast.success("Login successful!", {
           duration: 4000,
           position: "top-center",
         });
-        router.push('/dashboard');
+        router.push("/dashboard");
         return { success: true };
       } else {
-        toast.error(result.error || "Login failed. Please check your credentials.", {
-          duration: 4000,
-          position: "top-center",
-        });
+        toast.error(
+          result.error || "Login failed. Please check your credentials.",
+          {
+            duration: 4000,
+            position: "top-center",
+          },
+        );
         return { success: false, error: result.error };
       }
     } catch (error) {
@@ -99,13 +108,13 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoggingOut(true);
       const result = await logoutUser();
-      
+
       if (result.success) {
         toast.success("Logged out successfully!", {
           duration: 3000,
           position: "top-center",
         });
-        router.push('/');
+        router.push("/");
         return { success: true };
       } else {
         setLoggingOut(false);
@@ -139,6 +148,8 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        authEmail: user?.email,
+        uid: user?.uid,
         user,
         sellerDetails,
         loading,
