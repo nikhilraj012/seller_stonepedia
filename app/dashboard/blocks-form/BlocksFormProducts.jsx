@@ -257,12 +257,12 @@ const BlocksFormProducts = ({
 
             {expandedBlockId === block.id && (
               <div className="space-y-2 text-xs max-h-[400px] overflow-y-auto px-2">
-                <div className="border-[1px] border-[#E8E8E8] p-2 rounded-md space-y-1">
+                <div className="border border-[#E8E8E8] p-2 rounded-md space-y-1">
                   <h2 className="font-medium text-sm">Description</h2>
                   <span className="text-[#3B3B3B]">{block.description}</span>
                 </div>
 
-                <div className="border-[1px] border-[#E8E8E8] p-2 rounded-md space-y-1 flex justify-between font-medium">
+                <div className="border border-[#E8E8E8] p-2 rounded-md space-y-1 flex justify-between font-medium">
                   <div className="space-y-1">
                     <p className="">
                       Origin :{" "}
