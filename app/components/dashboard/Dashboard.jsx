@@ -8,8 +8,7 @@ const businessCategories = [
     title: "Block",
     description:
       "A block seller trades large quantities of assets, influencing market prices significantly.",
-    image:
-      "https://www.figma.com/api/mcp/asset/33c08e8a-13ad-4b54-b6dd-eb2ddb282d12",
+    image: "/images/dashboard/block.webp",
     route: "/dashboard/blocks-form",
   },
   {
@@ -17,8 +16,7 @@ const businessCategories = [
     title: "E-processing unit",
     description:
       "List electronic processing units here to reach the right buyers faster.",
-    image:
-      "https://www.figma.com/api/mcp/asset/9bcc4936-6522-499c-a28c-fd42dd864ea2",
+    image: "/images/dashboard/processing-unit.webp",
     route: "/dashboard/e-processing-unit-form",
   },
   {
@@ -26,8 +24,7 @@ const businessCategories = [
     title: "E-Gallery",
     description:
       "An E-gallery empowers sellers to showcase and sell their art to a global audience.",
-    image:
-      "https://www.figma.com/api/mcp/asset/0eaf107c-89b3-4502-87a8-0f3aa599b564",
+    image: "/images/dashboard/gallery.webp",
     route: "/dashboard/e-gallery-form",
   },
 
@@ -36,8 +33,7 @@ const businessCategories = [
     title: "Stone Product",
     description:
       "A stone product allows sellers to present unique creations to customers worldwide.",
-    image:
-      "https://www.figma.com/api/mcp/asset/bbe31e5c-9c45-4cc6-92bf-8e9adcd6f159",
+    image: "/images/dashboard/stone-product.webp",
     route: "/dashboard/stone-products-form",
   },
 ];
@@ -81,14 +77,14 @@ const Dashboard = () => {
                   <h2 className="text-2xl font-medium text-[#141219] text-center">
                     {category.title}
                   </h2>
-                  <p className="text-sm text-[#141219] text-center leading-normal">
+                  <p className="text-sm text-[#141219] text-center">
                     {category.description}
                   </p>
                 </div>
 
                 <button
                   onClick={() => router.push(category.route)}
-                  className="w-full border border-[rgba(20,18,25,0.2)] rounded-[40px] px-8 py-4 text-base font-medium text-[#141219] hover:bg-gray-50 transition-colors mt-auto"
+                  className="w-full border border-[#141219]/20 rounded-[40px] px-8 py-4 text-base font-medium text-[#141219] hover:bg-gray-50 transition-colors mt-auto cursor-pointer"
                 >
                   Register
                 </button>
