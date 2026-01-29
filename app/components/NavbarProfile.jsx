@@ -1,6 +1,7 @@
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "./context/AuthContext";
+import { useUi } from "./context/UiContext";
 import { useRouter } from "next/navigation";
 
 const profilePages = [
@@ -22,18 +23,27 @@ const profilePages = [
   },
 ];
 
-const NavbarProfile = ({ isMobile = false, setIsMenuOpen }) => {
-  const { sellerDetails, logout, user } = useAuth();
+const NavbarProfile = ({ isMobile = false }) => {
+  const { sellerDetails, logout } = useAuth();
+  const { setIsMenuOpen, setShowProfileDropdown } = useUi();
   const router = useRouter();
 
   const handleLogout = async () => {
     await logout();
-    setIsMenuOpen(false);
+    if (isMobile) {
+      setIsMenuOpen(false);
+    } else {
+      setShowProfileDropdown(false);
+    }
   };
 
   const handleNavigation = (href) => {
     router.push(href);
-    setIsMenuOpen(false);
+    if (isMobile) {
+      setIsMenuOpen(false);
+    } else {
+      setShowProfileDropdown(false);
+    }
   };
 
   if (isMobile) {

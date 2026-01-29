@@ -9,10 +9,9 @@ import { useAuth } from "./context/AuthContext";
 import NavbarProfile from "./NavbarProfile";
 
 const Navbar = () => {
-  const { openLogin, openSignup, navLinks, handleNavClick } = useUi();
+  const { openLogin, openSignup, navLinks, handleNavClick, isMenuOpen, setIsMenuOpen, showProfileDropdown, setShowProfileDropdown } = useUi();
   const { user, logout } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+
   const dropdownRef = useRef(null);
 
   const handleNavClickAndClose = (href) => {
@@ -84,9 +83,7 @@ const Navbar = () => {
                 </button>
 
                 {showProfileDropdown && (
-                  <NavbarProfile 
-                    setIsMenuOpen={setShowProfileDropdown} 
-                  />
+                  <NavbarProfile />
                 )}
               </div>
             ) : (

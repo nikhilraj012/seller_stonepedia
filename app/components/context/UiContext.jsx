@@ -8,6 +8,8 @@ export const UiProvider = ({ children }) => {
   const [isGetInTouchOpen, setIsGetInTouchOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [loginState, setLoginState] = useState("login");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   const openGetInTouch = () => setIsGetInTouchOpen(true);
   const closeGetInTouch = () => setIsGetInTouchOpen(false);
@@ -35,12 +37,13 @@ export const UiProvider = ({ children }) => {
     const element = document.querySelector(href);
     if (element) {
       const navbarHeight = 56;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const elementPosition =
+        element.getBoundingClientRect().top + window.pageYOffset;
       const offsetPosition = elementPosition - navbarHeight;
-      
+
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }
   };
@@ -59,6 +62,10 @@ export const UiProvider = ({ children }) => {
         closeLogin,
         navLinks,
         handleNavClick,
+        isMenuOpen,
+        setIsMenuOpen,
+        showProfileDropdown,
+        setShowProfileDropdown,
       }}
     >
       {children}
