@@ -212,7 +212,7 @@ const page = () => {
         console.log("Saved in Users also:", ref1.id);
         console.log("hu", productList);
         toast.success("Form submitted successfully!");
-        navigate("/stonepedia-for-business/sell-stone-products");
+        // navigate("/stonepedia-for-business/sell-stone-products");
         setProductList([]);
         setCompanyData({});
         setResetForm(true);
@@ -266,8 +266,8 @@ const page = () => {
   };
 
   return (
-    <div className="max-lg:px-4 lg:mx-24 xl:mx-32">
-      <div className="mt-23 md:mt-21 lg:mt-25 xl:mt-27 mx-auto ">
+    <div className="py-16 max-lg:px-4 lg:mx-24 xl:mx-32">
+      <div className="my-3 md:my-5 mx-auto ">
         <h1 className="font-medium text-[#871B58] text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl">
           Sell Stone Products
         </h1>
