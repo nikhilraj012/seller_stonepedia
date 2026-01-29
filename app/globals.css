@@ -3,6 +3,7 @@
 @theme {
   --font-poppins: var(--font-poppins);
   --font-outfit: var(--font-outfit);
+  --color-primary: #871B58;
 }
 
 @layer base {
