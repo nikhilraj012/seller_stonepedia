@@ -88,7 +88,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
             <label htmlFor="productName" className="mb-0.5 text-xs font-medium">
               Product Name
             </label>
-            <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+            <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
               <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                 <input
                   id="productName"
@@ -125,7 +125,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
               Size of Product (W × H)
             </label>
             <div className="grid grid-cols-2 gap-2">
-              <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+              <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                   <input
                     id="height"
@@ -148,7 +148,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
                   />
                 </div>
               </div>
-              <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+              <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                   <input
                     id="width"
@@ -178,7 +178,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
               <label htmlFor="weight" className="mb-0.5 text-xs font-medium">
                 Weight <span className="text-[#BCBCBC]">(kg)</span>
               </label>
-              <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+              <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                   <input
                     id="weight"
@@ -205,7 +205,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
             >
               Minimum Order
             </label>
-            <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+            <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
               <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                 <input
                   id="minimumOrder"
@@ -228,7 +228,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
             >
               Price Per Product
             </label>
-            <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+            <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
               <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                 <div className="relative flex-1 group">
                   <input
@@ -244,7 +244,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
                   />
 
                   {!product.currency && (
-                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-[#871B58] text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
+                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
                       Please select currency first
                     </div>
                   )}
@@ -301,7 +301,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
               <label htmlFor="media" className="mb-0.5 text-xs font-medium">
                 Upload Block image/Video
               </label>
-              <div className="border border-dashed  border-[#871B58] rounded-lg p-6 text-center text-gray-600 relative bg-white hover:shadow-md transition min-h-[100px] flex flex-col justify-center items-center">
+              <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white hover:shadow-md transition min-h-[100px] flex flex-col justify-center items-center">
                 <input
                   id="media"
                   type="file"
@@ -325,7 +325,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
                     <button
                       type="button"
                       onClick={() => document.getElementById("media").click()} // <-- media here
-                      className="inline-product bg-white border font-medium text-sm px-6 py-1 rounded-xl shadow-sm hover:bg-[#871B58] hover:text-white  transition"
+                      className="inline-product bg-white border font-medium text-sm px-6 py-1 rounded-xl shadow-sm hover:bg-primary hover:text-white  transition"
                     >
                       Browse
                     </button>

@@ -79,7 +79,7 @@ const CustomDropdown = ({
                 value={opt}
                 checked={value === opt}
                 onChange={() => selectValue(opt)}
-                className="accent-[#871B58]"
+                className="accent-primary"
               />
               {opt}
             </label>
@@ -103,7 +103,7 @@ const CustomDropdown = ({
                   ${
                     !otherValue.trim()
                       ? "bg-primary/70 cursor-not-allowed"
-                      : "bg-[#871B58] cursor-pointer"
+                      : "bg-primary cursor-pointer"
                   }`}
                 >
                   Add

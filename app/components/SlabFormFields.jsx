@@ -132,7 +132,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
             >
               Stone Category
             </label>
-            <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+            <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
               <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                 <input
                   id="stoneCategory"
@@ -151,7 +151,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
             <label htmlFor="stoneName" className="mb-0.5 text-xs font-medium">
               Stone Name
             </label>
-            <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+            <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
               <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                 <input
                   id="stoneName"
@@ -170,7 +170,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
           <label className="text-xs font-medium mb-0.5 block">
             Add Stone Finishes
           </label>
-          <div className="rounded-lg p-[1px] transition bg-transparent outline-none ">
+          <div className="rounded-lg p-px transition bg-transparent outline-none ">
             <div
               ref={bindRef("finish")}
               tabIndex={0}
@@ -217,7 +217,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
                     type="checkbox"
                     checked={product.finish.includes(opt)}
                     onChange={() => toggleOption("finish", opt)}
-                    className="accent-[#871B58] cursor-pointer bg-transparent outline-none border-none"
+                    className="accent-primary cursor-pointer bg-transparent outline-none border-none"
                   />
                   {opt}
                 </label>
@@ -253,7 +253,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
           >
             Add Stone Thickness
           </label>
-          <div className="rounded-lg p-[1px] transition bg-transparent outline-none">
+          <div className="rounded-lg p-px transition bg-transparent outline-none">
             <div
               ref={bindRef("thickness")}
               tabIndex={0}
@@ -295,7 +295,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
                     name="thickness"
                     checked={product.thickness.includes(opt)}
                     onChange={() => toggleOption("thickness", opt)}
-                    className="accent-[#871B58] cursor-pointer bg-transparent outline-none border-none"
+                    className="accent-primary cursor-pointer bg-transparent outline-none border-none"
                   />
                   {opt}
                 </label>
@@ -324,7 +324,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
                         ${
                           !customThickness.trim()
                             ? "bg-primary/70 cursor-not-allowed"
-                            : "bg-[#871B58]"
+                            : "bg-primary"
                         }`}
                   >
                     Add
@@ -396,7 +396,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
             </label>
             <div className="grid grid-cols-2 gap-2">
               <div ref={bindRef("heightWrapper")} className="relative">
-                <div className="rounded-lg p-[1px] transition bg-transparent outline-none">
+                <div className="rounded-lg p-px transition bg-transparent outline-none">
                   <div
                     ref={bindRef("height")}
                     tabIndex={0}
@@ -439,7 +439,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
                           type="checkbox"
                           checked={product.size.height.includes(opt)}
                           onChange={() => toggleOption("height", opt)}
-                          className="bg-transparent outline-none border-none cursor-pointer accent-[#871B58]"
+                          className="bg-transparent outline-none border-none cursor-pointer accent-primary"
                         />
                         {opt}
                       </label>
@@ -467,7 +467,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
               </div>
 
               <div ref={bindRef("widthWrapper")} className="relative">
-                <div className="rounded-lg p-[1px] transition bg-transparent outline-none">
+                <div className="rounded-lg p-px transition bg-transparent outline-none">
                   <div
                     ref={bindRef("width")}
                     tabIndex={0}
@@ -509,7 +509,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
                           type="checkbox"
                           checked={product.size.width.includes(opt)}
                           onChange={() => toggleOption("width", opt)}
-                          className="accent-[#871B58] cursor-pointer bg-transparent outline-none border-none"
+                          className="accent-primary cursor-pointer bg-transparent outline-none border-none"
                         />
                         {opt}
                       </label>
@@ -544,7 +544,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
           <label htmlFor="value" className="mb-0.5 text-xs font-medium">
             Enter Available Quantity
           </label>
-          <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+          <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
             <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
               <input
                 id="value"
@@ -590,7 +590,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
             <label htmlFor="media" className="mb-0.5 text-xs font-medium">
               Upload Block image/Video
             </label>
-            <div className="border border-dashed  border-[#871B58] rounded-lg p-6 text-center text-gray-600 relative bg-white hover:shadow-md transition min-h-[100px] flex flex-col justify-center items-center">
+            <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white hover:shadow-md transition min-h-[100px] flex flex-col justify-center items-center">
               <input
                 id="media"
                 type="file"
@@ -614,7 +614,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
                   <button
                     type="button"
                     onClick={() => document.getElementById("media").click()} // <-- media here
-                    className="inline-product bg-white border font-medium text-sm px-6 py-1 rounded-xl shadow-sm hover:bg-[#871B58] hover:text-white hover:shadow-md transition"
+                    className="inline-product bg-white border font-medium text-sm px-6 py-1 rounded-xl shadow-sm hover:bg-primary hover:text-white hover:shadow-md transition"
                   >
                     Browse
                   </button>
