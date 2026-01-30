@@ -251,7 +251,7 @@ const GalleryEdit = ({ mode }) => {
 
   return (
     <>
-      <div className="  flex justify-center max-lg:px-4 lg:mx-24 xl:mx-32">
+      <div className="flex justify-center max-lg:px-4 lg:mx-24 xl:mx-32">
         <div className="pt-19 md:pt-22   md:w-3/5 ">
           {isSubmitting && (
             <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
