@@ -316,14 +316,14 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
               >
                 View Details
               </button>
-              {(status === "approved" || status === "pending") && (
+              {/* {(status === "approved" || status === "pending") && (
                 <button
                   onClick={() => onProductDelete(item, product)}
                   className="text-xs outline-none md:text-sm px-4 md:px-6 py-2 rounded-md cursor-pointer hover:bg-gray-100 bg-gray-50 text-gray-800 border border-gray-200 "
                 >
                   Delete
                 </button>
-              )}
+              )} */}
             </div>
           </div>
         ))}
