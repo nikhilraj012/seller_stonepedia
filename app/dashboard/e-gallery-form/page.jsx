@@ -12,10 +12,6 @@ import {
   addDoc,
   doc,
   setDoc,
-  where,
-  query,
-  getDocs,
-  deleteDoc,
   getDoc,
   updateDoc,
   arrayUnion,
@@ -31,9 +27,9 @@ import { db, storage } from "@/app/firebase/config";
 const page = () => {
 
 const searchParams = useSearchParams();
-  const { setShowUserLogin, navigate, isSubmitting, setIsSubmitting } = useUi();
+  const {  isSubmitting, setIsSubmitting } = useUi();
 
-  const { isAuthenticated, uid, authEmail } = useAuth();
+  const {  uid, authEmail } = useAuth();
   const [resetForm, setResetForm] = useState(false);
 
   const [productList, setProductList] = useState([]);
@@ -142,12 +138,6 @@ const hasApprovedForm = searchParams.get("hasApprovedForm") === "true";
     e.preventDefault();
     setIsSubmitting(true);
 
-    // if (!isAuthenticated || !uid) {
-    //   setShowUserLogin(true);
-    //   toast.error("Please sign in before submitting the form");
-    //   return setIsSubmitting(false);
-    // }
-
     try {
       // NEW FORM SUBMISSION
 
@@ -194,7 +184,7 @@ const hasApprovedForm = searchParams.get("hasApprovedForm") === "true";
         console.log("Saved in Users also:", ref1.id);
         console.log("hu", productList);
         toast.success("Form submitted successfully!");
-        // navigate("/stonepedia-for-business/create-e-gallery");
+        router.push("/dashboard");
         setProductList([]);
         setCompanyData({});
         setResetForm(true);
@@ -247,9 +237,28 @@ const hasApprovedForm = searchParams.get("hasApprovedForm") === "true";
       setIsSubmitting(false);
     }
   };
-
+  useEffect(() => {
+    if (isSubmitting) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isSubmitting]);
   return (
     <div className="py-16 max-lg:px-4 lg:mx-24 xl:mx-32">
+      {isSubmitting && (
+        <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
+          <img    
+          src="/images/logo1.png"
+          alt="Loading"
+          className="w-20 md:w-24 animate-pulse"
+        />
+          
+        </div>
+      )}
       <div className=" my-3 md:my-5 mx-auto ">
         <h1 className="font-medium text-[#871B58] text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl">
           E - Gallery
@@ -258,15 +267,6 @@ const hasApprovedForm = searchParams.get("hasApprovedForm") === "true";
           Fill this form to Upload your slab
         </p>
       </div>
-      {isSubmitting && (
-        <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
-          <img
-            src="/logo.png"
-            alt="Loading"
-            className="w-20 md:w-24 animate-pulse"
-          />
-        </div>
-      )}
       <div className="mx-auto max-w-7xl relative">
         <form
           onSubmit={handleSubmit}

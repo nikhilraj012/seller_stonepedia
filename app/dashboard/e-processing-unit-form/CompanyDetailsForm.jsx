@@ -59,9 +59,9 @@ const initialProductData = {
 };
 
 const CompanyDetailsForm = () => {
-  const { setShowUserLogin, navigate, isSubmitting, setIsSubmitting } = useUi();
+  const { isSubmitting, setIsSubmitting } = useUi();
  
-    const { isAuthenticated, uid , authEmail} = useAuth();
+    const {uid , authEmail} = useAuth();
   const [formData, setFormData] = useState(initialFormData);
   const [productList, setProductList] = useState([]);
 
@@ -518,15 +518,7 @@ const CompanyDetailsForm = () => {
 
   return (
     <div className="relative">
-      {isSubmitting && (
-        <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
-          <img
-            src="/logo.png"
-            alt="Loading"
-            className="w-20 md:w-24 animate-pulse"
-          />
-        </div>
-      )}
+      
       <form
         onSubmit={handleSubmit}
         className="max-md:space-y-5 md:flex justify-center mt-4 md:mt-7 gap-5 xl:gap-10"

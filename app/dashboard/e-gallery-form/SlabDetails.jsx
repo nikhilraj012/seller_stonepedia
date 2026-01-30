@@ -16,7 +16,8 @@ const SlabDetails = forwardRef(
       stoneName: "",
       finish: [],
       thickness: [],
-      units: null,
+      units: "",
+
       size: { width: [], height: [] },
       // value: "",
       description: "",
@@ -94,7 +95,7 @@ const refs = useRef({
         // id: product.id || uuidv4(),
         finish: [...product.finish],
         thickness: [...product.thickness],
-        units: product.units?.label,
+        units: product.units?.label ?? null,
         size: {
           width: [...product.size.width],
           height: [...product.size.height],
