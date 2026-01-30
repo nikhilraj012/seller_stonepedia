@@ -1,17 +1,18 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useUi } from "@/app/components/context/UiContext";
-import MediaUploader from "@/app/dashboard/components/galleryMediaUploader/MediaUploader";
+import MediaUploader from "@/app/components/common/gallery/MediaUploader";
 import SlabFormFields from "@/app/components/SlabFormFields";
 import { auth, db, storage } from "@/app/firebase/config";
 import { toSlug } from "@/app/utils/helpers";
+import { useAuth } from "@/app/components/context/AuthContext";
 
 const page = () => {
   const refs = useRef({});
+  const { isAuthenticated, uid } = useAuth();
   const { companySlug, productSlug } = useParams();
   const router = useRouter();
   const [gallery, setGallery] = useState(null);
@@ -35,36 +36,40 @@ const page = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const user = auth.currentUser;
-        if (!user) return;
+        if (!isAuthenticated) return;
 
         const qSnap = await getDocs(
-          collection(db, "SellerDetails", user.uid, collectionName),
+          collection(db, "SellerDetails", uid, collectionName),
         );
 
         qSnap.forEach((docSnap) => {
           const data = docSnap.data();
 
-          if (toSlug(data.companyDetails.shopName) === companySlug) {
-            const slab = data.products.find(
-              (p) => toSlug(p.stoneName) === productSlug,
-            );
+        if (
+          data?.companyDetails?.shopName &&
+          toSlug(data.companyDetails.shopName) === companySlug
+        ) {
+      if (!Array.isArray(data.products)) return;
 
-            if (slab) {
-             setGallery({
-               id: docSnap.id, 
-               ...data,
-             });
+      const slab = data.products.find(
+        (p) => toSlug(p.stoneName) === productSlug,
+      );
 
-              setProduct({
-                ...slab,
-                units:
-                  typeof slab.units === "string"
-                    ? { label: slab.units, value: slab.units }
-                    : slab.units,
-              });
-            }
+          if (slab) {
+            setGallery({
+              id: docSnap.id,
+              ...data,
+            });
+
+            setProduct({
+              ...slab,
+              units:
+                typeof slab.units === "string"
+                  ? { label: slab.units, value: slab.units }
+                  : slab.units,
+            });
           }
+        }
         });
       } catch (err) {
         console.log(err);
@@ -87,7 +92,7 @@ const page = () => {
         const name = file.name || `file_${Date.now()}`;
         const fileRef = ref(
           storage,
-          `StonepediaForBusiness/${collectionName}/${auth.currentUser.uid}/${path}/${name}`,
+          `${collectionName}/${uid}/${path}/${name}`,
         );
 
         await uploadBytes(fileRef, file);
@@ -178,8 +183,8 @@ const page = () => {
       }
 
       setIsSubmitting(true);
-      const user = auth.currentUser;
-      if (!user) return;
+
+      if (!isAuthenticated) return;
       const newMedia = await uploadFiles(
         product.media.filter((m) => m.file),
         `products/${product.id}`,
@@ -196,15 +201,8 @@ const page = () => {
         p.id === updatedSlab.id ? updatedSlab : p,
       );
 
-     const uRef = doc(
-       db,
-       "SellerDetails",
-       user.uid,
-       collectionName,
-       gallery.id,
-     );
-     const gRef = doc(db, collectionName, gallery.id);
-
+      const uRef = doc(db, "SellerDetails", uid, collectionName, gallery.id);
+      const gRef = doc(db, collectionName, gallery.id);
 
       await updateDoc(uRef, { products: updatedProducts });
       await updateDoc(gRef, { products: updatedProducts });
@@ -222,7 +220,11 @@ const page = () => {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white">
-        <img src="images/logo1.png" alt="Loading" className="w-16 animate-pulse" />
+        <img
+          src="images/logo1.png"
+          alt="Loading"
+          className="w-16 animate-pulse"
+        />
       </div>
     );
   }
@@ -231,8 +233,8 @@ const page = () => {
 
   return (
     <>
-      <div className="max-lg:px-4 lg:mx-24 xl:mx-32">
-        <div className="pt-19 md:pt-22  md:w-3/5 ">
+      <div className=" pb-16 flex justify-center max-lg:px-4 lg:mx-24 xl:mx-32">
+        <div className="pt-19 md:pt-22   md:w-3/5 ">
           {isSubmitting && (
             <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
               <img

@@ -19,7 +19,7 @@ import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import useMediaPlayer from "@/app/hooks/useMediaPlayer";
 
 import { useAuth } from "@/app/components/context/AuthContext";
-import MediaGrid from "@/app/dashboard/components/MediaGrid";
+import MediaGrid from "@/app/components/common/MediaGrid";
 import { db, storage } from "@/app/firebase/config";
 import { toSlug } from "@/app/utils/helpers";
 
@@ -50,7 +50,7 @@ const page = () => {
   const { collectionName, basePath } = config;
 
   const status = item?.status?.toLowerCase();
-  const canEdit = status === "approved";
+  const canEdit = status === "pending";
   // useEffect(() => {
   //   if (!uid) return;
 
@@ -97,14 +97,21 @@ const page = () => {
           const data = docSnap.data();
 
           // Compare company slug
-          if (toSlug(data.companyDetails.shopName) === companySlug) {
+          if (
+            data.companyDetails?.shopName &&
+            toSlug(data.companyDetails.shopName) === companySlug
+          ) {
             // Corrected line: directly access stoneName
             const prod = data.products.find(
               (p) => toSlug(p.stoneName) === productSlug,
             );
 
             if (prod) {
-              setItem(data);
+              setItem({
+                id: docSnap.id,
+                ...data,
+              });
+
               setProduct(prod);
             }
           }
@@ -160,7 +167,7 @@ const page = () => {
       if (!isAuthenticated) return;
       console.log(item.id);
       const gRef = doc(db, collectionName, item.id);
-      const uRef = doc(db, "SellerDetails", user.uid, collectionName, item.id);
+      const uRef = doc(db, "SellerDetails", uid, collectionName, item.id);
 
       const updateProductThumbnail = (products) =>
         products.map((p) =>
@@ -196,13 +203,7 @@ const page = () => {
           p.id === productId ? { ...p, thumbnail: null } : p,
         );
 
-      const userRef = doc(
-        db,
-        "SellerDetails",
-        user.uid,
-        collectionName,
-        item.id,
-      );
+      const userRef = doc(db, "SellerDetails", uid, collectionName, item.id);
       const globalRef = doc(db, collectionName, item.id);
 
       const snap = await getDoc(globalRef);
@@ -237,13 +238,7 @@ const page = () => {
     try {
       if (!isAuthenticated || !item || !product) return;
 
-      const userRef = doc(
-        db,
-        "SellerDetails",
-        user.uid,
-        collectionName,
-        item.id,
-      );
+      const userRef = doc(db, "SellerDetails", uid, collectionName, item.id);
       const globalRef = doc(db, collectionName, item.id);
 
       if (item.products.length === 1) {
@@ -272,7 +267,11 @@ const page = () => {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white">
-        <img src="images/logo1.png" alt="Loading" className="w-16 animate-pulse" />
+        <img
+          src="images/logo1.png"
+          alt="Loading"
+          className="w-16 animate-pulse"
+        />
       </div>
     );
   }
@@ -282,7 +281,10 @@ const page = () => {
   }
 
   return (
-    <div className="pt-19 md:pt-22  max-lg:px-4 lg:mx-24 xl:mx-32">
+    <div className="pt-16 md:pt-19  max-lg:px-4 lg:mx-24 xl:mx-32">
+      <h1 className="text-center mb-3   inline-block text-base md:text-2xl font-medium text-primary">
+        Slab Details
+      </h1>
       <div className="px-4 bg-white rounded-xl shadow-sm border border-gray-300">
         <div className="py-3 sm:py-4 border-b border-gray-300 relative">
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
