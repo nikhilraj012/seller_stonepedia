@@ -1,39 +1,39 @@
 import React from "react";
 
-const AboutBusiness = () => {
-  const features = [
-    {
-      number: "001",
-      title: "Global Visibility & Reach",
-      description:
-        "Showcase your stone products to buyers across 190+ countries and expand into new international markets.",
-    },
-    {
-      number: "002",
-      title: "Digital Product Showcase",
-      description:
-        "Promote 100+ products with professional listings designed to attract buyers.",
-    },
-    {
-      number: "003",
-      title: "End-to-End Selling Support",
-      description:
-        "From product listing to buyer inquiries, manage everything seamlessly on one platform with 24×7 assistance",
-    },
-    {
-      number: "004",
-      title: "Better Price Realization",
-      description:
-        "Sell your stone at its true market value by reaching verified buyers directly no middlemen, no price pressure.",
-    },
-    {
-      number: "005",
-      title: "Trusted & Transparent Marketplace",
-      description:
-        "Sell with confidence through a verified network that gives you a strong digital and competitive edge.",
-    },
-  ];
+const features = [
+  {
+    number: "001",
+    title: "Global Visibility & Reach",
+    description:
+      "Showcase your stone products to buyers across 190+ countries and expand into new international markets.",
+  },
+  {
+    number: "002",
+    title: "Digital Product Showcase",
+    description:
+      "Promote 100+ products with professional listings designed to attract buyers.",
+  },
+  {
+    number: "003",
+    title: "End-to-End Selling Support",
+    description:
+      "From product listing to buyer inquiries, manage everything seamlessly on one platform with 24×7 assistance",
+  },
+  {
+    number: "004",
+    title: "Better Price Realization",
+    description:
+      "Sell your stone at its true market value by reaching verified buyers directly no middlemen, no price pressure.",
+  },
+  {
+    number: "005",
+    title: "Trusted & Transparent Marketplace",
+    description:
+      "Sell with confidence through a verified network that gives you a strong digital and competitive edge.",
+  },
+];
 
+const AboutBusiness = () => {
   return (
     <div className="p-6 md:p-10 my-16 md:my-20 lg:my-28 xl:my-36 2xl:my-40">
       <div className="max-w-[1800px] mx-auto space-y-10 md:space-y-12 lg:space-y-12 xl:space-y-14 2xl:space-y-16">

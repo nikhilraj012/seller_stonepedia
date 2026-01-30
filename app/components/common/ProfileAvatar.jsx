@@ -6,7 +6,7 @@ import { uploadProfilePhoto } from "../../utils/uploadProfilePhoto";
 import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
-const ProfileAvatar = ({ size = 40, className = "" }) => {
+const ProfileAvatar = ({ size = 40 }) => {
   const { user, updateAppUser } = useAuth();
   const photoUrl = user?.photoURL;
   const localFileInputRef = useRef(null);

@@ -113,7 +113,7 @@ const NavbarProfile = ({ isMobile = false }) => {
 
       <button
         onClick={handleLogout}
-        className="w-full bg-[#871b58] text-white rounded-md py-2 cursor-pointer mt-2"
+        className="w-full bg-primary text-white rounded-md py-2 cursor-pointer mt-2"
       >
         Logout
       </button>

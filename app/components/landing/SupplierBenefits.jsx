@@ -1,37 +1,36 @@
-
-'use client';
+"use client";
 import React from "react";
 import Image from "next/image";
 import { useUi } from "../context/UiContext";
 
+const benefits = [
+  {
+    title: "Worldwide Market Access",
+    points: [
+      "Sell directly to global audience",
+      "Showcase your product to everyone",
+    ],
+  },
+  {
+    title: "One Place for All Stones",
+    points: [
+      "Show your product to more buyers",
+      "Easily connect to global market",
+    ],
+  },
+  {
+    title: "End to End Support",
+    points: [
+      "Online platform support for smooth operations",
+      "From Pickup to Logistic to documentation",
+      "Support for pricing, negotiation, and order flow",
+      "Payment security",
+    ],
+  },
+];
+
 const SupplierBenefits = () => {
   const { openSignup } = useUi();
-
-  const benefits = [
-    {
-      title: "Worldwide Market Access",
-      points: [
-        "Sell directly to global audience",
-        "Showcase your product to everyone",
-      ],
-    },
-    {
-      title: "One Place for All Stones",
-      points: [
-        "Show your product to more buyers",
-        "Easily connect to global market",
-      ],
-    },
-    {
-      title: "End to End Support",
-      points: [
-        "Online platform support for smooth operations",
-        "From Pickup to Logistic to documentation",
-        "Support for pricing, negotiation, and order flow",
-        "Payment security",
-      ],
-    },
-  ];
 
   return (
     <div className="p-6 md:p-10 my-16 md:my-20 lg:my-28 xl:my-36 2xl:my-40">
@@ -98,7 +97,10 @@ const SupplierBenefits = () => {
 
             {/* CTA Button */}
             <div className="flex justify-end">
-              <button onClick={openSignup } className="bg-[#1e1e1e] text-[#f6f6f6] px-6 py-2 xl:px-8 xl:py-3 rounded-[10px] text-sm lg:text-base font-normal hover:bg-[#2e2e2e] transition-colors">
+              <button
+                onClick={openSignup}
+                className="bg-[#1e1e1e] text-[#f6f6f6] px-6 py-2 xl:px-8 xl:py-3 rounded-[10px] text-sm lg:text-base font-normal hover:bg-[#2e2e2e] transition-colors"
+              >
                 Register
               </button>
             </div>

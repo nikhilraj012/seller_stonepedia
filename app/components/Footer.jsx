@@ -41,7 +41,7 @@ const Footer = () => {
         </div>
         <div className="grid grid-cols-2 text-white text-xs lg:text-sm gap-2 md:flex md:gap-4 lg:gap-6 xl:gap-10 2xl:gap-14">
           {navLinks.map((link) => (
-            <button key={link.label} className="max-md:text-left cursor-pointer hover:text-[#871b58]" onClick={() => handleNavClick(link.href)}>
+            <button key={link.label} className="max-md:text-left cursor-pointer hover:text-primary" onClick={() => handleNavClick(link.href)}>
               {link.label}
             </button>
           ))}

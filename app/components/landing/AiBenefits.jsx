@@ -1,41 +1,41 @@
 import React from "react";
 import Image from "next/image";
 
+const benefits = [
+  {
+    title: "Stone AI Search",
+    description:
+      "Upload a product image and instantly find matching stones with our AI-powered visual search.",
+  },
+  {
+    title: "AI Stone Cost Estimator",
+    description:
+      "Quickly estimate your total project cost with our smart stone cost calculator.",
+  },
+  {
+    title: "StoneBot AI Assistant",
+    description:
+      "Get personalized stone recommendations and assistance in real-time with our intelligent AI consultant.",
+  },
+  {
+    title: "AI Stone Visualizer",
+    description:
+      "Visualize how each stone will look as tiles in real spaces before you buy.",
+  },
+];
+
+const ecosystemSteps = [
+  { number: "01", label: "Stone Extraction" },
+  { number: "02", label: "Block Selection" },
+  { number: "03", label: "Stone Processing" },
+  { number: "04", label: "Finishing" },
+  { number: "05", label: "Quality Check" },
+  { number: "06", label: "Packaging" },
+  { number: "07", label: "Logistics" },
+  { number: "08", label: "Doorstep Delivery" },
+];
+
 const AiBenefits = () => {
-  const benefits = [
-    {
-      title: "Stone AI Search",
-      description:
-        "Upload a product image and instantly find matching stones with our AI-powered visual search.",
-    },
-    {
-      title: "AI Stone Cost Estimator",
-      description:
-        "Quickly estimate your total project cost with our smart stone cost calculator.",
-    },
-    {
-      title: "StoneBot AI Assistant",
-      description:
-        "Get personalized stone recommendations and assistance in real-time with our intelligent AI consultant.",
-    },
-    {
-      title: "AI Stone Visualizer",
-      description:
-        "Visualize how each stone will look as tiles in real spaces before you buy.",
-    },
-  ];
-
-  const ecosystemSteps = [
-    { number: "01", label: "Stone Extraction" },
-    { number: "02", label: "Block Selection" },
-    { number: "03", label: "Stone Processing" },
-    { number: "04", label: "Finishing" },
-    { number: "05", label: "Quality Check" },
-    { number: "06", label: "Packaging" },
-    { number: "07", label: "Logistics" },
-    { number: "08", label: "Doorstep Delivery" },
-  ];
-
   return (
     <div className="relative w-full overflow-hidden p-6 md:p-10">
       <div className="max-w-[1800px] mx-auto ">
