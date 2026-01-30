@@ -92,11 +92,11 @@ const BlockDetailsPage = () => {
   }
 
   return (
-    <div className="pt-16 px-4 md:px-10 lg:px-16 xl:px-24">
+    <div className="pt-16 p-4 md:p-16 xl:p-20">
       <div className="max-w-[1800px] mx-auto flex flex-col gap-3">
         <div className="flex justify-center my-2">
           <h1 className="rounded-full border border-primary px-6 py-2 text-primary font-semibold lg:text-xl text-center">
-            My Blocks
+            Block Details
           </h1>
         </div>
 
@@ -153,12 +153,12 @@ const BlockDetailsPage = () => {
                         );
                       }
                     }}
-                    className="p-1.5 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
+                    className="p-1.5 2xl:p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
                   >
-                    <MdOutlineEdit className="text-lg text-gray-700" />
+                    <MdOutlineEdit className="text-xl text-gray-700" />
                   </button>
-                  <button className="p-1.5 rounded-lg border border-gray-300 hover:bg-gray-50 transition">
-                    <RiDeleteBin5Line className="text-lg text-red-600" />
+                  <button className="p-1.5 2xl:p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition">
+                    <RiDeleteBin5Line className="text-xl text-red-600" />
                   </button>
                 </div>
               </div>
