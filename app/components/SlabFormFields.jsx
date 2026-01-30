@@ -1,10 +1,10 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import Select from "react-select";
 import { selectCommonStyles, selectCommonTheme } from "./styles/select.config";
-
 
 const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
   const [openDropdown, setOpenDropdown] = useState(null);

@@ -1,5 +1,4 @@
 "use client";
-export const dynamic = "force-static"; // optional
 
 import { useParams, useRouter } from "next/navigation";
 import {
@@ -119,7 +118,6 @@ const page = () => {
 
     fetchData();
   }, [uid, companySlug, productSlug]);
-
   const handleThumbnailChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -274,7 +272,7 @@ const page = () => {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white">
-        <img src="/logo.png" alt="Loading" className="w-16 animate-pulse" />
+        <img src="images/logo1.png" alt="Loading" className="w-16 animate-pulse" />
       </div>
     );
   }
@@ -385,7 +383,7 @@ const page = () => {
                     // }}
                     onClick={() => {
                       router.push(
-                        `/dashboard/profile/${companySlug}/${productSlug}/edit`,
+                        `/dashboard/profile/my-e-gallery/${companySlug}/${productSlug}/edit`,
                       );
                     }}
                   >

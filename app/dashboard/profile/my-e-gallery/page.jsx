@@ -27,6 +27,7 @@ const page = () => {
     data: eGallery,
     deleteItem,
     deleteProduct,
+    handleCancel,
     updateThumbnail,
     updateCompanyDetails,
   } = useGallery("EGallery");
@@ -76,7 +77,7 @@ const page = () => {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white">
-        <img src="/logo.png" alt="Loading" className="w-16 animate-pulse" />
+        <img src="images/logo1.png" alt="Loading" className="w-16 animate-pulse" />
       </div>
     );
   }
@@ -137,8 +138,9 @@ const page = () => {
                 key={item.id}
                 item={item}
                 updating={updating}
-                addSlabRoute="/stonepedia-for-business/create-e-gallery/gallery-form"
+                addSlabRoute="/dashboard/e-gallery-form"
                 actions={{
+                  handleCancel,
                   updateThumbnail,
                   onEdit: openEdit,
                   onDelete: deleteItem,
