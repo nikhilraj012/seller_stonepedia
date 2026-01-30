@@ -73,7 +73,7 @@ const useGallery = (collectionName ) => {
             cancelledAt: serverTimestamp(),
           }),
         ]);
-        setG((prev) =>
+        setData((prev) =>
           prev.map((item) =>
             item.id === id ? { ...item, status: "cancelled" } : item
           )
