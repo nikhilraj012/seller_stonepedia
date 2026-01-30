@@ -11,7 +11,16 @@ const page = () => {
   // const hasSubmittedForm = state?.hasSubmittedForm || false;
   const galleryId = searchParams.get("galleryId");
   const hasApprovedForm = searchParams.get("hasApprovedForm") === "true";
-
+  useEffect(() => {
+    if (isSubmitting) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isSubmitting]);
   return (
     <div className="py-16 max-lg:px-4 lg:mx-24 xl:mx-32">
       {isSubmitting && (
