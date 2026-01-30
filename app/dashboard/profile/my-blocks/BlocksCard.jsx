@@ -94,10 +94,26 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
     }
   };
 
-  const handleBlockClick = (name, id) => {
-    const urlFriendlyId = name.toString().replace(/\s+/g, "-").toLowerCase();
-    router.push(`/dashboard/profile/my-blocks/${id}/${urlFriendlyId}`);
-  };
+  const handleViewDetails = (item, block) => {
+    const companySlug = item.quarryDetails?.quarryName
+      ?.toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]/g, "") || "company";
+    const productSlug = block.stoneName
+      ?.toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]/g, "") || "product";
+    
+    // Store the data in sessionStorage for the details page to retrieve
+    sessionStorage.setItem('currentBlock', JSON.stringify({
+      docId: item.id,
+      blockId: block.id,
+      companyData: item.quarryDetails
+    }));
+    
+    router.push(`/dashboard/profile/my-blocks/${companySlug}/${productSlug}`);
+  }
+
 
   return (
     <div>
@@ -129,7 +145,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
             </p>
 
             <div className="flex items-center gap-1   mt-1 ">
-              <IoLocation className="text-[#871B58] text-[10px] md:text-sm" />
+              <IoLocation className="text-primary text-[10px] md:text-sm" />
               <span>
                 {" "}
                 {item.quarryDetails?.quarryCity},{" "}
@@ -268,7 +284,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
             <div className="relative w-full h-40 mb-3 rounded-lg bg-gray-100">
               {productImageLoading[i] !== false && (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#871B58]" />
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary" />
                 </div>
               )}
 
@@ -331,13 +347,12 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
             <div className="flex justify-between">
               <div className="flex gap-2">
                 <button
-                  //   onClick={() => onViewDetails(item, block)}
-                  onClick={() => handleBlockClick(block.stoneName, block.id)}
-                  className=" bg-[#871B58]/10  font-medium cursor-pointer text-[#871B58] text-xs md:text-sm px-2 md:px-4 py-2 rounded-md hover:bg-[#871B58]/20 transition"
+                  onClick={() => handleViewDetails(item, block)}
+                  className=" bg-primary/10  font-medium cursor-pointer text-primary text-xs md:text-sm px-2 md:px-4 py-2 rounded-md hover:bg-primary/20 transition"
                 >
                   View Details
                 </button>
-                <button
+                {/* <button
                   //   onClick={() => onViewDetails(item, block)}
                   onClick={() => {
                     navigate(`/blocks/edit/${item.id}/${block.id}`);
@@ -351,7 +366,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
                     }`}
                 >
                   <MdOutlineEdit className="text-sm lg:text-lg" />
-                </button>
+                </button> */}
               </div>
 
               {(status === "approved" || status === "pending") && (
