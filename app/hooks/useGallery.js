@@ -7,6 +7,7 @@ import {
   query,
   doc,
   updateDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
@@ -49,6 +50,41 @@ const useGallery = (collectionName ) => {
 
   
 
+  const handleCancel = async (id) => {
+      const toastId = toast.loading("Cancelling...");
+  
+      try {
+        const userRef = doc(
+          db,
+          "SellerDetails",
+          auth.currentUser.uid,
+          collectionName,
+          id,
+        );
+        const Ref = doc(db, collectionName, id);
+  
+        await Promise.all([
+          updateDoc(userRef, {
+            status: "cancelled",
+            cancelledAt: serverTimestamp(),
+          }),
+          updateDoc(Ref, {
+            status: "cancelled",
+            cancelledAt: serverTimestamp(),
+          }),
+        ]);
+        setG((prev) =>
+          prev.map((item) =>
+            item.id === id ? { ...item, status: "cancelled" } : item
+          )
+        );
+        toast.success("Cancelled successfully", { id: toastId });
+      } catch (error) {
+        toast.error("Failed to cancel", { id: toastId });
+        console.error("Error cancelling :", error);
+      }
+    };
+  
 
 
   const deleteItem = async (id) => {
@@ -184,7 +220,7 @@ const useGallery = (collectionName ) => {
 
   return {
     loading,
-    
+    handleCancel,
     updating,
     data,
     deleteItem,

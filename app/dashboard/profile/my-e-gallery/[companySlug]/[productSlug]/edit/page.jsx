@@ -1,24 +1,24 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { useParams, useRouter } from "next/navigation";
+import { collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useUi } from "@/app/components/context/UiContext";
 import MediaUploader from "@/app/dashboard/components/galleryMediaUploader/MediaUploader";
 import SlabFormFields from "@/app/components/SlabFormFields";
-import { auth, db, storage  } from "@/app/firebase/config";
+import { auth, db, storage } from "@/app/firebase/config";
+import { toSlug } from "@/app/utils/helpers";
 
 const page = () => {
   const refs = useRef({});
-  const location = useLocation();
-  const { navigate } = useUi();
-
-  const { orderId, productId } = useParams();
+  const { companySlug, productSlug } = useParams();
+  const router = useRouter();
   const [gallery, setGallery] = useState(null);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-const mode="gallery"
+  const mode = "gallery";
   const MODE_CONFIG = {
     gallery: {
       collectionName: "EGallery",
@@ -38,29 +38,33 @@ const mode="gallery"
         const user = auth.currentUser;
         if (!user) return;
 
-        const ref = doc(db, "SellerDetails", user.uid, collectionName, orderId);
-        const snap = await getDoc(ref);
+        const qSnap = await getDocs(
+          collection(db, "SellerDetails", user.uid, collectionName),
+        );
 
-        if (!snap.exists()) {
-          toast.error("Gallery not found");
-          return;
-        }
+        qSnap.forEach((docSnap) => {
+          const data = docSnap.data();
 
-        const data = snap.data();
-        setGallery(data);
+          if (toSlug(data.companyDetails.shopName) === companySlug) {
+            const slab = data.products.find(
+              (p) => toSlug(p.stoneName) === productSlug,
+            );
 
-        const slab = data.products.find((p) => p.id === productId);
-        if (!slab) {
-          toast.error("Slab not found");
-          return;
-        }
+            if (slab) {
+             setGallery({
+               id: docSnap.id, 
+               ...data,
+             });
 
-        setProduct({
-          ...slab,
-          units:
-            typeof slab.units === "string"
-              ? { label: slab.units, value: slab.units }
-              : slab.units,
+              setProduct({
+                ...slab,
+                units:
+                  typeof slab.units === "string"
+                    ? { label: slab.units, value: slab.units }
+                    : slab.units,
+              });
+            }
+          }
         });
       } catch (err) {
         console.log(err);
@@ -71,7 +75,7 @@ const mode="gallery"
     };
 
     fetchData();
-  }, [orderId, productId]);
+  }, [companySlug, productSlug]);
 
   const uploadFiles = async (files, path) => {
     if (!files) return [];
@@ -192,14 +196,21 @@ const mode="gallery"
         p.id === updatedSlab.id ? updatedSlab : p,
       );
 
-      const uRef = doc(db, "SellerDetails", user.uid, collectionName, orderId);
-      const gRef = doc(db, collectionName, orderId);
+     const uRef = doc(
+       db,
+       "SellerDetails",
+       user.uid,
+       collectionName,
+       gallery.id,
+     );
+     const gRef = doc(db, collectionName, gallery.id);
+
 
       await updateDoc(uRef, { products: updatedProducts });
       await updateDoc(gRef, { products: updatedProducts });
 
       toast.success("Slab updated successfully");
-      navigate(basePath);
+      router.back();
     } catch (err) {
       console.log(err);
       toast.error("Update failed");
@@ -211,7 +222,7 @@ const mode="gallery"
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white">
-        <img src="/logo.png" alt="Loading" className="w-16 animate-pulse" />
+        <img src="images/logo1.png" alt="Loading" className="w-16 animate-pulse" />
       </div>
     );
   }
@@ -225,7 +236,7 @@ const mode="gallery"
           {isSubmitting && (
             <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
               <img
-                src="/logo.png"
+                src="images/logo1.png"
                 alt="Loading"
                 className="w-20 md:w-24 animate-pulse"
               />
@@ -248,7 +259,7 @@ const mode="gallery"
               <div className="mt-6 gap-3 flex justify-end">
                 <button
                   type="button"
-                  onClick={() => navigate(-1)}
+                  onClick={() => router.back()}
                   className="px-4 py-2 md:px-8 border border-gray-300 rounded-md text-gray-700 text-xs cursor-pointer hover:bg-gray-50"
                 >
                   Cancel

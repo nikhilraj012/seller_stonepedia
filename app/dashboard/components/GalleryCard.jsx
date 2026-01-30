@@ -2,13 +2,22 @@
 import { IoLocation } from "react-icons/io5";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
-
+import toast from "react-hot-toast";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { auth, db } from "@/app/firebase/config";
 
 const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
   const router = useRouter();
-  const { updateThumbnail, onEdit, onDelete,onProductDelete, onViewDetails } = actions;
+  const {
+    updateThumbnail,
+    onEdit,
+    onDelete,
+    handleCancel,
+    onProductDelete,
+    onViewDetails,
+  } = actions;
 
   const [imageLoading, setImageLoading] = useState(true);
   const [productImageLoading, setProductImageLoading] = useState({});
@@ -143,7 +152,7 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
                 <MdOutlineEdit className="text-sm lg:text-xl" />
               </button>
             )}
-            {(status === "approved" || status === "pending") && (
+            {/* {(status === "approved" || status === "pending") && (
               <button
                 disabled={updating}
                 onClick={() => onDelete(item.id)}
@@ -156,8 +165,17 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
               >
                 <RiDeleteBin5Line className="text-sm lg:text-xl" />
               </button>
+            )} */}
+            {(status === "pending" || status === "approved") && (
+              <button
+                onClick={() => handleCancel(item.id)}
+                className="p-2 cursor-pointer bg-gray-100 text-red-500 rounded-lg"
+              >
+                Cancel
+              </button>
             )}
           </div>
+
           <div>
             <div
               className={`hidden  md:flex   mt-17 items-center  capitalize  gap-2 text-[13px] font-medium px-3 py-1.5 rounded-md
@@ -222,11 +240,11 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
         {status.toLowerCase() === "approved" && (
           <button
             onClick={() =>
-              router.push(addSlabRoute, {
-                state: { hasApprovedForm: true, galleryId: item.id },
-              })
+              router.push(
+                `${addSlabRoute}?hasApprovedForm=true&galleryId=${item.id}`,
+              )
             }
-            className="mt-2 bg-primary font-medium text-white px-4 md:px-6  cursor-pointer hover:bg-pink-100 hover:text-primary py-1.5 rounded-md text-xs   md:text-sm hover:bg-green-700 transition"
+            className="mt-2 bg-primary font-medium text-white px-4 md:px-6 cursor-pointer hover:bg-pink-100 hover:text-primary py-1.5 rounded-md text-xs md:text-sm hover:bg-green-700 transition"
           >
             Add Slab
           </button>
