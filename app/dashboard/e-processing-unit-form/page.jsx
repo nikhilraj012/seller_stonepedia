@@ -26,7 +26,7 @@ const page = () => {
       )}
       <div className="my-3 md:my-5 mx-auto ">
         <div className="space-y-1 lg:space-y-2">
-          <h1 className="font-medium text-[#871B58] text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl">
+          <h1 className="font-medium text-primary text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl">
             Stonepedia E - Gallery For Processing Unit
           </h1>
           <div className="space-y-0.5">

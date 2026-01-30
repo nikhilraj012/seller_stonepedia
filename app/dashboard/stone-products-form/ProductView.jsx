@@ -271,7 +271,7 @@ const ProductView = ({
             </button>
             {expandedIndex === i && (
               <div className="space-y-2  text-xs max-h-[400px] overflow-y-auto overflow-x-hidden">
-                <div className="border-[1px] p-2 rounded-md space-y-1 border-gray-300 ">
+                <div className="border p-2 rounded-md space-y-1 border-gray-300 ">
                   <h2 className="font-medium text-sm">Description</h2>
                   <span className="text-[#3B3B3B]">{p.description}</span>
                 </div>

@@ -277,7 +277,7 @@ const page = () => {
         </div>
       )}
       <div className="my-3 md:my-5 mx-auto ">
-        <h1 className="font-medium text-[#871B58] text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl">
+        <h1 className="font-medium text-primary text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl">
           Sell Stone Products
         </h1>
         <p className="text-[#100808] text-sm md:text-md lg:text-lg xl:text-xl">
