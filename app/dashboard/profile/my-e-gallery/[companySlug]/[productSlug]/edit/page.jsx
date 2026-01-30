@@ -1,309 +1,316 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
-import toast from "react-hot-toast";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useUi } from "@/app/components/context/UiContext";
-import MediaUploader from "@/app/dashboard/components/galleryMediaUploader/MediaUploader";
-import SlabFormFields from "@/app/components/SlabFormFields";
-import { auth, db, storage } from "@/app/firebase/config";
-import { toSlug } from "@/app/utils/helpers";
+// "use client";
+// import React, { useEffect, useRef, useState } from "react";
+// import { useParams, useRouter } from "next/navigation";
+// import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+// import toast from "react-hot-toast";
+// import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+// import MediaUploader from "@/app/components/common/gallery/MediaUploader";
+// import SlabFormFields from "@/app/components/SlabFormFields";
+// import { auth, db, storage } from "@/app/firebase/config";
+// import { toSlug } from "@/app/utils/helpers";
+// import { useAuth } from "@/app/components/context/AuthContext";
 
-const page = () => {
-  const refs = useRef({});
-  const { companySlug, productSlug } = useParams();
-  const router = useRouter();
-  const [gallery, setGallery] = useState(null);
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const mode = "gallery";
-  const MODE_CONFIG = {
-    gallery: {
-      collectionName: "EGallery",
-      basePath: "/e-gallery",
-    },
-    processing: {
-      collectionName: "EGalleryForProcessingUnit",
-      basePath: "/e-processing-unit",
-    },
-  };
-  const config = MODE_CONFIG[mode];
-  const { collectionName, basePath } = config;
+// const page = () => {
+//   const refs = useRef({});
+//   const { isAuthenticated, uid } = useAuth();
+//   const { companySlug, productSlug } = useParams();
+//   const router = useRouter();
+//   const [gallery, setGallery] = useState(null);
+//   const [product, setProduct] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+//   const mode = "gallery";
+//   const MODE_CONFIG = {
+//     gallery: {
+//       collectionName: "EGallery",
+//       basePath: "/e-gallery",
+//     },
+//     processing: {
+//       collectionName: "EGalleryForProcessingUnit",
+//       basePath: "/e-processing-unit",
+//     },
+//   };
+//   const config = MODE_CONFIG[mode];
+//   const { collectionName, basePath } = config;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const user = auth.currentUser;
-        if (!user) return;
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         if (!isAuthenticated) return;
 
-        const qSnap = await getDocs(
-          collection(db, "SellerDetails", user.uid, collectionName),
-        );
+//         const qSnap = await getDocs(
+//           collection(db, "SellerDetails", uid, collectionName),
+//         );
 
-        qSnap.forEach((docSnap) => {
-          const data = docSnap.data();
+//         qSnap.forEach((docSnap) => {
+//           const data = docSnap.data();
 
-          if (toSlug(data.companyDetails.shopName) === companySlug) {
-            const slab = data.products.find(
-              (p) => toSlug(p.stoneName) === productSlug,
-            );
+//         if (
+//           data?.companyDetails?.shopName &&
+//           toSlug(data.companyDetails.shopName) === companySlug
+//         ) {
+//       if (!Array.isArray(data.products)) return;
 
-            if (slab) {
-             setGallery({
-               id: docSnap.id, 
-               ...data,
-             });
+//       const slab = data.products.find(
+//         (p) => toSlug(p.stoneName) === productSlug,
+//       );
 
-              setProduct({
-                ...slab,
-                units:
-                  typeof slab.units === "string"
-                    ? { label: slab.units, value: slab.units }
-                    : slab.units,
-              });
-            }
-          }
-        });
-      } catch (err) {
-        console.log(err);
-        toast.error("Failed to load data");
-      } finally {
-        setLoading(false);
-      }
-    };
+//           if (slab) {
+//             setGallery({
+//               id: docSnap.id,
+//               ...data,
+//             });
 
-    fetchData();
-  }, [companySlug, productSlug]);
+//             setProduct({
+//               ...slab,
+//               units:
+//                 typeof slab.units === "string"
+//                   ? { label: slab.units, value: slab.units }
+//                   : slab.units,
+//             });
+//           }
+//         }
+//         });
+//       } catch (err) {
+//         console.log(err);
+//         toast.error("Failed to load data");
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
 
-  const uploadFiles = async (files, path) => {
-    if (!files) return [];
-    const fileArray = Array.isArray(files) ? files : [files];
+//     fetchData();
+//   }, [companySlug, productSlug]);
 
-    return Promise.all(
-      fileArray.map(async (f) => {
-        const file = f.file || f;
-        const name = file.name || `file_${Date.now()}`;
-        const fileRef = ref(
-          storage,
-          `StonepediaForBusiness/${collectionName}/${auth.currentUser.uid}/${path}/${name}`,
-        );
+//   const uploadFiles = async (files, path) => {
+//     if (!files) return [];
+//     const fileArray = Array.isArray(files) ? files : [files];
 
-        await uploadBytes(fileRef, file);
-        return { url: await getDownloadURL(fileRef), type: file.type };
-      }),
-    );
-  };
+//     return Promise.all(
+//       fileArray.map(async (f) => {
+//         const file = f.file || f;
+//         const name = file.name || `file_${Date.now()}`;
+//         const fileRef = ref(
+//           storage,
+//           `${collectionName}/${uid}/${path}/${name}`,
+//         );
 
-  const handleSaveChanges = async () => {
-    try {
-      const requiredFields = [
-        "stoneCategory",
-        "stoneName",
-        "finish",
-        "thickness",
-        "units",
-        "size",
-      ];
-      const formatKey = (key) =>
-        key
-          .replace(/_/g, " ")
-          .replace(/([A-Z])/g, " $1")
-          .trim()
-          .toLowerCase();
+//         await uploadBytes(fileRef, file);
+//         return { url: await getDownloadURL(fileRef), type: file.type };
+//       }),
+//     );
+//   };
 
-      const tempProduct = {
-        ...product,
+//   const handleSaveChanges = async () => {
+//     try {
+//       const requiredFields = [
+//         "stoneCategory",
+//         "stoneName",
+//         "finish",
+//         "thickness",
+//         "units",
+//         "size",
+//       ];
+//       const formatKey = (key) =>
+//         key
+//           .replace(/_/g, " ")
+//           .replace(/([A-Z])/g, " $1")
+//           .trim()
+//           .toLowerCase();
 
-        finish: [...product.finish],
-        thickness: [...product.thickness],
-        units: product.units?.label,
-        size: {
-          width: [...product.size.width],
-          height: [...product.size.height],
-        },
-      };
+//       const tempProduct = {
+//         ...product,
 
-      const focusField = (key) => {
-        const dropdownKeys = new Set([
-          "finish",
-          "thickness",
-          "height",
-          "width",
-        ]);
-        if (dropdownKeys.has(key)) {
-          setOpenDropdown(key);
-          setTimeout(() => {
-            const el = refs.current[key];
-            el?.focus?.();
-            el?.scrollIntoView?.({ behavior: "smooth", block: "center" });
-          }, 100);
-        } else if (key === "units") {
-          const el = refs.current.units;
-          el?.focus?.();
-          el?.scrollIntoView?.({ behavior: "smooth", block: "center" });
-        } else {
-          const el = document.querySelector(`[name="${key}"]`);
-          el?.focus?.();
-          el?.scrollIntoView?.({ behavior: "smooth", block: "center" });
-        }
-      };
+//         finish: [...product.finish],
+//         thickness: [...product.thickness],
+//         units: product.units?.label,
+//         size: {
+//           width: [...product.size.width],
+//           height: [...product.size.height],
+//         },
+//       };
 
-      for (const key of requiredFields) {
-        const value = tempProduct[key];
-        const fieldName = formatKey(key);
-        const isEmpty =
-          value === "" ||
-          value === null ||
-          (Array.isArray(value) && value.length === 0);
-        if (isEmpty) {
-          toast.error(`Please Enter The ${fieldName}`, { duration: 1000 });
-          focusField(key);
-          return;
-        }
-      }
+//       const focusField = (key) => {
+//         const dropdownKeys = new Set([
+//           "finish",
+//           "thickness",
+//           "height",
+//           "width",
+//         ]);
+//         if (dropdownKeys.has(key)) {
+//           setOpenDropdown(key);
+//           setTimeout(() => {
+//             const el = refs.current[key];
+//             el?.focus?.();
+//             el?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+//           }, 100);
+//         } else if (key === "units") {
+//           const el = refs.current.units;
+//           el?.focus?.();
+//           el?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+//         } else {
+//           const el = document.querySelector(`[name="${key}"]`);
+//           el?.focus?.();
+//           el?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+//         }
+//       };
 
-      if (tempProduct.size?.height?.length === 0) {
-        toast.error("Please select height");
-        return;
-      }
-      if (tempProduct.size?.width?.length === 0) {
-        toast.error("Please select width");
-        return;
-      }
-      if (product.media.length === 0) {
-        toast.error("Upload at least 1 image or video", { duration: 1000 });
-        return;
-      }
+//       for (const key of requiredFields) {
+//         const value = tempProduct[key];
+//         const fieldName = formatKey(key);
+//         const isEmpty =
+//           value === "" ||
+//           value === null ||
+//           (Array.isArray(value) && value.length === 0);
+//         if (isEmpty) {
+//           toast.error(`Please Enter The ${fieldName}`, { duration: 1000 });
+//           focusField(key);
+//           return;
+//         }
+//       }
 
-      setIsSubmitting(true);
-      const user = auth.currentUser;
-      if (!user) return;
-      const newMedia = await uploadFiles(
-        product.media.filter((m) => m.file),
-        `products/${product.id}`,
-      );
+//       if (tempProduct.size?.height?.length === 0) {
+//         toast.error("Please select height");
+//         return;
+//       }
+//       if (tempProduct.size?.width?.length === 0) {
+//         toast.error("Please select width");
+//         return;
+//       }
+//       if (product.media.length === 0) {
+//         toast.error("Upload at least 1 image or video", { duration: 1000 });
+//         return;
+//       }
 
-      const finalMedia = [...product.media.filter((m) => !m.file), ...newMedia];
+//       setIsSubmitting(true);
 
-      const updatedSlab = {
-        ...product,
-        units: product.units?.label,
-        media: finalMedia,
-      };
-      const updatedProducts = gallery.products.map((p) =>
-        p.id === updatedSlab.id ? updatedSlab : p,
-      );
+//       if (!isAuthenticated) return;
+//       const newMedia = await uploadFiles(
+//         product.media.filter((m) => m.file),
+//         `products/${product.id}`,
+//       );
 
-     const uRef = doc(
-       db,
-       "SellerDetails",
-       user.uid,
-       collectionName,
-       gallery.id,
-     );
-     const gRef = doc(db, collectionName, gallery.id);
+//       const finalMedia = [...product.media.filter((m) => !m.file), ...newMedia];
 
+//       const updatedSlab = {
+//         ...product,
+//         units: product.units?.label,
+//         media: finalMedia,
+//       };
+//       const updatedProducts = gallery.products.map((p) =>
+//         p.id === updatedSlab.id ? updatedSlab : p,
+//       );
 
-      await updateDoc(uRef, { products: updatedProducts });
-      await updateDoc(gRef, { products: updatedProducts });
+//       const uRef = doc(db, "SellerDetails", uid, collectionName, gallery.id);
+//       const gRef = doc(db, collectionName, gallery.id);
 
-      toast.success("Slab updated successfully");
-      router.back();
-    } catch (err) {
-      console.log(err);
-      toast.error("Update failed");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+//       await updateDoc(uRef, { products: updatedProducts });
+//       await updateDoc(gRef, { products: updatedProducts });
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-white">
-        <img src="images/logo1.png" alt="Loading" className="w-16 animate-pulse" />
-      </div>
-    );
-  }
+//       toast.success("Slab updated successfully");
+//       router.back();
+//     } catch (err) {
+//       console.log(err);
+//       toast.error("Update failed");
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
 
-  if (!product) return null;
+//   if (loading) {
+//     return (
+//       <div className="flex h-screen items-center justify-center bg-white">
+//         <img
+//           src="images/logo1.png"
+//           alt="Loading"
+//           className="w-16 animate-pulse"
+//         />
+//       </div>
+//     );
+//   }
 
-  return (
-    <>
-      <div className="max-lg:px-4 lg:mx-24 xl:mx-32">
-        <div className="pt-19 md:pt-22  md:w-3/5 ">
-          {isSubmitting && (
-            <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
-              <img
-                src="images/logo1.png"
-                alt="Loading"
-                className="w-20 md:w-24 animate-pulse"
-              />
-            </div>
-          )}
+//   if (!product) return null;
 
-          <span className="text-center ml-1 inline-block text-base md:text-2xl font-medium text-[#871B58] ">
-            Edit Slab
-          </span>
+//   return (
+//     <>
+//       <div className=" pb-16 flex justify-center max-lg:px-4 lg:mx-24 xl:mx-32">
+//         <div className="pt-19 md:pt-22   md:w-3/5 ">
+//           {isSubmitting && (
+//             <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
+//               <img
+//                 src="images/logo1.png"
+//                 alt="Loading"
+//                 className="w-20 md:w-24 animate-pulse"
+//               />
+//             </div>
+//           )}
 
-          <div className="md:flex justify-center">
-            <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-4  w-full max-w-full">
-              <h2 className="text-xs font-medium mb-1">Stone Slab Details</h2>
-              <SlabFormFields
-                product={product}
-                setProduct={setProduct}
-                hideMedia={true}
-              />
-              <MediaUploader product={product} setProduct={setProduct} />
-              <div className="mt-6 gap-3 flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => router.back()}
-                  className="px-4 py-2 md:px-8 border border-gray-300 rounded-md text-gray-700 text-xs cursor-pointer hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSaveChanges}
-                  className="bg-[#871B58] hover:bg-[#6a1545] px-4 py-2 md:px-5 lg:px-10 xl:px-12 rounded-md text-white text-xs cursor-pointer"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center justify-center">
-                      <svg
-                        className="animate-spin h-5 w-5 text-white mr-1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      <span>Saving...</span>
-                    </div>
-                  ) : (
-                    "Save Changes"
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
+//           <span className="text-center ml-1 inline-block text-base md:text-2xl font-medium text-[#871B58] ">
+//             Edit Slab
+//           </span>
 
-export default page;
+//           <div className="md:flex justify-center">
+//             <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-4  w-full max-w-full">
+//               <h2 className="text-xs font-medium mb-1">Stone Slab Details</h2>
+//               <SlabFormFields
+//                 product={product}
+//                 setProduct={setProduct}
+//                 hideMedia={true}
+//               />
+//               <MediaUploader product={product} setProduct={setProduct} />
+//               <div className="mt-6 gap-3 flex justify-end">
+//                 <button
+//                   type="button"
+//                   onClick={() => router.back()}
+//                   className="px-4 py-2 md:px-8 border border-gray-300 rounded-md text-gray-700 text-xs cursor-pointer hover:bg-gray-50"
+//                 >
+//                   Cancel
+//                 </button>
+//                 <button
+//                   onClick={handleSaveChanges}
+//                   className="bg-[#871B58] hover:bg-[#6a1545] px-4 py-2 md:px-5 lg:px-10 xl:px-12 rounded-md text-white text-xs cursor-pointer"
+//                   disabled={isSubmitting}
+//                 >
+//                   {isSubmitting ? (
+//                     <div className="flex items-center justify-center">
+//                       <svg
+//                         className="animate-spin h-5 w-5 text-white mr-1"
+//                         xmlns="http://www.w3.org/2000/svg"
+//                         fill="none"
+//                         viewBox="0 0 24 24"
+//                       >
+//                         <circle
+//                           className="opacity-25"
+//                           cx="12"
+//                           cy="12"
+//                           r="10"
+//                           stroke="currentColor"
+//                           strokeWidth="4"
+//                         ></circle>
+//                         <path
+//                           className="opacity-75"
+//                           fill="currentColor"
+//                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+//                         ></path>
+//                       </svg>
+//                       <span>Saving...</span>
+//                     </div>
+//                   ) : (
+//                     "Save Changes"
+//                   )}
+//                 </button>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default page;
+import GalleryEdit from "@/app/components/common/gallery/GalleryEdit";
+
+export default function Page() {
+  return <GalleryEdit mode="gallery" />;
+}

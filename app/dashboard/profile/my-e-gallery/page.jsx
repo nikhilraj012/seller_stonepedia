@@ -5,9 +5,9 @@ import Pagination from "@/app/components/common/Pagination";
 import usePagination from "@/app/hooks/usePagination";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toSlug } from "@/app/utils/helpers";
-import GalleryCard from "../../components/GalleryCard";
-import EditCompanyModal from "../../components/EditCompanyModal";
 import useGallery from "@/app/hooks/useGallery";
+import EditCompanyModal from "@/app/components/common/gallery/EditCompanyModal";
+import GalleryCard from "@/app/components/common/gallery/GalleryCard";
 const ITEMS_PER_PAGE = 1;
 const page = () => {
   const router = useRouter();
@@ -77,7 +77,11 @@ const page = () => {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white">
-        <img src="images/logo1.png" alt="Loading" className="w-16 animate-pulse" />
+        <img
+          src="images/logo1.png"
+          alt="Loading"
+          className="w-16 animate-pulse"
+        />
       </div>
     );
   }
@@ -101,7 +105,7 @@ const page = () => {
     );
   }
   return (
-    <div className="pt-18 md:pt-22 max-lg:px-4 lg:mx-24 xl:mx-32">
+    <div className="pt-16 px-4 md:px-6 lg:px-24 xl:px-32">
       <div className="flex justify-center my-2">
         <h1 className="rounded-full border border-primary px-6 py-2 text-primary font-semibold lg:text-xl text-center">
           My E-Gallery

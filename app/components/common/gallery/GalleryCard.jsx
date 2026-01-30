@@ -1,6 +1,5 @@
 "use client";
 import { IoLocation } from "react-icons/io5";
-import { MdOutlineEdit } from "react-icons/md";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -19,7 +18,7 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
   const [productImageLoading, setProductImageLoading] = useState({});
   const fileRef = useRef(null);
   const status = item.status;
-  const canEdit = String(status).toLowerCase() === "approved";
+  const canEdit = String(status).toLowerCase() === "pending";
 
   const formatDate = (timestamp) => {
     if (!timestamp) return "";
@@ -36,7 +35,7 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
   };
 
   return (
-    <div className="shadow-lg border p-3 rounded-xl border-gray-300">
+    <div className="  rounded-xl ">
       <div className={`flex   flex-col md:flex-row md:justify-between`}>
         <div className="flex flex-row gap-4">
           <input
@@ -145,7 +144,8 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
                   : "cursor-pointer hover:text-gray-500"
               }`}
               >
-                <MdOutlineEdit className="text-sm lg:text-xl" />
+                Edit
+                {/* <MdOutlineEdit className="text-sm lg:text-xl" /> */}
               </button>
             )}
             {/* {(status === "approved" || status === "pending") && (
