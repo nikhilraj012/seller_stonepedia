@@ -67,7 +67,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
               <label htmlFor="name" className="mb-0.5 text-xs font-medium ">
                 Full Name
               </label>
-              <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+              <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                   <input
                     id="name"
@@ -94,7 +94,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
               >
                 Shop Name
               </label>
-              <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+              <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                   <input
                     id="companyName"
@@ -115,7 +115,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
               <label htmlFor="gstNumber" className="mb-0.5 text-xs font-medium">
                 GST Number
               </label>
-              <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+              <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                   <input
                     id="gstNumber"
@@ -143,7 +143,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
               <label htmlFor="email" className="mb-0.5 text-xs font-medium">
                 Email Address
               </label>
-              <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+              <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                   <input
                     id="email"
@@ -171,7 +171,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
             <label htmlFor="address" className="mb-0.5 text-xs font-medium">
               Address
             </label>
-            <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+            <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
               <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                 <textarea
                   id="address"
@@ -190,7 +190,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
               <label htmlFor="name" className="mb-0.5 text-xs font-medium">
                 Phone Number
               </label>
-              <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+              <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent ">
                   <div className="flex items-center w-full ">
                     <span className="text-xs text-gray-500 px-2 border-r">
@@ -226,7 +226,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
               <label htmlFor="pincode" className="mb-0.5 text-xs font-medium">
                 Pincode
               </label>
-              <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+              <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                   <input
                     id="pincode"

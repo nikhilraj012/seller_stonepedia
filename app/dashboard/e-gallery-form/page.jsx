@@ -18,29 +18,25 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useUi } from "@/app/components/context/UiContext";
 import { useAuth } from "@/app/components/context/AuthContext";
 import { db, storage } from "@/app/firebase/config";
 
-
 const page = () => {
-
-const searchParams = useSearchParams();
-  const {  isSubmitting, setIsSubmitting } = useUi();
-
-  const {  uid, authEmail } = useAuth();
+  const searchParams = useSearchParams();
+  const { isSubmitting, setIsSubmitting } = useUi();
+  const { uid, authEmail } = useAuth();
   const [resetForm, setResetForm] = useState(false);
-
   const [productList, setProductList] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
   const [companyData, setCompanyData] = useState({});
-
   const slabRef = useRef();
+  const router = useRouter();
 
-const galleryId = searchParams.get("galleryId");
-const hasApprovedForm = searchParams.get("hasApprovedForm") === "true";
+  const galleryId = searchParams.get("galleryId");
+  const hasApprovedForm = searchParams.get("hasApprovedForm") === "true";
 
   const processFiles = (files, mediaArray = []) => {
     if (!files?.length) return [];
@@ -98,10 +94,7 @@ const hasApprovedForm = searchParams.get("hasApprovedForm") === "true";
       fileArray.map(async (f) => {
         const file = f.file || f;
         const name = file.name || `file_${Date.now()}`;
-        const fileRef = ref(
-          storage,
-          `EGallery/${uid}/${path}/${name}`,
-        );
+        const fileRef = ref(storage, `EGallery/${uid}/${path}/${name}`);
         const metadata = {
           contentType: file.type,
           contentDisposition: `attachment; filename="${file.name}"`,
@@ -180,11 +173,14 @@ const hasApprovedForm = searchParams.get("hasApprovedForm") === "true";
         };
         console.log(galleryData);
         const ref1 = await addDoc(collection(db, "EGallery"), galleryData);
-        await setDoc(doc(db, "SellerDetails", uid, "EGallery", ref1.id), galleryData);
+        await setDoc(
+          doc(db, "SellerDetails", uid, "EGallery", ref1.id),
+          galleryData,
+        );
         console.log("Saved in Users also:", ref1.id);
         console.log("hu", productList);
         toast.success("Form submitted successfully!");
-        router.push("/dashboard");
+        router.push("/dashboard/profile/my-e-gallery");
         setProductList([]);
         setCompanyData({});
         setResetForm(true);
@@ -251,16 +247,15 @@ const hasApprovedForm = searchParams.get("hasApprovedForm") === "true";
     <div className="py-16 max-lg:px-4 lg:mx-24 xl:mx-32">
       {isSubmitting && (
         <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
-          <img    
-          src="/images/logo1.png"
-          alt="Loading"
-          className="w-20 md:w-24 animate-pulse"
-        />
-          
+          <img
+            src="/images/logo1.png"
+            alt="Loading"
+            className="w-20 md:w-24 animate-pulse"
+          />
         </div>
       )}
       <div className=" my-3 md:my-5 mx-auto ">
-        <h1 className="font-medium text-[#871B58] text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl">
+        <h1 className="font-medium text-primary text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl">
           E - Gallery
         </h1>
         <p className="text-[#6E6E6E] text-sm md:text-md lg:text-lg xl:text-xl">

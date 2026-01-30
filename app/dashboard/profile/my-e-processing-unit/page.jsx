@@ -91,7 +91,7 @@ const handleViewDetails = (item, product) => {
           You haven’t added anything to E-Gallery For Processing Found yet.
         </p>
         <button
-          onClick={() => navigate("/stonepedia-for-business/e-processing-unit")}
+          onClick={() => router.push("/dashboard/e-processing-unit-form")}
           className="border border-primary cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"
         >
           Add E-Gallery For Processing
