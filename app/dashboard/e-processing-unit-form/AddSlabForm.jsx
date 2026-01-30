@@ -23,6 +23,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import ProductView from "./ProductView";
 import { useUi } from "@/app/components/context/UiContext";
 import { useAuth } from "@/app/components/context/AuthContext";
+import { selectCommonStyles, selectCommonTheme } from "@/app/components/styles/select.config";
 
 
 const AddSlabForm = ({ galleryId }) => {

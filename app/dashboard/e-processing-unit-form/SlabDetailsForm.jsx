@@ -5,8 +5,6 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import Select from "react-select";
 
-
-
 export default function SlabDetailsForm({
   product,
   toggleOption,

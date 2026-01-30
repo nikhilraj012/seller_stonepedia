@@ -393,7 +393,7 @@ const GalleryDetails = ({mode}) => {
                     <MdOutlineEdit className="text-sm lg:text-lg" />
                   </button>
                 )}
-                {(status === "approved" || status === "pending") && (
+                {/* {(status === "approved" || status === "pending") && (
                   <button
                     onClick={handleDeleteProduct}
                     type="button"
@@ -406,7 +406,7 @@ const GalleryDetails = ({mode}) => {
                   >
                     <RiDeleteBin5Line className="text-sm lg:text-lg" />
                   </button>
-                )}
+                )} */}
               </div>
             </div>
           </div>
