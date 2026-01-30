@@ -144,6 +144,8 @@ export const AuthProvider = ({ children }) => {
       setSellerDetails(userData.sellerDetails);
     }
   };
+  
+const isAuthenticated = !!user;
 
   return (
     <AuthContext.Provider
@@ -154,6 +156,7 @@ export const AuthProvider = ({ children }) => {
         sellerDetails,
         loading,
         loggingOut,
+        isAuthenticated,
         register,
         login,
         logout,

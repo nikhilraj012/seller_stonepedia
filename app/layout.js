@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${poppins.variable} ${outfit.variable} font-poppins`}>
       <body className="antialiased">
         <Toaster />
-        {/* <AuthProvider>
+        <AuthProvider>
           <GlobalLoading>
             <UiProvider>
               <Navbar />
@@ -39,18 +39,8 @@ export default function RootLayout({ children }) {
               <Login />
             </UiProvider>
           </GlobalLoading>
-        </AuthProvider> */}
-        <AuthProvider>
-  <UiProvider>
-    <GlobalLoading>
-      <Navbar />
-      {children}
-      <Footer />
-      <GetInTouch />
-      <Login />
-    </GlobalLoading>
-  </UiProvider>
-</AuthProvider>
+        </AuthProvider>
+        
       </body>
     </html>
   );

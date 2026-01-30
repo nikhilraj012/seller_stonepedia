@@ -27,7 +27,7 @@ import { useAuth } from "@/app/components/context/AuthContext";
 import { db, storage } from "@/app/firebase/config";
 const page = () => {
   const searchParams = useSearchParams();
-  const { setShowUserLogin, navigate, isSubmitting, setIsSubmitting } = useUi();
+  const { isSubmitting, setIsSubmitting } = useUi();
 
   const { isAuthenticated, uid, authEmail } = useAuth();
 
@@ -267,6 +267,15 @@ const page = () => {
 
   return (
     <div className="py-16 max-lg:px-4 lg:mx-24 xl:mx-32">
+      {isSubmitting && (
+        <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
+          <img
+            src="/images/logo1.png"
+            alt="Loading"
+            className="w-20 md:w-24 animate-pulse"
+          />
+        </div>
+      )}
       <div className="my-3 md:my-5 mx-auto ">
         <h1 className="font-medium text-[#871B58] text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl">
           Sell Stone Products
@@ -275,15 +284,7 @@ const page = () => {
           Share details of your artefact to list it for sell securely.
         </p>
       </div>
-      {isSubmitting && (
-        <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center">
-          <img
-            src="/logo.png"
-            alt="Loading"
-            className="w-20 md:w-24 animate-pulse"
-          />
-        </div>
-      )}
+
       <div className="mx-auto max-w-7xl relative">
         <form
           onSubmit={handleSubmit}
