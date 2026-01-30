@@ -24,9 +24,11 @@ import ProductView from "./ProductView";
 import { useUi } from "@/app/components/context/UiContext";
 import { useAuth } from "@/app/components/context/AuthContext";
 import { selectCommonStyles, selectCommonTheme } from "@/app/components/styles/select.config";
+import { useRouter } from "next/navigation";
 
 
 const AddSlabForm = ({ galleryId }) => {
+    const router = useRouter();
   const generateNumericId = () => {
     return uuidv4().replace(/\D/g, "").slice(0, 6);
   };
@@ -48,7 +50,7 @@ const AddSlabForm = ({ galleryId }) => {
   const MAX_IMAGE = 20;
   const MAX_VIDEO = 10;
   const MAX_FILE_SIZE_MB = 20;
-  const { navigate, isSubmitting, setIsSubmitting } = useUi();
+  const {isSubmitting, setIsSubmitting } = useUi();
 
   const { isAuthenticated, uid, authEmail } = useAuth();
 
@@ -402,7 +404,7 @@ const AddSlabForm = ({ galleryId }) => {
 
       const userGalleryRef = doc(
         db,
-        "Users",
+        "SellerDetails",
         uid,
         "EGalleryForProcessingUnit",
         galleryId,
@@ -424,7 +426,7 @@ const AddSlabForm = ({ galleryId }) => {
       setIsSubmitting(false);
       setProductList([]);
       window.scrollTo({ top: 0, behavior: "smooth" });
-      navigate("/e - processing - unit");
+      router.push("/my-e-processing-unit");
     } catch (err) {
       console.log(err);
       setIsSubmitting(false);
