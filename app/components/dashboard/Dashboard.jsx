@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/app/firebase/config";
+import { useAuth } from "@/app/components/context/AuthContext";
 
 const businessCategories = [
   {
@@ -40,6 +43,38 @@ const businessCategories = [
 
 const Dashboard = () => {
   const router = useRouter();
+  const { uid } = useAuth();
+  const [hasRegisteredBlocks, setHasRegisteredBlocks] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkBlockRegistration = async () => {
+      if (!uid) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const sellBlocksRef = collection(db, "SellerDetails", uid, "SellBlocks");
+        const querySnapshot = await getDocs(sellBlocksRef);
+        
+        setHasRegisteredBlocks(!querySnapshot.empty);
+      } catch (error) {
+        console.error("Error checking block registration:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkBlockRegistration();
+  }, [uid]);
+
+  const getButtonText = (categoryId) => {
+    if (categoryId === 1) {
+      return hasRegisteredBlocks ? "Add Block" : "Register";
+    }
+    return "Register";
+  };
 
   return (
     <div className="pt-14 px-4 md:px-6 lg:px-10">
@@ -86,7 +121,7 @@ const Dashboard = () => {
                   onClick={() => router.push(category.route)}
                   className="w-full border border-[#141219]/20 rounded-[40px] px-8 py-4 text-base font-medium text-[#141219] hover:bg-gray-50 transition-colors mt-auto cursor-pointer"
                 >
-                  Register
+                  {getButtonText(category.id)}
                 </button>
               </div>
             </div>

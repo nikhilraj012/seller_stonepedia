@@ -78,7 +78,7 @@ const Pagination = ({ itemsPerPage, totalItems, currentPage, onPageChange }) => 
                   <button
                     className={`h-5 w-5 md:h-8 md:w-8 flex items-center justify-center outline-none rounded-full ${
                       currentPage === number
-                        ? "bg-[#871B58] text-white"
+                        ? "bg-primary text-white"
                         : "hover:bg-gray-100 cursor-pointer"
                     }`}
                     onClick={() => onPageChange(number)}
