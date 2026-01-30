@@ -1,12 +1,8 @@
 "use client";
 import { IoLocation } from "react-icons/io5";
-import { RiDeleteBin5Line } from "react-icons/ri";
 import { MdOutlineEdit } from "react-icons/md";
-import toast from "react-hot-toast";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { auth, db } from "@/app/firebase/config";
 
 const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
   const router = useRouter();
