@@ -98,14 +98,14 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
     const companySlug = item.quarryDetails?.quarryName
       ?.toLowerCase()
       .replace(/\s+/g, "-")
-      .replace(/[^\w-]/g, "") || "company";
+      .replace(/[^\w-]/g, "");
     const productSlug = block.stoneName
       ?.toLowerCase()
       .replace(/\s+/g, "-")
-      .replace(/[^\w-]/g, "") || "product";
+      .replace(/[^\w-]/g, "");
     
     // Store the data in sessionStorage for the details page to retrieve
-    sessionStorage.setItem('currentBlock', JSON.stringify({
+    sessionStorage.setItem('currentProduct', JSON.stringify({
       docId: item.id,
       blockId: block.id,
       companyData: item.quarryDetails
