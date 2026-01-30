@@ -426,7 +426,7 @@ const AddSlabForm = ({ galleryId }) => {
       setIsSubmitting(false);
       setProductList([]);
       window.scrollTo({ top: 0, behavior: "smooth" });
-      router.push("/my-e-processing-unit");
+      router.push("dashboard/my-e-processing-unit");
     } catch (err) {
       console.log(err);
       setIsSubmitting(false);

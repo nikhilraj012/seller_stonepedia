@@ -264,14 +264,13 @@ const GalleryDetails = ({mode}) => {
       setIsUpdating(false);
     }
   };
-  if (loading) {
+if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-white">
-        <img
-          src="images/logo1.png"
-          alt="Loading"
-          className="w-16 animate-pulse"
-        />
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-gray-900 mx-auto"></div>
+          <p className="mt-6 text-gray-600 text-lg">Loading...</p>
+        </div>
       </div>
     );
   }
@@ -284,7 +283,7 @@ const GalleryDetails = ({mode}) => {
     <div className="pt-16 md:pt-19  max-lg:px-4 lg:mx-24 xl:mx-32">
       
       <h1 className="text-center mb-3   inline-block text-base md:text-2xl font-medium text-primary">
-        Slab Details
+        Product Details
       </h1>
       <div className="px-4 bg-white rounded-xl shadow-sm border border-gray-300">
         <div className="py-3 sm:py-4 border-b border-gray-300 relative">
