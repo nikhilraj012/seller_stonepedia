@@ -162,14 +162,14 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
                 <RiDeleteBin5Line className="text-sm lg:text-xl" />
               </button>
             )} */}
-            {(status === "pending" || status === "approved") && (
+            {/* {(status === "pending" || status === "approved") && (
               <button
                 onClick={() => handleCancel(item.id)}
                 className="p-2 cursor-pointer bg-gray-100 text-red-500 rounded-lg"
               >
                 Cancel
               </button>
-            )}
+            )} */}
           </div>
 
           <div>

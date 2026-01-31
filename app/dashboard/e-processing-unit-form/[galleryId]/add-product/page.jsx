@@ -51,9 +51,12 @@ const AddSlabPage = () => {
     media: [],
   });
 
-  const MAX_IMAGE = 2;
-  const MAX_VIDEO = 5;
-  const MAX_FILE_SIZE_MB = 2;
+  const MAX_IMAGE = 8;
+  const MAX_VIDEO = 8;
+  const MAX_PDF_SIZE_MB = 2;
+  const MAX_IMAGE_SIZE_MB = 2;
+  const MAX_VIDEO_SIZE_MB = 5;
+
   const { isSubmitting, setIsSubmitting } = useUi();
 
   const { isAuthenticated, uid, authEmail } = useAuth();
@@ -93,14 +96,12 @@ const AddSlabPage = () => {
     "Shot Blast",
   ];
   const thicknessOptions = ["14MM", "16MM", "18MM", "20MM", "25MM"];
- const widthOptions =
-  product.units?.value === "sqm"
-    ? ["5-8 m", "8-11 m"]
-    : ["5-8 ft", "8-11 ft"];
-     const heightOptions =
-       product.units?.value === "sqm"
-         ? ["2-3 m", "4-5 m"]
-         : ["2-3 ft", "4-5 ft"];
+  const widthOptions =
+    product.units?.value === "sqm"
+      ? ["5-8 m", "8-11 m"]
+      : ["5-8 ft", "8-11 ft"];
+  const heightOptions =
+    product.units?.value === "sqm" ? ["2-3 m", "4-5 m"] : ["2-3 ft", "4-5 ft"];
   const wrapperMap = {
     finish: finishWrapperRef,
     thickness: thicknessWrapperRef,
@@ -179,11 +180,12 @@ const AddSlabPage = () => {
       toast.error(`Maximum ${MAX_VIDEO} videos allowed`);
       return [];
     }
-    return validateFiles(files, MAX_FILE_SIZE_MB).map((f) => ({
-      file: f,
-      url: URL.createObjectURL(f),
-      type: f.type,
-    }));
+   return validateFiles(files).map((f) => ({
+     file: f,
+     url: URL.createObjectURL(f),
+     type: f.type,
+   }));
+
   };
   const handleFile = (e) => {
     const files = Array.from(e.target.files);
@@ -195,16 +197,35 @@ const AddSlabPage = () => {
       }));
     }
   };
-  const validateFiles = (files, maxSizeMB) => {
-    return Array.from(files).filter((file) => {
-      if (file.size > maxSizeMB * 1024 * 1024) {
-        toast.error(`${file.name} exceeds ${maxSizeMB}MB limit`);
-        return false;
-      }
-      return true;
-    });
-  };
 
+
+const validateFiles = (files) => {
+  return Array.from(files).filter((file) => {
+    const isImage = file.type.startsWith("image/");
+    const isVideo = file.type.startsWith("video/");
+    const isPDF = file.type === "application/pdf";
+
+    let maxSizeMB = 0;
+
+    if (isImage) maxSizeMB = MAX_IMAGE_SIZE_MB;
+    else if (isVideo) maxSizeMB = MAX_VIDEO_SIZE_MB;
+    else if (isPDF) maxSizeMB = MAX_PDF_SIZE_MB;
+    else {
+      toast.error("Only Image, Video or PDF allowed");
+      return false;
+    }
+
+    if (file.size > maxSizeMB * 1024 * 1024) {
+      toast.error(
+        `${file.name} exceeds ${maxSizeMB}MB limit`,
+        { duration: 1500 }
+      );
+      return false;
+    }
+
+    return true;
+  });
+};
   const editProduct = (index) => {
     const p = productList[index];
     setProduct(p);
@@ -444,16 +465,16 @@ const AddSlabPage = () => {
       toast.error("Error while adding slabs!");
     }
   };
-    useEffect(() => {
-      if (isSubmitting) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "unset";
-      }
-      return () => {
-        document.body.style.overflow = "unset";
-      };
-    }, [isSubmitting]);
+  useEffect(() => {
+    if (isSubmitting) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isSubmitting]);
   return (
     <div className="py-16 max-lg:px-4 lg:mx-24 xl:mx-32">
       {isSubmitting && (

@@ -427,7 +427,10 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
                 </div>
                 {openDropdown === "height" && (
                   <div className="absolute mt-1 w-full border border-gray-300 rounded-md bg-white shadow max-h-40 overflow-y-auto z-10">
-                    {["2-3 ft", "4-5 ft"].map((opt) => (
+                    {(product.units?.value === "sqm"
+                      ? ["2-3 m", "4-5 m"]
+                      : ["2-3 ft", "4-5 ft"]
+                    ).map((opt) => (
                       <label
                         htmlFor={`height-${opt}`}
                         key={opt}
@@ -497,7 +500,10 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
 
                 {openDropdown === "width" && (
                   <div className="absolute mt-1 w-full border border-gray-300 rounded-md bg-white shadow max-h-40 overflow-y-auto z-10">
-                    {["5-8 ft", "8-11 ft"].map((opt) => (
+                    {(product.units?.value === "sqm"
+                      ? ["2-3 m", "4-5 m"]
+                      : ["2-3 ft", "4-5 ft"]
+                    ).map((opt) => (
                       <label
                         htmlFor={`width-${opt}`}
                         key={opt}

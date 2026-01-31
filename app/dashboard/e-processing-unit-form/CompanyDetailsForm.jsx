@@ -75,9 +75,11 @@ const CompanyDetailsForm = () => {
   const [product, setProduct] = useState(initialProductData);
 
   const refs = useRef({});
-  const MAX_FILE_SIZE_MB = 2;
-  const MAX_IMAGE = 2;
-  const MAX_VIDEO = 5;
+const MAX_IMAGE = 8;
+const MAX_VIDEO = 8;
+const MAX_PDF_SIZE_MB = 2;
+const MAX_IMAGE_SIZE_MB = 2;
+const MAX_VIDEO_SIZE_MB = 5;
 
   const bindRef = (name) => (el) => {
     refs.current[name] = el;
@@ -340,11 +342,11 @@ const CompanyDetailsForm = () => {
       toast.error(`Maximum ${MAX_VIDEO} videos allowed`);
       return [];
     }
-    return validateFiles(files, MAX_FILE_SIZE_MB).map((f) => ({
-      file: f,
-      url: URL.createObjectURL(f),
-      type: f.type,
-    }));
+     return validateFiles(files).map((f) => ({
+       file: f,
+       url: URL.createObjectURL(f),
+       type: f.type,
+     }));
   };
 
   const handleFile = (e) => {
@@ -358,16 +360,32 @@ const CompanyDetailsForm = () => {
     }
   };
 
-  const validateFiles = (files, maxSizeMB) => {
+  const validateFiles = (files) => {
     return Array.from(files).filter((file) => {
-      if (file.size > maxSizeMB * 1024 * 1024) {
-        toast.error(`${file.name} exceeds ${maxSizeMB}MB limit`);
+      const isImage = file.type.startsWith("image/");
+      const isVideo = file.type.startsWith("video/");
+      const isPDF = file.type === "application/pdf";
+  
+      let maxSizeMB = 0;  
+      if (isImage) maxSizeMB = MAX_IMAGE_SIZE_MB;
+      else if (isVideo) maxSizeMB = MAX_VIDEO_SIZE_MB;
+     
+      else {
+        toast.error("Only Image, Video allowed");
         return false;
       }
+  
+      if (file.size > maxSizeMB * 1024 * 1024) {
+        toast.error(
+          `${file.name} exceeds ${maxSizeMB}MB limit`,
+          { duration: 1500 }
+        );
+        return false;
+      }
+  
       return true;
     });
   };
-
   const editProduct = (index) => {
     const p = productList[index];
     setProduct(p);
