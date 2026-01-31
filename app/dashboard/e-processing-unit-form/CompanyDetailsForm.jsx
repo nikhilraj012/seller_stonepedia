@@ -182,7 +182,7 @@ const CompanyDetailsForm = () => {
             const fileName = file.name || `file_${Date.now()}`;
             const fileRef = ref(
               storage,
-              `StonepediaForBusiness/EGalleryForProcessingUnit/${uid}/${folderName}/${fileName}`
+              `EGalleryForProcessingUnit/${uid}/${folderName}/${fileName}`
             );
             const metadata = {
               contentType: file.type,
