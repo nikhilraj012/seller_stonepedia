@@ -305,7 +305,7 @@ const CompanyDetailsForm = () => {
       setSelectedWidth([]);
       setEditIndex(null);
 
-        router.push("dashboard/my-e-processing-unit");
+      router.push("/dashboard/my-e-processing-unit");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       console.error("Submit Error:", error);
@@ -385,6 +385,7 @@ const CompanyDetailsForm = () => {
     setEditIndex(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
   const handleAddproduct = () => {
     const requiredFields = [
       "stoneCategory",
