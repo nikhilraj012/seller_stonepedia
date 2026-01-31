@@ -43,36 +43,127 @@ const businessCategories = [
 const Dashboard = () => {
   const router = useRouter();
   const { uid } = useAuth();
-  const [hasRegisteredBlocks, setHasRegisteredBlocks] = useState(false);
+  const [blocksStatus, setBlocksStatus] = useState(null);
+  const [eProcessingStatus, setEProcessingStatus] = useState(null);
+  const [eGalleryStatus, setEGalleryStatus] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkBlockRegistration = async () => {
+    const checkRegistrations = async () => {
       if (!uid) {
         setLoading(false);
         return;
       }
 
       try {
-        const sellBlocksRef = collection(db, "SellerDetails", uid, "SellBlocks");
-        const querySnapshot = await getDocs(sellBlocksRef);
+        // Check Blocks status
+        // const blocksRef = collection(db, "SellerDetails", uid, "SellBlocks");
+        // const blocksSnapshot = await getDocs(blocksRef);
         
-        setHasRegisteredBlocks(!querySnapshot.empty);
+        // if (!blocksSnapshot.empty) {
+        //   const docs = blocksSnapshot.docs.map(doc => doc.data());
+        //   const hasApproved = docs.some(doc => doc.status === "approved");
+        //   const hasPending = docs.some(doc => doc.status === "pending");
+        //   const allRejectedOrCancelled = docs.every(doc => 
+        //     doc.status === "rejected" || doc.status === "cancelled"
+        //   );
+          
+        //   if (hasApproved) {
+        //     setBlocksStatus("approved");
+        //   } else if (hasPending) {
+        //     setBlocksStatus("pending");
+        //   } else if (allRejectedOrCancelled) {
+        //     setBlocksStatus("rejected");
+        //   }
+        // }
+
+        // Check E-Processing Unit status
+        const eProcessingRef = collection(db, "SellerDetails", uid, "EGalleryForProcessingUnit");
+        const eProcessingSnapshot = await getDocs(eProcessingRef);
+        
+        if (!eProcessingSnapshot.empty) {
+          const docs = eProcessingSnapshot.docs.map(doc => doc.data());
+          const hasApproved = docs.some(doc => doc.status === "approved");
+          const hasPending = docs.some(doc => doc.status === "pending");
+          const allRejectedOrCancelled = docs.every(doc => 
+            doc.status === "rejected" || doc.status === "cancelled"
+          );
+          
+          if (hasApproved) {
+            setEProcessingStatus("approved");
+          } else if (hasPending) {
+            setEProcessingStatus("pending");
+          } else if (allRejectedOrCancelled) {
+            setEProcessingStatus("rejected");
+          }
+        }
+
+        // Check E-Gallery status
+        const eGalleryRef = collection(db, "SellerDetails", uid, "EGallery");
+        const eGallerySnapshot = await getDocs(eGalleryRef);
+        
+        if (!eGallerySnapshot.empty) {
+          const docs = eGallerySnapshot.docs.map(doc => doc.data());
+          const hasApproved = docs.some(doc => doc.status === "approved");
+          const hasPending = docs.some(doc => doc.status === "pending");
+          const allRejectedOrCancelled = docs.every(doc => 
+            doc.status === "rejected" || doc.status === "cancelled"
+          );
+          
+          if (hasApproved) {
+            setEGalleryStatus("approved");
+          } else if (hasPending) {
+            setEGalleryStatus("pending");
+          } else if (allRejectedOrCancelled) {
+            setEGalleryStatus("rejected");
+          }
+        }
       } catch (error) {
-        console.error("Error checking block registration:", error);
+        console.error("Error checking registrations:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    checkBlockRegistration();
+    checkRegistrations();
   }, [uid]);
 
   const getButtonText = (categoryId) => {
-    if (categoryId === 1) {
-      return hasRegisteredBlocks ? "Add Block" : "Register";
+    if (categoryId === 1) { // Blocks
+      if (blocksStatus === "approved") return "Add Block";
+      if (blocksStatus === "pending") return "My Blocks";
+      return "Register";
+    }
+    if (categoryId === 2) { // E-processing unit
+      if (eProcessingStatus === "approved") return "Add Product";
+      if (eProcessingStatus === "pending") return "My E-Processing Unit";
+      return "Register";
+    }
+    if (categoryId === 3) { // E-Gallery
+      if (eGalleryStatus === "approved") return "Add Product";
+      if (eGalleryStatus === "pending") return "My E-Gallery";
+      return "Register";
     }
     return "Register";
+  };
+
+  const getButtonRoute = (category) => {
+    if (category.id === 1) { // Blocks
+      if (blocksStatus === "approved") return "/dashboard/blocks-form";
+      if (blocksStatus === "pending") return "/dashboard/profile/my-blocks";
+      return category.route;
+    }
+    if (category.id === 2) { // E-processing unit
+      if (eProcessingStatus === "approved") return "/dashboard/e-processing-unit-form";
+      if (eProcessingStatus === "pending") return "/dashboard/profile/my-e-processing-unit";
+      return category.route;
+    }
+    if (category.id === 3) { // E-Gallery
+      if (eGalleryStatus === "approved") return "/dashboard/e-gallery-form";
+      if (eGalleryStatus === "pending") return "/dashboard/profile/my-e-gallery";
+      return category.route;
+    }
+    return category.route;
   };
 
   return (
@@ -117,7 +208,7 @@ const Dashboard = () => {
                 </div>
 
                 <button
-                  onClick={() => router.push(category.route)}
+                  onClick={() => router.push(getButtonRoute(category))}
                   className="w-full border border-[#141219]/20 rounded-[40px] px-8 py-4 text-base font-medium text-[#141219] hover:bg-gray-50 transition-colors mt-auto cursor-pointer"
                 >
                   {getButtonText(category.id)}
