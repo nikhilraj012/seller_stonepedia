@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import ProfileAvatar from "./common/ProfileAvatar";
 
 const profilePages = [
-  // {
-  //   title: "My Blocks",
-  //   href: "/dashboard/profile/my-blocks",
-  // },
+  {
+    title: "My Blocks",
+    href: "/dashboard/profile/my-blocks",
+  },
   {
     title: "My E-Processing Unit",
     href: "/dashboard/profile/my-e-processing-unit",

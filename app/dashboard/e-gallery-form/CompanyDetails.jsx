@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { LuUserRound } from "react-icons/lu";
 import toast from "react-hot-toast";
 
@@ -8,9 +13,9 @@ import { CiMobile3 } from "react-icons/ci";
 import { FiUpload } from "react-icons/fi";
 import { LocationSelector } from "@/app/components/LocationSelector";
 
-const MAX_SIZE = 2 * 1024 * 1024; 
+const MAX_SIZE = 2 * 1024 * 1024;
 
-const CompanyDetails = ({ onDataChange, resetForm }) => {
+const CompanyDetails = forwardRef(({ resetForm }, ref) => {
   const initialFormData = {
     name: "",
     shopName: "",
@@ -34,9 +39,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
       setFormData(initialFormData);
     }
   }, [resetForm]);
-  useEffect(() => {
-    onDataChange(formData);
-  }, [formData]);
+ 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -49,26 +52,32 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
   };
 
   const handleUpload = (e, type) => {
-  const file = e.target.files[0];
-  if (!file) return;
+    const file = e.target.files[0];
+    if (!file) return;
 
-  
-  if (file.size > MAX_SIZE) {
-    toast.error(`${file.name} exceeds 2MB limit`);
-    e.target.value = ""; 
-    return;
-  }
+    if (file.size > MAX_SIZE) {
+      toast.error(`${file.name} exceeds 2MB limit`);
+      e.target.value = "";
+      return;
+    }
 
-  setFormData((prev) => ({
-    ...prev,
-    [type]: {
-      file,
-      url: URL.createObjectURL(file),
-      type: file.type,
-      name: file.name,
+    setFormData((prev) => ({
+      ...prev,
+      [type]: {
+        file,
+        url: URL.createObjectURL(file),
+        type: file.type,
+        name: file.name,
+      },
+    }));
+  };
+  useImperativeHandle(ref, () => ({
+    getData: () => formData,
+
+    reset: () => {
+      setFormData(initialFormData);
     },
   }));
-};
 
   return (
     <div className="">
@@ -81,7 +90,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
                 Full Name
               </label>
               <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
-                <div className="flex items-center gap-2 rounded-lg bg-white border border-[#8c8888] transition focus-within:border-transparent">
+                <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                   <input
                     id="name"
                     type="text"
@@ -91,7 +100,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
                     placeholder="Full Name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="flex-1 bg-transparent outline-none border-0 p-3 text-xs appearance-none w-full"
+                    className="flex-1 bg-transparent outline-none border-0 p-3 text-xs w-full"
                     style={{ WebkitAppearance: "none" }}
                   />
                   <label htmlFor="name" className="pr-3 text-gray-600">
@@ -358,6 +367,6 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
       </div>
     </div>
   );
-};
+});
 
 export default CompanyDetails;

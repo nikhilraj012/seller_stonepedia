@@ -31,8 +31,8 @@ const GalleryForm = () => {
   const [productList, setProductList] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
-  const [companyData, setCompanyData] = useState({});
   const slabRef = useRef();
+ const companyRef=useRef()
   const router = useRouter();
 const { galleryId } = useParams();
 
@@ -96,7 +96,10 @@ const hasApprovedForm = Boolean(galleryId);
   };
 
   const handleSubmit = async (e) => {
+    const companyData = companyRef.current.getData();
+
     e.preventDefault();
+   
     setIsSubmitting(true);
 
     try {
@@ -129,12 +132,12 @@ const hasApprovedForm = Boolean(galleryId);
           brochure: brochureUrls[0],
           image: shopImage[0],
         };
-
+         
         const galleryData = {
           userEmail: authEmail,
           userUid: uid,
           orderId,
-          companyDetails: companyDataFormatted,
+          companyDetails: companyDataFormatted  ,
           products: uploadedProducts,
           status: "pending",
           createdAt: serverTimestamp(),
@@ -150,7 +153,7 @@ const hasApprovedForm = Boolean(galleryId);
         toast.success("Form submitted successfully!");
         router.push("/dashboard/profile/my-e-gallery");
         setProductList([]);
-        setCompanyData({});
+        companyRef.current.reset();
         setResetForm(true);
         setTimeout(() => setResetForm(false), 0);
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -238,7 +241,8 @@ const hasApprovedForm = Boolean(galleryId);
           <div className="shadow-lg md:shadow-2xl p-4 rounded-lg md:w-3/5 space-y-2 md:space-y-4">
             {!hasApprovedForm && (
               <CompanyDetails
-                onDataChange={setCompanyData}
+                ref={companyRef}
+               
                 resetForm={resetForm}
               />
             )}
@@ -246,7 +250,6 @@ const hasApprovedForm = Boolean(galleryId);
             <SlabDetails
               ref={slabRef}
               setProductList={setProductList}
-             
               editIndex={editIndex}
               setEditIndex={setEditIndex}
               editProduct={editProduct}
@@ -275,7 +278,6 @@ const hasApprovedForm = Boolean(galleryId);
               productList={productList}
               setProductList={setProductList}
               editIndex={editIndex}
-             
               onEdit={handleEdit}
             />
 

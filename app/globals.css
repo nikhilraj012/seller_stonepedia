@@ -5,7 +5,9 @@
   --font-outfit: var(--font-outfit);
   --color-primary: #871B58;
 }
-
+:invalid {
+  scroll-margin-top: 100px;
+}
 @layer base {
   html {
     scroll-behavior: smooth;
