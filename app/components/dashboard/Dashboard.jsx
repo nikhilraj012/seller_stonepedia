@@ -46,6 +46,8 @@ const Dashboard = () => {
   const [blocksStatus, setBlocksStatus] = useState(null);
   const [eProcessingStatus, setEProcessingStatus] = useState(null);
   const [eGalleryStatus, setEGalleryStatus] = useState(null);
+  const [eProcessingGalleryId, setEProcessingGalleryId] = useState(null);
+  const [eGalleryId, setEGalleryId] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -82,7 +84,7 @@ const Dashboard = () => {
         const eProcessingSnapshot = await getDocs(eProcessingRef);
         
         if (!eProcessingSnapshot.empty) {
-          const docs = eProcessingSnapshot.docs.map(doc => doc.data());
+          const docs = eProcessingSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
           const hasApproved = docs.some(doc => doc.status === "approved");
           const hasPending = docs.some(doc => doc.status === "pending");
           const allRejectedOrCancelled = docs.every(doc => 
@@ -91,6 +93,9 @@ const Dashboard = () => {
           
           if (hasApproved) {
             setEProcessingStatus("approved");
+            // Find the first approved gallery ID
+            const approvedGallery = docs.find(doc => doc.status === "approved");
+            setEProcessingGalleryId(approvedGallery?.id || null);
           } else if (hasPending) {
             setEProcessingStatus("pending");
           } else if (allRejectedOrCancelled) {
@@ -103,7 +108,7 @@ const Dashboard = () => {
         const eGallerySnapshot = await getDocs(eGalleryRef);
         
         if (!eGallerySnapshot.empty) {
-          const docs = eGallerySnapshot.docs.map(doc => doc.data());
+          const docs = eGallerySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
           const hasApproved = docs.some(doc => doc.status === "approved");
           const hasPending = docs.some(doc => doc.status === "pending");
           const allRejectedOrCancelled = docs.every(doc => 
@@ -112,6 +117,9 @@ const Dashboard = () => {
           
           if (hasApproved) {
             setEGalleryStatus("approved");
+            // Find the first approved gallery ID
+            const approvedGallery = docs.find(doc => doc.status === "approved");
+            setEGalleryId(approvedGallery?.id || null);
           } else if (hasPending) {
             setEGalleryStatus("pending");
           } else if (allRejectedOrCancelled) {
@@ -154,12 +162,16 @@ const Dashboard = () => {
       return category.route;
     }
     if (category.id === 2) { // E-processing unit
-      if (eProcessingStatus === "approved") return "/dashboard/profile/my-e-processing-unit";
+      if (eProcessingStatus === "approved" && eProcessingGalleryId) {
+        return `/dashboard/e-processing-unit-form/${eProcessingGalleryId}/add-product`;
+      }
       if (eProcessingStatus === "pending") return "/dashboard/profile/my-e-processing-unit";
       return category.route;
     }
     if (category.id === 3) { // E-Gallery
-      if (eGalleryStatus === "approved") return "/dashboard/profile/my-e-gallery";
+      if (eGalleryStatus === "approved" && eGalleryId) {
+        return `/dashboard/e-gallery-form/${eGalleryId}/add-product`;
+      }
       if (eGalleryStatus === "pending") return "/dashboard/profile/my-e-gallery";
       return category.route;
     }

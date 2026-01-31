@@ -2,7 +2,6 @@
 
 import CompanyDetailsForm from "./CompanyDetailsForm";
 import { useEffect } from "react";
-import AddSlabForm from "./AddSlabForm";
 import { useSearchParams } from "next/navigation";
 import { useUi } from "@/app/components/context/UiContext";
 const page = () => {
