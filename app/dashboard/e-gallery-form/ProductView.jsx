@@ -58,8 +58,10 @@ const ProductView = ({
     if (addedFiles.length) {
       setProductList((prev) =>
         prev.map((p, i) =>
-          i === index ? { ...p, media: [...(p.media || []), ...addedFiles] } : p
-        )
+          i === index
+            ? { ...p, media: [...(p.media || []), ...addedFiles] }
+            : p,
+        ),
       );
     }
   };
@@ -90,7 +92,7 @@ const ProductView = ({
         }
 
         return product;
-      })
+      }),
     );
 
     // Video refs cleanup for media
@@ -107,8 +109,8 @@ const ProductView = ({
 
     setProductList((prev) =>
       prev.map((item, i) =>
-        i === index ? { ...item, thumbnail: { file, url } } : item
-      )
+        i === index ? { ...item, thumbnail: { file, url } } : item,
+      ),
     );
   };
 
@@ -192,7 +194,6 @@ const ProductView = ({
                   </h1>
                   <p className="text-[#8B8B8B] capitalize">{p.stoneCategory}</p>
                 </div>
-              
               </div>
 
               {editIndex === null && (
@@ -275,8 +276,8 @@ const ProductView = ({
               </span>
             </button>
             {expandedIndex === i && (
-              <div className="space-y-2  text-xs max-h-[400px] overflow-y-auto overflow-x-hidden">
-                <div className="border-[1px] p-2 rounded-md space-y-1 border-gray-300 ">
+              <div className="space-y-2  text-xs max-h-100 overflow-y-auto overflow-x-hidden">
+                <div className="border p-2 rounded-md space-y-1 border-gray-300 ">
                   <h2 className="font-medium text-sm">Description</h2>
                   <span className="text-[#3B3B3B]">{p.description}</span>
                 </div>

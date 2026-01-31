@@ -262,7 +262,7 @@ const GalleryEdit = ({ mode }) => {
             </div>
           )}
 
-          <span className="text-center ml-1 inline-block text-base md:text-2xl font-medium text-[#871B58] ">
+          <span className="text-center ml-1 inline-block text-base md:text-2xl font-medium text-primary ">
             Edit Slab
           </span>
 
@@ -285,7 +285,7 @@ const GalleryEdit = ({ mode }) => {
                 </button>
                 <button
                   onClick={handleSaveChanges}
-                  className="bg-[#871B58] hover:bg-[#6a1545] px-4 py-2 md:px-5 lg:px-10 xl:px-12 rounded-md text-white text-xs cursor-pointer"
+                  className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-5 lg:px-10 xl:px-12 rounded-md text-white text-xs cursor-pointer"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

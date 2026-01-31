@@ -38,7 +38,7 @@ const ProductView = ({
           setShowControls((prev) => ({ ...prev, [key]: true }));
           setTimeout(
             () => setShowControls((prev) => ({ ...prev, [key]: false })),
-            2000
+            2000,
           );
         }
       });
@@ -97,8 +97,10 @@ const ProductView = ({
     if (addedFiles.length) {
       setProductList((prev) =>
         prev.map((p, i) =>
-          i === index ? { ...p, media: [...(p.media || []), ...addedFiles] } : p
-        )
+          i === index
+            ? { ...p, media: [...(p.media || []), ...addedFiles] }
+            : p,
+        ),
       );
     }
   };
@@ -118,7 +120,7 @@ const ProductView = ({
           };
         }
         return product;
-      })
+      }),
     );
     const key = `${index}-${imgIndex}`;
     if (VideoRef.current[key]) {
@@ -133,8 +135,8 @@ const ProductView = ({
 
     setProductList((prev) =>
       prev.map((item, i) =>
-        i === index ? { ...item, thumbnail: { file, url } } : item
-      )
+        i === index ? { ...item, thumbnail: { file, url } } : item,
+      ),
     );
   };
 
@@ -148,7 +150,7 @@ const ProductView = ({
         }
 
         return { ...item, thumbnail: null };
-      })
+      }),
     );
   };
 
@@ -315,7 +317,7 @@ const ProductView = ({
               </span>
             </button>
             {expandedIndex === i && (
-              <div className="space-y-2  text-xs max-h-[400px] overflow-y-auto overflow-x-hidden">
+              <div className="space-y-2  text-xs max-h-100 overflow-y-auto overflow-x-hidden">
                 <div className="border p-2 rounded-md space-y-1 border-gray-300 ">
                   <h2 className="font-medium text-sm">Description</h2>
                   <span className="text-[#3B3B3B]">{p.description}</span>

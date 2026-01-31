@@ -10,7 +10,16 @@ import { useAuth } from "./context/AuthContext";
 import NavbarProfile from "./NavbarProfile";
 
 const Navbar = () => {
-  const { openLogin, openSignup, navLinks, handleNavClick, isMenuOpen, setIsMenuOpen, showProfileDropdown, setShowProfileDropdown } = useUi();
+  const {
+    openLogin,
+    openSignup,
+    navLinks,
+    handleNavClick,
+    isMenuOpen,
+    setIsMenuOpen,
+    showProfileDropdown,
+    setShowProfileDropdown,
+  } = useUi();
   const { user } = useAuth();
   const router = useRouter();
   const photoUrl = user?.photoURL;
@@ -77,7 +86,7 @@ const Navbar = () => {
             <div className="hidden md:flex text-xs lg:text-sm space-x-4 lg:space-x-6 xl:space-x-10 2xl:space-x-14">
               {navLinks.map((link) => (
                 <button
-                  className="cursor-pointer hover:text-[#871b58]"
+                  className="cursor-pointer hover:text-primary"
                   key={link.label}
                   onClick={() => handleNavClick(link.href)}
                 >
@@ -105,20 +114,21 @@ const Navbar = () => {
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <IoPersonCircleOutline size={40} className="text-gray-400" />
+                        <IoPersonCircleOutline
+                          size={40}
+                          className="text-gray-400"
+                        />
                       </div>
                     )}
                   </div>
                 </button>
 
-                {showProfileDropdown && (
-                  <NavbarProfile />
-                )}
+                {showProfileDropdown && <NavbarProfile />}
               </div>
             ) : (
               <>
                 <button
-                  className="cursor-pointer hover:text-[#871b58]"
+                  className="cursor-pointer hover:text-primary"
                   onClick={openLogin}
                 >
                   Log in
@@ -175,7 +185,7 @@ const Navbar = () => {
           {!user &&
             navLinks.map((link) => (
               <button
-                className="text-left cursor-pointer hover:text-[#871b58]"
+                className="text-left cursor-pointer hover:text-primary"
                 key={link.label}
                 onClick={() => handleNavClickAndClose(link.href)}
               >
@@ -184,9 +194,7 @@ const Navbar = () => {
             ))}
 
           {user ? (
-            <NavbarProfile
-              isMobile={true} setIsMenuOpen={setIsMenuOpen}
-            />
+            <NavbarProfile isMobile={true} setIsMenuOpen={setIsMenuOpen} />
           ) : (
             <>
               <button

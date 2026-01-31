@@ -22,6 +22,7 @@ import { useUi } from "@/app/components/context/UiContext";
 import { useAuth } from "@/app/components/context/AuthContext";
 import { db, storage } from "@/app/firebase/config";
 import { LocationSelector } from "@/app/components/LocationSelector";
+import { useRouter } from "next/navigation";
 
 const initialFormData = {
   name: "",
@@ -59,6 +60,7 @@ const initialProductData = {
 };
 
 const CompanyDetailsForm = () => {
+     const router = useRouter();
   const { isSubmitting, setIsSubmitting } = useUi();
  
     const {uid , authEmail} = useAuth();
@@ -182,7 +184,7 @@ const CompanyDetailsForm = () => {
             const fileName = file.name || `file_${Date.now()}`;
             const fileRef = ref(
               storage,
-              `StonepediaForBusiness/EGalleryForProcessingUnit/${uid}/${folderName}/${fileName}`
+              `EGalleryForProcessingUnit/${uid}/${folderName}/${fileName}`
             );
             const metadata = {
               contentType: file.type,
@@ -302,7 +304,8 @@ const CompanyDetailsForm = () => {
       setSelectedHeight([]);
       setSelectedWidth([]);
       setEditIndex(null);
-      // navigate("/stonepedia-for-business/e-processing-unit");
+
+        router.push("dashboard/my-e-processing-unit");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       console.error("Submit Error:", error);

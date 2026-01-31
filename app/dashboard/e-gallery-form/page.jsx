@@ -177,7 +177,7 @@ const page = () => {
           doc(db, "SellerDetails", uid, "EGallery", ref1.id),
           galleryData,
         );
-        console.log("Saved in Users also:", ref1.id);
+        console.log("Saved in SellerDetails also:", ref1.id);
         console.log("hu", productList);
         toast.success("Form submitted successfully!");
         router.push("/dashboard/profile/my-e-gallery");
@@ -205,7 +205,7 @@ const page = () => {
       const newProducts = await Promise.all(productList.map(uploadProduct));
 
       const gRef = doc(db, "EGallery", galleryId);
-      const uRef = doc(db, "Users", uid, "EGallery", galleryId);
+      const uRef = doc(db, "SellerDetails", uid, "EGallery", galleryId);
 
       const gSnap = await getDoc(gRef);
       if (!gSnap.exists()) {
@@ -225,7 +225,7 @@ const page = () => {
       toast.success("New slabs added!");
       setProductList([]);
       window.scrollTo({ top: 0, behavior: "smooth" });
-      // navigate("/e-gallery");
+      router.push("/dashboard/profile/my-e-gallery");
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");
