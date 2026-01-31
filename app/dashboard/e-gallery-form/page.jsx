@@ -225,7 +225,7 @@ const page = () => {
       toast.success("New slabs added!");
       setProductList([]);
       window.scrollTo({ top: 0, behavior: "smooth" });
-      // navigate("/e-gallery");
+      router.push("/dashboard/profile/my-e-gallery");
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");
