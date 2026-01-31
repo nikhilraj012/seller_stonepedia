@@ -149,17 +149,17 @@ const Dashboard = () => {
 
   const getButtonRoute = (category) => {
     if (category.id === 1) { // Blocks
-      if (blocksStatus === "approved") return "/dashboard/blocks-form";
+      if (blocksStatus === "approved") return "/dashboard/profile/my-blocks";
       if (blocksStatus === "pending") return "/dashboard/profile/my-blocks";
       return category.route;
     }
     if (category.id === 2) { // E-processing unit
-      if (eProcessingStatus === "approved") return "/dashboard/e-processing-unit-form";
+      if (eProcessingStatus === "approved") return "/dashboard/profile/my-e-processing-unit";
       if (eProcessingStatus === "pending") return "/dashboard/profile/my-e-processing-unit";
       return category.route;
     }
     if (category.id === 3) { // E-Gallery
-      if (eGalleryStatus === "approved") return "/dashboard/e-gallery-form";
+      if (eGalleryStatus === "approved") return "/dashboard/profile/my-e-gallery";
       if (eGalleryStatus === "pending") return "/dashboard/profile/my-e-gallery";
       return category.route;
     }
