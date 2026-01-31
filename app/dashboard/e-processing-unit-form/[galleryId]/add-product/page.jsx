@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
 import { db, storage } from "@/app/firebase/config";
-
+import { processFiles } from "@/app/utils/fileUtils";
 import {
   collection,
   doc,
@@ -162,31 +162,7 @@ const AddSlabPage = () => {
       [name]: val,
     }));
   };
-  const processFiles = (files, mediaArray = []) => {
-    if (!files?.length) return [];
-    const imagesCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("image/"),
-    ).length;
-    const videosCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("video/"),
-    ).length;
-    const imageFiles = files.filter((f) => (f.type || "").startsWith("image/"));
-    const videoFiles = files.filter((f) => (f.type || "").startsWith("video/"));
-    if (imagesCount + imageFiles.length > MAX_IMAGE) {
-      toast.error(`Maximum ${MAX_IMAGE} images allowed`);
-      return [];
-    }
-    if (videosCount + videoFiles.length > MAX_VIDEO) {
-      toast.error(`Maximum ${MAX_VIDEO} videos allowed`);
-      return [];
-    }
-   return validateFiles(files).map((f) => ({
-     file: f,
-     url: URL.createObjectURL(f),
-     type: f.type,
-   }));
-
-  };
+ 
   const handleFile = (e) => {
     const files = Array.from(e.target.files);
     const addedFiles = processFiles(files, product.media || []);
@@ -199,33 +175,7 @@ const AddSlabPage = () => {
   };
 
 
-const validateFiles = (files) => {
-  return Array.from(files).filter((file) => {
-    const isImage = file.type.startsWith("image/");
-    const isVideo = file.type.startsWith("video/");
-    const isPDF = file.type === "application/pdf";
 
-    let maxSizeMB = 0;
-
-    if (isImage) maxSizeMB = MAX_IMAGE_SIZE_MB;
-    else if (isVideo) maxSizeMB = MAX_VIDEO_SIZE_MB;
-    else if (isPDF) maxSizeMB = MAX_PDF_SIZE_MB;
-    else {
-      toast.error("Only Image, Video or PDF allowed");
-      return false;
-    }
-
-    if (file.size > maxSizeMB * 1024 * 1024) {
-      toast.error(
-        `${file.name} exceeds ${maxSizeMB}MB limit`,
-        { duration: 1500 }
-      );
-      return false;
-    }
-
-    return true;
-  });
-};
   const editProduct = (index) => {
     const p = productList[index];
     setProduct(p);
@@ -994,7 +944,7 @@ const validateFiles = (files) => {
             setProductList={setProductList}
             editIndex={editIndex}
             editProduct={editProduct}
-            processFiles={processFiles}
+          
           />
           {productList.length > 0 && editIndex === null && (
             <div className="flex justify-end gap-2 mt-5 text-xs md:text-sm">

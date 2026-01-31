@@ -5,6 +5,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import Select from "react-select";
 import { selectCommonStyles, selectCommonTheme } from "./styles/select.config";
+import { processFiles } from "../utils/fileUtils";
 
 const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -26,40 +27,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
       document.removeEventListener("keydown", onKey);
     };
   }, [openDropdown]);
-  const processFiles = (files, mediaArray = []) => {
-    if (!files?.length) return [];
-    const imagesCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("image/"),
-    ).length;
-    const videosCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("video/"),
-    ).length;
-    const imageFiles = files.filter((f) => (f.type || "").startsWith("image/"));
-    const videoFiles = files.filter((f) => (f.type || "").startsWith("video/"));
-    if (imagesCount + imageFiles.length > 20) {
-      toast.error(`Maximum 20 images allowed`);
-      return [];
-    }
-    if (videosCount + videoFiles.length > 10) {
-      toast.error(`Maximum 10 videos allowed`);
-      return [];
-    }
-    return validateFiles(files, 20).map((f) => ({
-      file: f,
-      url: URL.createObjectURL(f),
-      type: f.type,
-    }));
-  };
 
-  const validateFiles = (files, maxSizeMB) => {
-    return Array.from(files).filter((file) => {
-      if (file.size > maxSizeMB * 1024 * 1024) {
-        toast.error(`${file.name} exceeds ${maxSizeMB}MB limit`);
-        return false;
-      }
-      return true;
-    });
-  };
   const handleFile = (e) => {
     const files = Array.from(e.target.files);
     const addedFiles = processFiles(files, product.media || []);
@@ -594,7 +562,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
         {!hideMedia && (
           <div className="w-full">
             <label htmlFor="media" className="mb-0.5 text-xs font-medium">
-              Upload Block image/Video
+              Upload image/Video
             </label>
             <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white hover:shadow-md transition min-h-[100px] flex flex-col justify-center items-center">
               <input
@@ -611,7 +579,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
                 Choose a Image/Video or drag & drop it here
               </p>
               <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
-                JPEG, PNG and MP4 formats up to 20MB
+                Image up to 2MB,Video up to 5MB
               </span>
               <div className="h-6">
                 {product.media?.length > 0 ? (

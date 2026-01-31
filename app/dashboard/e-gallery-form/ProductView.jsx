@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { TiDeleteOutline } from "react-icons/ti";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -10,13 +11,14 @@ import toast from "react-hot-toast";
 
 import useMediaPlayer from "@/app/hooks/useMediaPlayer";
 import ConfirmDialog from "@/app/components/common/ConfirmDialog";
+import { processFiles } from "@/app/utils/fileUtils";
 
 const ProductView = ({
   productList,
   setProductList,
   editIndex,
   onEdit,
-  processFiles,
+
 }) => {
   const {
     VideoRef,

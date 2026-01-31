@@ -72,7 +72,7 @@ const page = () => {
     await updateCompanyDetails(editId, editForm);
     setEditOpen(false);
   };
-  
+
   if (loading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
@@ -93,7 +93,7 @@ const page = () => {
         <p className="text-gray-500 mb-4">
           You haven’t added anything to E-Gallery yet.
         </p>
-        
+
         <button
           onClick={() => router.push("/dashboard/e-gallery-form")}
           className="border border-primary cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"
@@ -113,11 +113,7 @@ const page = () => {
       {eGallery.every((item) => item.status === "rejected") && (
         <div className="flex justify-end ">
           <button
-            onClick={() =>
-              router.push(
-                "/stonepedia-for-business/create-e-gallery/gallery-form",
-              )
-            }
+            onClick={() => router.push("/dashboard/e-gallery-form")}
             className="border border-primary cursor-pointer text-xs md:text-sm  font-medium text-primary px-4 py-2 rounded-xl hover:bg-primary hover:text-white transition"
           >
             Add E-Gallery

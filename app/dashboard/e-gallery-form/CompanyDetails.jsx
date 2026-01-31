@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { LuUserRound } from "react-icons/lu";
+import toast from "react-hot-toast";
 
 import { LuFactory } from "react-icons/lu";
 import { CiMobile3 } from "react-icons/ci";
 
 import { FiUpload } from "react-icons/fi";
 import { LocationSelector } from "@/app/components/LocationSelector";
+
+const MAX_SIZE = 2 * 1024 * 1024; 
 
 const CompanyDetails = ({ onDataChange, resetForm }) => {
   const initialFormData = {
@@ -46,19 +49,26 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
   };
 
   const handleUpload = (e, type) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
-    setFormData((prev) => ({
-      ...prev,
-      [type]: {
-        file,
-        url: URL.createObjectURL(file),
-        type: file.type,
-        name: file.name,
-      },
-    }));
-  };
+  
+  if (file.size > MAX_SIZE) {
+    toast.error(`${file.name} exceeds 2MB limit`);
+    e.target.value = ""; 
+    return;
+  }
+
+  setFormData((prev) => ({
+    ...prev,
+    [type]: {
+      file,
+      url: URL.createObjectURL(file),
+      type: file.type,
+      name: file.name,
+    },
+  }));
+};
 
   return (
     <div className="">
@@ -281,7 +291,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
                 Choose a file or drag & drop it here
               </p>
               <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
-                JPEG, PNG and MP4 formats up to 20MB
+                up to 2MB
               </span>
               <div className="h-6">
                 {formData.brochure ? (

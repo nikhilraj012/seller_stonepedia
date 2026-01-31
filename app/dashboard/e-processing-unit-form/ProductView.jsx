@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { TiDeleteOutline } from "react-icons/ti";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -8,14 +9,13 @@ import { FaPlay } from "react-icons/fa6";
 import { FaPause } from "react-icons/fa";
 import toast from "react-hot-toast";
 import ConfirmDialog from "@/app/components/common/ConfirmDialog";
+import { processFiles } from "@/app/utils/fileUtils";
 
-//hii
 const ProductView = ({
   productList,
   setProductList,
   editIndex,
   editProduct,
-  processFiles,
 }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
   const VideoRef = useRef({});

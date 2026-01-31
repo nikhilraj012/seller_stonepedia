@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useEffect, useState } from "react";
 import { LuUserRound } from "react-icons/lu";
 import { LuFactory } from "react-icons/lu";
@@ -23,6 +24,7 @@ import { useAuth } from "@/app/components/context/AuthContext";
 import { db, storage } from "@/app/firebase/config";
 import { LocationSelector } from "@/app/components/LocationSelector";
 import { useRouter } from "next/navigation";
+import { processFiles } from "@/app/utils/fileUtils";
 
 const initialFormData = {
   name: "",
@@ -59,10 +61,10 @@ const initialProductData = {
 };
 
 const CompanyDetailsForm = () => {
-     const router = useRouter();
+  const router = useRouter();
   const { isSubmitting, setIsSubmitting } = useUi();
- 
-    const {uid , authEmail} = useAuth();
+
+  const { uid, authEmail } = useAuth();
   const [formData, setFormData] = useState(initialFormData);
   const [productList, setProductList] = useState([]);
 
@@ -75,12 +77,9 @@ const CompanyDetailsForm = () => {
   const [product, setProduct] = useState(initialProductData);
 
   const refs = useRef({});
-const MAX_IMAGE = 8;
-const MAX_VIDEO = 8;
-const MAX_PDF_SIZE_MB = 2;
-const MAX_IMAGE_SIZE_MB = 2;
-const MAX_VIDEO_SIZE_MB = 5;
 
+  const MAX_FILE_SIZE_MB = 2;
+  
   const bindRef = (name) => (el) => {
     refs.current[name] = el;
   };
@@ -100,13 +99,11 @@ const MAX_VIDEO_SIZE_MB = 5;
   // const heightOptions = ["2-3 ft", "4-5 ft"];
   // const widthOptions = ["5-8 ft", "8-11 ft"];
   const widthOptions =
-  product.units?.value === "sqm"
-    ? ["5-8 m", "8-11 m"]
-    : ["5-8 ft", "8-11 ft"];
-     const heightOptions =
-       product.units?.value === "sqm"
-         ? ["2-3 m", "4-5 m"]
-         : ["2-3 ft", "4-5 ft"];
+    product.units?.value === "sqm"
+      ? ["5-8 m", "8-11 m"]
+      : ["5-8 ft", "8-11 ft"];
+  const heightOptions =
+    product.units?.value === "sqm" ? ["2-3 m", "4-5 m"] : ["2-3 ft", "4-5 ft"];
   const wrapperMap = {
     finish: () => refs.current.finishWrapper,
     thickness: () => refs.current.thicknessWrapper,
@@ -193,7 +190,7 @@ const MAX_VIDEO_SIZE_MB = 5;
             const fileName = file.name || `file_${Date.now()}`;
             const fileRef = ref(
               storage,
-              `EGalleryForProcessingUnit/${uid}/${folderName}/${fileName}`
+              `EGalleryForProcessingUnit/${uid}/${folderName}/${fileName}`,
             );
             const metadata = {
               contentType: file.type,
@@ -203,7 +200,7 @@ const MAX_VIDEO_SIZE_MB = 5;
             await uploadBytes(fileRef, file, metadata);
             const url = await getDownloadURL(fileRef);
             return { url, type: file.type };
-          })
+          }),
         );
       };
       const brochureUrls = formData.brochure
@@ -219,13 +216,13 @@ const MAX_VIDEO_SIZE_MB = 5;
         productList.map(async (product) => {
           const uploadedMedia = await uploadFiles(
             product.media,
-            `products/${product.id}`
+            `products/${product.id}`,
           );
           let uploadedThumbnail = null;
           if (product.thumbnail?.file) {
             const t = await uploadFiles(
               [product.thumbnail.file],
-              `products/${product.id}`
+              `products/${product.id}`,
             );
             uploadedThumbnail = t[0];
           } else if (
@@ -260,7 +257,7 @@ const MAX_VIDEO_SIZE_MB = 5;
                 : [],
             },
           };
-        })
+        }),
       );
 
       const generateNumericId = () => {
@@ -288,7 +285,6 @@ const MAX_VIDEO_SIZE_MB = 5;
           about: formData.about,
           brochure: brochureUrls[0],
           image: processingImages[0],
-          
         },
         products: uploadedProducts,
         status: "pending",
@@ -297,7 +293,7 @@ const MAX_VIDEO_SIZE_MB = 5;
       console.log("processingData", processingData);
       const docRef = await addDoc(
         collection(db, "EGalleryForProcessingUnit"),
-        processingData
+        processingData,
       );
       await setDoc(
         doc(db, "SellerDetails", uid, "EGalleryForProcessingUnit", docRef.id),
@@ -324,30 +320,7 @@ const MAX_VIDEO_SIZE_MB = 5;
     }
   };
 
-  const processFiles = (files, mediaArray = []) => {
-    if (!files?.length) return [];
-    const imagesCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("image/")
-    ).length;
-    const videosCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("video/")
-    ).length;
-    const imageFiles = files.filter((f) => (f.type || "").startsWith("image/"));
-    const videoFiles = files.filter((f) => (f.type || "").startsWith("video/"));
-    if (imagesCount + imageFiles.length > MAX_IMAGE) {
-      toast.error(`Maximum ${MAX_IMAGE} images allowed`);
-      return [];
-    }
-    if (videosCount + videoFiles.length > MAX_VIDEO) {
-      toast.error(`Maximum ${MAX_VIDEO} videos allowed`);
-      return [];
-    }
-     return validateFiles(files).map((f) => ({
-       file: f,
-       url: URL.createObjectURL(f),
-       type: f.type,
-     }));
-  };
+  
 
   const handleFile = (e) => {
     const files = Array.from(e.target.files);
@@ -360,32 +333,6 @@ const MAX_VIDEO_SIZE_MB = 5;
     }
   };
 
-  const validateFiles = (files) => {
-    return Array.from(files).filter((file) => {
-      const isImage = file.type.startsWith("image/");
-      const isVideo = file.type.startsWith("video/");
-      const isPDF = file.type === "application/pdf";
-  
-      let maxSizeMB = 0;  
-      if (isImage) maxSizeMB = MAX_IMAGE_SIZE_MB;
-      else if (isVideo) maxSizeMB = MAX_VIDEO_SIZE_MB;
-     
-      else {
-        toast.error("Only Image, Video allowed");
-        return false;
-      }
-  
-      if (file.size > maxSizeMB * 1024 * 1024) {
-        toast.error(
-          `${file.name} exceeds ${maxSizeMB}MB limit`,
-          { duration: 1500 }
-        );
-        return false;
-      }
-  
-      return true;
-    });
-  };
   const editProduct = (index) => {
     const p = productList[index];
     setProduct(p);
@@ -491,7 +438,7 @@ const MAX_VIDEO_SIZE_MB = 5;
 
     if (editIndex !== null) {
       setProductList((prev) =>
-        prev.map((p, i) => (i === editIndex ? tempProduct : p))
+        prev.map((p, i) => (i === editIndex ? tempProduct : p)),
       );
       toast.success("Product updated successfully!");
       setEditIndex(null);
@@ -547,7 +494,6 @@ const MAX_VIDEO_SIZE_MB = 5;
 
   return (
     <div className="relative">
-      
       <form
         onSubmit={handleSubmit}
         className="max-md:space-y-5 md:flex justify-center mt-4 md:mt-7 gap-5 xl:gap-10"
@@ -623,7 +569,7 @@ const MAX_VIDEO_SIZE_MB = 5;
                         pattern=".{15}"
                         onInvalid={(e) =>
                           e.target.setCustomValidity(
-                            "GST number must follow these rules:\n1. Must be 15 characters\n2. Example: 22AAAAA0000A1Z5"
+                            "GST number must follow these rules:\n1. Must be 15 characters\n2. Example: 22AAAAA0000A1Z5",
                           )
                         }
                         onInput={(e) => e.target.setCustomValidity("")}
@@ -915,7 +861,7 @@ const MAX_VIDEO_SIZE_MB = 5;
             setProductList={setProductList}
             editIndex={editIndex}
             editProduct={editProduct}
-            processFiles={processFiles}
+            
             formData={formData}
           />
           {productList.length > 0 && editIndex === null && (
