@@ -40,6 +40,7 @@ const page = () => {
     deleteProduct,
     updateThumbnail,
     updateCompanyDetails,
+    handleCancel,
   } = useGallery("EGalleryForProcessingUnit");
 
   const { paginatedData, currentPage, onPageChange } = usePagination({
@@ -112,11 +113,7 @@ const handleViewDetails = (item, product) => {
       {eProcessingUnit.every((item) => item.status === "rejected") && (
         <div className="flex justify-end ">
           <button
-            onClick={() =>
-              navigate(
-                "/stonepedia-for-business/e-processing-unit/e-gallery-form",
-              )
-            }
+            onClick={() => router.push("/dashboard/e-processing-unit-form")}
             className="border border-primary cursor-pointer text-xs md:text-sm  font-medium text-primary px-4 py-2 rounded-xl hover:bg-primary hover:text-white transition"
           >
             Add E-Processing Unit
@@ -132,6 +129,7 @@ const handleViewDetails = (item, product) => {
                 item={item}
                 updating={updating}
                 actions={{
+                  handleCancel,
                   updateThumbnail,
                   onEdit: openEdit,
                   onProductDelete: deleteProduct,

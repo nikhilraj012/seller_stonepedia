@@ -20,7 +20,6 @@ import usePagination from "@/app/hooks/usePagination";
 const ITEMS_PER_PAGE = 1;
 
 const Page = () => {
-  const { navigate } = useUi();
   const { isAuthenticated, uid } = useAuth();
   const router = useRouter();
   const [editId, setEditId] = useState(null);

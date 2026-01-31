@@ -444,7 +444,7 @@ export default function SlabDetailsForm({
       </div>
       <div className="w-full">
         <label htmlFor="media" className="mb-0.5 text-xs font-medium">
-          Upload Block image/Video
+          Upload image/Video
         </label>
         <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white hover:shadow-md transition min-h-[100px] flex flex-col justify-center items-center">
           <input
@@ -461,7 +461,7 @@ export default function SlabDetailsForm({
             Choose a Image/Video or drag & drop it here
           </p>
           <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
-            JPEG, PNG and MP4 formats up to 20MB
+            Image up to 2MB,Video  up to 5MB
           </span>
           <div className="h-6">
             {product.media?.length > 0 ? (

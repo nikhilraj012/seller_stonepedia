@@ -93,6 +93,7 @@ const page = () => {
         <p className="text-gray-500 mb-4">
           You haven’t added anything to E-Gallery yet.
         </p>
+        
         <button
           onClick={() => router.push("/dashboard/e-gallery-form")}
           className="border border-primary cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"

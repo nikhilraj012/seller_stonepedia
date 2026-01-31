@@ -45,7 +45,6 @@ const generateNumericId = () => {
 };
 
 const initialProductData = {
-  id: generateNumericId(),
   stoneCategory: "",
   stoneName: "",
   finish: null,
@@ -76,9 +75,9 @@ const CompanyDetailsForm = () => {
   const [product, setProduct] = useState(initialProductData);
 
   const refs = useRef({});
-  const MAX_FILE_SIZE_MB = 20;
-  const MAX_IMAGE = 20;
-  const MAX_VIDEO = 10;
+  const MAX_FILE_SIZE_MB = 2;
+  const MAX_IMAGE = 2;
+  const MAX_VIDEO = 5;
 
   const bindRef = (name) => (el) => {
     refs.current[name] = el;
@@ -96,8 +95,16 @@ const CompanyDetailsForm = () => {
   ];
 
   const thicknessOptions = ["14MM", "16MM", "18MM", "20MM", "25MM"];
-  const heightOptions = ["2-3 ft", "4-5 ft"];
-  const widthOptions = ["5-8 ft", "8-11 ft"];
+  // const heightOptions = ["2-3 ft", "4-5 ft"];
+  // const widthOptions = ["5-8 ft", "8-11 ft"];
+  const widthOptions =
+  product.units?.value === "sqm"
+    ? ["5-8 m", "8-11 m"]
+    : ["5-8 ft", "8-11 ft"];
+     const heightOptions =
+       product.units?.value === "sqm"
+         ? ["2-3 m", "4-5 m"]
+         : ["2-3 ft", "4-5 ft"];
   const wrapperMap = {
     finish: () => refs.current.finishWrapper,
     thickness: () => refs.current.thicknessWrapper,
@@ -305,7 +312,7 @@ const CompanyDetailsForm = () => {
       setSelectedWidth([]);
       setEditIndex(null);
 
-      router.push("/dashboard/my-e-processing-unit");
+      router.push("/dashboard/profile/my-e-processing-unit");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error) {
       console.error("Submit Error:", error);
@@ -409,7 +416,7 @@ const CompanyDetailsForm = () => {
 
     const tempProduct = {
       ...product,
-      id: product.id || generateNumericId(),
+      id: editIndex !== null ? product.id : generateNumericId(),
       finish: selectedFinish.length > 0 ? [...selectedFinish] : null,
       thickness: selectedThickness.length > 0 ? [...selectedThickness] : null,
       size: sizesObj,
@@ -761,7 +768,7 @@ const CompanyDetailsForm = () => {
                     Choose a file or drag & drop it here
                   </p>
                   <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
-                    JPEG, PNG and MP4 formats up to 20MB
+                    up to 2MB
                   </span>
                   <div className="h-6">
                     {formData.brochure ? (
