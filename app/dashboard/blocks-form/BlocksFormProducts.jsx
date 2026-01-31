@@ -59,8 +59,8 @@ const BlocksFormProducts = ({
     // Update the block with the new image
     setBlocksList((prevBlocks) =>
       prevBlocks.map((block) =>
-        block.id === blockId ? { ...block, thumbnail: file } : block
-      )
+        block.id === blockId ? { ...block, thumbnail: file } : block,
+      ),
     );
   };
 
@@ -196,7 +196,7 @@ const BlocksFormProducts = ({
                     onClick={() => {
                       // Get the current block data
                       const currentBlock = blocksList.find(
-                        (b) => b.id === block.id
+                        (b) => b.id === block.id,
                       );
 
                       // Send the block data to the parent component for editing
@@ -223,7 +223,7 @@ const BlocksFormProducts = ({
                     onClick={() => {
                       // Remove block from list
                       setBlocksList((prevBlocks) =>
-                        prevBlocks.filter((b) => b.id !== block.id)
+                        prevBlocks.filter((b) => b.id !== block.id),
                       );
                     }}
                     className="text-red-500 hover:text-red-700 p-1 bg-[#F7F7F7] text-sm lg:text-lg rounded-md"
@@ -240,7 +240,7 @@ const BlocksFormProducts = ({
               onClick={() => {
                 // Toggle expanded state - if already expanded, close it, otherwise open this one
                 setExpandedBlockId(
-                  expandedBlockId === block.id ? null : block.id
+                  expandedBlockId === block.id ? null : block.id,
                 );
               }}
               className="flex gap-3 items-center text-xs cursor-pointer"
@@ -256,7 +256,7 @@ const BlocksFormProducts = ({
             </button>
 
             {expandedBlockId === block.id && (
-              <div className="space-y-2 text-xs max-h-[400px] overflow-y-auto px-2">
+              <div className="space-y-2 text-xs max-h-100 overflow-y-auto px-2">
                 <div className="border border-[#E8E8E8] p-2 rounded-md space-y-1">
                   <h2 className="font-medium text-sm">Description</h2>
                   <span className="text-[#3B3B3B]">{block.description}</span>
@@ -372,11 +372,11 @@ const BlocksFormProducts = ({
                                     ? {
                                         ...b,
                                         images: b.images.filter(
-                                          (img) => img !== image
+                                          (img) => img !== image,
                                         ),
                                       }
-                                    : b
-                                )
+                                    : b,
+                                ),
                               );
                             }}
                           >
@@ -405,7 +405,7 @@ const BlocksFormProducts = ({
                                       // Show play button for paused videos
                                       const playBtn =
                                         video.parentNode.querySelector(
-                                          ".play-btn"
+                                          ".play-btn",
                                         );
                                       if (playBtn)
                                         playBtn.style.display = "flex";
@@ -447,11 +447,11 @@ const BlocksFormProducts = ({
                                     ? {
                                         ...b,
                                         videos: b.videos.filter(
-                                          (vid) => vid !== video
+                                          (vid) => vid !== video,
                                         ),
                                       }
-                                    : b
-                                )
+                                    : b,
+                                ),
                               );
                             }}
                           >
@@ -464,7 +464,7 @@ const BlocksFormProducts = ({
                             onClick={(e) => {
                               const video =
                                 e.currentTarget.parentNode.querySelector(
-                                  "video"
+                                  "video",
                                 );
                               if (video) {
                                 if (video.paused) {
@@ -518,11 +518,11 @@ const BlocksFormProducts = ({
                                     ? {
                                         ...b,
                                         documents: b.documents.filter(
-                                          (d) => d !== doc
+                                          (d) => d !== doc,
                                         ),
                                       }
-                                    : b
-                                )
+                                    : b,
+                                ),
                               );
                             }}
                           >
