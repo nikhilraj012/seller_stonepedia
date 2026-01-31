@@ -544,7 +544,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
           <label htmlFor="value" className="mb-0.5 text-xs font-medium">
             Enter Available Quantity
           </label>
-          <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+          <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
             <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
               <input
                 id="value"

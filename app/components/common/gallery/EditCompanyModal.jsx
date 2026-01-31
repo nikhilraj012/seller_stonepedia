@@ -36,7 +36,7 @@ const EditCompanyModal = ({
               onChange={(e) =>
                 setEditForm({ ...editForm, shopName: e.target.value })
               }
-              className=" w-full rounded-lg border border-gray-200 px-3 sm:px-4 py-2 text-xs md:text-sm focus:ring-2 focus:ring-[#871B58]/40 outline-none  "
+              className=" w-full rounded-lg border border-gray-200 px-3 sm:px-4 py-2 text-xs md:text-sm focus:ring-2 focus:ring-primary/40 outline-none  "
             />
           </div>
 
@@ -56,7 +56,7 @@ const EditCompanyModal = ({
               onChange={(e) =>
                 setEditForm({ ...editForm, email: e.target.value })
               }
-              className=" w-full rounded-lg border border-gray-200 px-3 sm:px-4 py-2 text-xs md:text-sm focus:ring-2 focus:ring-[#871B58]/40 outline-none  "
+              className=" w-full rounded-lg border border-gray-200 px-3 sm:px-4 py-2 text-xs md:text-sm focus:ring-2 focus:ring-primary/40 outline-none  "
             />
           </div>
 
@@ -79,7 +79,7 @@ const EditCompanyModal = ({
                 setEditForm({ ...editForm, gstNumber: e.target.value })
               }
               onInput={(e) => e.target.setCustomValidity("")}
-              className=" w-full rounded-lg border border-gray-200 px-3 sm:px-4 py-2 text-xs md:text-sm focus:ring-2 focus:ring-[#871B58]/40 outline-none  "
+              className=" w-full rounded-lg border border-gray-200 px-3 sm:px-4 py-2 text-xs md:text-sm focus:ring-2 focus:ring-primary/40 outline-none  "
             />
           </div>
         </div>
@@ -94,7 +94,7 @@ const EditCompanyModal = ({
 
           <button
             type="submit"
-            className="cursor-pointer  text-xs md:text-sm px-4 py-2 rounded-lg  bg-[#871B58] text-white  hover:bg-[#6d1546] transition shadow-md   "
+            className="cursor-pointer  text-xs md:text-sm px-4 py-2 rounded-lg  bg-primary text-white  hover:bg-[#6d1546] transition shadow-md   "
           >
             Save Changes
           </button>

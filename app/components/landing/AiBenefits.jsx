@@ -92,13 +92,13 @@ const AiBenefits = () => {
 
             {ecosystemSteps.map((step, index) => (
               <div key={index} className="flex items-center gap-3 relative">
-                <div className="bg-white border-2 border-dashed border-[#871b58] rounded-full w-8 h-8 flex items-center justify-center shadow-[0px_0px_6px_0px_rgba(135,27,88,0.25)] shrink-0 z-10">
+                <div className="bg-white border-2 border-dashed border-primary rounded-full w-8 h-8 flex items-center justify-center shadow-[0px_0px_6px_0px_rgba(135,27,88,0.25)] shrink-0 z-10">
                   <span className="text-[#2d2d2d] font-semibold text-xs">
                     {step.number}
                   </span>
                 </div>
 
-                <p className="text-[#871b58] font-medium text-sm tracking-tight">
+                <p className="text-primary font-medium text-sm tracking-tight">
                   {step.label}
                 </p>
               </div>

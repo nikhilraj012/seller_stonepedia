@@ -137,7 +137,7 @@ const Page = () => {
         </p>
         <button
           onClick={() => router.push("/dashboard/blocks-form")}
-          className="border border-[#871B58] cursor-pointer text-[#871B58] px-6 py-3 rounded-xl hover:bg-[#871B58] hover:text-white transition"
+          className="border border-primary cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"
         >
           Create Block
         </button>
@@ -148,7 +148,7 @@ const Page = () => {
   return (
     <div className="pt-16 px-4 md:px-6 lg:px-24 xl:px-32">
       <div className="flex justify-center my-2">
-        <h1 className="rounded-full border border-[#871B58] px-6 py-2 text-[#871B58] font-semibold lg:text-xl text-center">
+        <h1 className="rounded-full border border-primary px-6 py-2 text-primary font-semibold lg:text-xl text-center">
           My Blocks
         </h1>
       </div>
@@ -156,7 +156,7 @@ const Page = () => {
         <div className="flex justify-end ">
           <button
             onClick={() => router.push("/dashboard/blocks-form")}
-            className="border border-[#871B58] cursor-pointer text-[#871B58] px-6 py-3 rounded-xl hover:bg-[#871B58] hover:text-white transition"
+            className="border border-primary   cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"
           >
             Add Blocks
           </button>

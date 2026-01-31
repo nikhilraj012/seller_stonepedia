@@ -104,7 +104,7 @@ const NavbarProfile = ({ isMobile = false }) => {
           <button
             key={page.href}
             onClick={() => handleNavigation(page.href)}
-            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer active:text-[#871b58]"
+            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer active:text-primary"
           >
             {page.title}
           </button>

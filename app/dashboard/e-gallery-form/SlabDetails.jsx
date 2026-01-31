@@ -24,16 +24,15 @@ const SlabDetails = forwardRef(
       media: [],
     };
 
-
     const [product, setProduct] = useState(initialProductData);
-const refs = useRef({
-  stoneCategory: null,
-  units: null,
-  finish: null,
-  thickness: null,
-  height: null,
-  width: null,
-});
+    const refs = useRef({
+      stoneCategory: null,
+      units: null,
+      finish: null,
+      thickness: null,
+      height: null,
+      width: null,
+    });
     useImperativeHandle(ref, () => ({
       focusStoneCategory: () => {
         refs.current.stoneCategory?.focus();
@@ -197,7 +196,7 @@ const refs = useRef({
           <button
             type="button"
             onClick={handleAddproduct}
-            className="bg-[#871B58] hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
+            className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
           >
             {editIndex != null ? "Save Changes" : "Add Product"}
           </button>
