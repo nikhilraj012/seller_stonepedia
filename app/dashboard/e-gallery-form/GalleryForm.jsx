@@ -38,9 +38,6 @@ const { galleryId } = useParams();
 
 // reuse ke liye simple logic
 const hasApprovedForm = Boolean(galleryId);
-
-  
-
   const handleEdit = (i) => {
     setEditIndex(i);
     setEditProduct(productList[i]);
@@ -230,7 +227,7 @@ const hasApprovedForm = Boolean(galleryId);
           E - Gallery
         </h1>
         <p className="text-[#6E6E6E] text-sm md:text-md lg:text-lg xl:text-xl">
-          Fill this form to Upload your slab
+          Fill this form to Upload your E-Gallery
         </p>
       </div>
       <div className="mx-auto max-w-7xl relative">

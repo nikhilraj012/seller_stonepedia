@@ -39,7 +39,7 @@ const page = () => {
           </h1>
           <div className="space-y-0.5">
             <h2 className="text-[#6E6E6E] text-base md:text-md lg:text-lg xl:text-xl 2xl:text-2xl">
-              Fill this form to upload your slab
+              Fill this form to upload your processing unit
             </h2>
           </div>
         </div>
