@@ -221,15 +221,12 @@ const GalleryEdit = ({ mode }) => {
 
       toast.success("Slab updated successfully");
       // if (toSlug(product.stoneName) !== productSlug) {
-      //   router.replace(
-      //     `/dashboard/profile/${basePath}/${companySlug}/${toSlug(product.stoneName)}`,
-      //   );
+         router.replace(
+          `/dashboard/profile/${basePath}/${companySlug}/${toSlug(product.stoneName)}`
+        );
       // } else {
       //   router.back(); // fallback: just go back
       // }
-      router.replace(
-        `/dashboard/profile/${basePath}/${companySlug}/${toSlug(product.stoneName)}`,
-      );
     } catch (err) {
       console.log(err);
       toast.error("Update failed");
