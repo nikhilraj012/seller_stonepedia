@@ -162,7 +162,7 @@ const AddSlabPage = () => {
       [name]: val,
     }));
   };
- 
+
   const handleFile = (e) => {
     const files = Array.from(e.target.files);
     const addedFiles = processFiles(files, product.media || []);
@@ -173,8 +173,6 @@ const AddSlabPage = () => {
       }));
     }
   };
-
-
 
   const editProduct = (index) => {
     const p = productList[index];
@@ -898,6 +896,7 @@ const AddSlabPage = () => {
                 </div>
               </div>
             </div>
+
             <div className="flex justify-end gap-2">
               {editIndex != null && (
                 <button
@@ -909,13 +908,15 @@ const AddSlabPage = () => {
                   Cancel
                 </button>
               )}
-              <button
-                type="button"
-                onClick={handleAddproduct}
-                className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
-              >
-                {editIndex != null ? "Save Changes" : "Add Product"}
-              </button>
+              {(productList.length < 2 || editIndex !== null) && (
+                <button
+                  type="button"
+                  onClick={handleAddproduct}
+                  className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
+                >
+                  {editIndex != null ? "Save Changes" : "Add Product"}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -944,7 +945,6 @@ const AddSlabPage = () => {
             setProductList={setProductList}
             editIndex={editIndex}
             editProduct={editProduct}
-          
           />
           {productList.length > 0 && editIndex === null && (
             <div className="flex justify-end gap-2 mt-5 text-xs md:text-sm">
