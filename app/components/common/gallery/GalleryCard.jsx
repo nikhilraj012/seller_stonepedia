@@ -331,8 +331,8 @@ const GalleryCard = ({
               )} */}
             </div>
             {product.feedbackStatus && product.feedbackStatus !== "ok" && (
-              <div className="bg-pink-50 border-l-4 p-3 mt-2 rounded-md">
-                <p className="text-gray-800 text-sm">
+              <div className="bg-pink-50 p-3 mt-2 rounded-md">
+                <p className="text-gray-800 mb-2 text-xs md:text-sm">
                   {product.feedbackMessage}
                 </p>
                 <div className=" flex justify-end items-center">
@@ -353,7 +353,7 @@ const GalleryCard = ({
                         if (!item?.id || !product?.id) return;
                         handleProductFeedback(item.id, product.id, "ok");
                       }}
-                      className="px-3 py-1 cursor-pointer bg-primary text-white rounded-md hover:bg-primary/40 text-xs md:text-sm"
+                      className="px-3 py-1 cursor-pointer bg-primary text-white rounded-md hover:bg-primary/80 text-xs md:text-sm"
                     >
                       OK
                     </button>
