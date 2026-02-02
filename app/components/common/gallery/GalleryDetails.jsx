@@ -82,6 +82,50 @@ const GalleryDetails = ({ mode }) => {
   //   fetchData();
   // }, [uid, companySlug, productSlug]);
 
+  // useEffect(() => {
+  //   if (!uid) return;
+
+  //   const fetchData = async () => {
+  //     setLoading(true);
+
+  //     try {
+  //       const qSnap = await getDocs(
+  //         collection(db, "SellerDetails", uid, config.collectionName),
+  //       );
+
+  //       qSnap.forEach((docSnap) => {
+  //         const data = docSnap.data();
+
+  //         // Compare company slug
+  //         if (
+  //           data.companyDetails?.shopName &&
+  //           toSlug(data.companyDetails.shopName) === companySlug
+  //         ) {
+  //           // Corrected line: directly access stoneName
+  //           const prod = data.products.find(
+  //             (p) => toSlug(p.stoneName) === productSlug,
+  //           );
+
+  //           if (prod) {
+  //             setItem({
+  //               id: docSnap.id,
+  //               ...data,
+  //             });
+
+  //             setProduct(prod);
+  //           }
+  //         }
+  //       });
+  //     } catch (err) {
+  //       console.error("Error fetching data:", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [uid, companySlug, productSlug]);
+
   useEffect(() => {
     if (!uid) return;
 
@@ -96,22 +140,13 @@ const GalleryDetails = ({ mode }) => {
         qSnap.forEach((docSnap) => {
           const data = docSnap.data();
 
-          // Compare company slug
-          if (
-            data.companyDetails?.shopName &&
-            toSlug(data.companyDetails.shopName) === companySlug
-          ) {
-            // Corrected line: directly access stoneName
+          if (toSlug(data.companyDetails.shopName) === companySlug) {
             const prod = data.products.find(
               (p) => toSlug(p.stoneName) === productSlug,
             );
 
             if (prod) {
-              setItem({
-                id: docSnap.id,
-                ...data,
-              });
-
+              setItem({ id: docSnap.id, ...data });
               setProduct(prod);
             }
           }
@@ -124,7 +159,8 @@ const GalleryDetails = ({ mode }) => {
     };
 
     fetchData();
-  }, [uid, companySlug, productSlug]);
+  }, [uid, companySlug, productSlug]); // make sure latest slug is used
+
   const handleThumbnailChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -382,9 +418,15 @@ const GalleryDetails = ({ mode }) => {
                     // onClick={() => {
                     //   router.push(`${basePath}/edit/${item.id}/${product.id}`);
                     // }}
+                    // onClick={() => {
+                    //   router.push(
+                    //     `/dashboard/profile/${basePath}/${companySlug}/${productSlug}/edit`,
+                    //   );
+                    // }}
                     onClick={() => {
-                      router.push(
-                        `/dashboard/profile/${basePath}/${companySlug}/${productSlug}/edit`,
+                      const newSlug = toSlug(product.stoneName);
+                      router.replace(
+                        `/dashboard/profile/${basePath}/${companySlug}/${newSlug}/edit`,
                       );
                     }}
                   >
