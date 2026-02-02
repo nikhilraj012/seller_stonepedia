@@ -227,7 +227,18 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
           </div>
         </div>
       </div>
-
+      {item.rejectionReason && (
+        <>
+          <p className="mt-2">
+            <span className="text-primary font-medium text-sm">
+              Rejected Reason:
+            </span>
+            <span className="text-gray-600 text-sm ml-1">
+              {item.rejectionReason}
+            </span>
+          </p>
+        </>
+      )}
       <div className="border-b py-3 border-gray-200" />
       <div className="flex  justify-between">
         <h1 className="text-[#000000] mt-4 font-medium  text-sm lg:text-base">
@@ -236,9 +247,7 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
         {status.toLowerCase() === "approved" && (
           <button
             onClick={() =>
-              router.push(
-                `${addSlabRoute}/${item.id}/add-product`,
-              )
+              router.push(`${addSlabRoute}/${item.id}/add-product`)
             }
             className="mt-2 bg-primary font-medium text-white px-4 md:px-6 cursor-pointer hover:bg-pink-100 hover:text-primary py-1.5 rounded-md text-xs md:text-sm hover:bg-green-700 transition"
           >
