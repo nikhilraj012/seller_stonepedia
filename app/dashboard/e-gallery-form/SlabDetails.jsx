@@ -172,7 +172,7 @@ const SlabDetails = forwardRef(
     return (
       <>
         <h2 className="text-xs font-medium mb-1">
-          Stone Slab Details
+          Stone Details
           <span className="text-[#CDCDCD] font-normal">
             {" "}
             (Add Multiple Products)
