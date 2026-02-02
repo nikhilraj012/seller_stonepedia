@@ -564,7 +564,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
             <label htmlFor="media" className="mb-0.5 text-xs font-medium">
               Upload image/Video
             </label>
-            <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white  min-h-[100px] flex flex-col justify-center items-center">
+            <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white transition min-h-[100px] flex flex-col justify-center items-center">
               <input
                 id="media"
                 type="file"
@@ -576,7 +576,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
               />
               <FiUpload size={20} className="mb-2 text-gray-900" />
               <p className="text-[#2C2C2C] text-[10px] md:text-xs font-medium tracking-wide pointer-events-none mb-1">
-                Choose a Image/Video 
+                Choose a Image/Video
               </p>
               <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
                 Image up to 2MB,Video up to 5MB
@@ -588,7 +588,7 @@ const SlabFormFields = ({ product, setProduct, hideMedia = false }) => {
                   <button
                     type="button"
                     onClick={() => document.getElementById("media").click()} // <-- media here
-                    className="border font-medium text-sm px-6 py-1 rounded-xl cursor-pointer"
+                    className="border font-medium text-sm px-6 py-1 rounded-xl hover:border-primary cursor-pointer hover:shadow-md transition-colors pointer-events-auto relative z-10"
                   >
                     Browse
                   </button>

@@ -23,7 +23,7 @@ import MediaGrid from "@/app/components/common/MediaGrid";
 import { db, storage } from "@/app/firebase/config";
 import { toSlug } from "@/app/utils/helpers";
 
-const GalleryDetails = ({mode}) => {
+const GalleryDetails = ({ mode }) => {
   const router = useRouter();
 
   const { isAuthenticated, uid } = useAuth();
@@ -256,7 +256,7 @@ const GalleryDetails = ({mode}) => {
       await updateDoc(globalRef, { products: updatedProducts });
 
       toast.success("Product deleted successfully", { id: toastId });
-      router.back;
+      router.back();
     } catch (error) {
       console.error(error);
       toast.error("Delete failed", { id: toastId });
@@ -264,7 +264,7 @@ const GalleryDetails = ({mode}) => {
       setIsUpdating(false);
     }
   };
-if (loading) {
+  if (loading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
         <div className="text-center">
@@ -281,7 +281,6 @@ if (loading) {
 
   return (
     <div className="pt-16 md:pt-19  max-lg:px-4 lg:mx-24 xl:mx-32">
-      
       <h1 className="text-center mb-3   inline-block text-base md:text-2xl font-medium text-primary">
         Product Details
       </h1>

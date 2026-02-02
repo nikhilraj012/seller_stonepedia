@@ -718,7 +718,7 @@ const CompanyDetailsForm = () => {
                 >
                   Upload Brochure
                 </label>
-                <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white hover:shadow-md transition min-h-[100px] flex flex-col justify-center items-center">
+                <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white transition min-h-[100px] flex flex-col justify-center items-center">
                   <input
                     id="brochure"
                     type="file"
@@ -729,7 +729,7 @@ const CompanyDetailsForm = () => {
                   />
                   <FiUpload size={20} className="mb-2 text-gray-900" />
                   <p className="text-[#2C2C2C] text-[10px] md:text-xs font-medium tracking-wide pointer-events-none mb-1">
-                    Choose a file or drag & drop it here
+                    Choose a file
                   </p>
                   <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
                     up to 2MB
@@ -746,7 +746,7 @@ const CompanyDetailsForm = () => {
                         onClick={() =>
                           document.getElementById("brochure").click()
                         }
-                        className="inline-product bg-white border font-medium text-sm px-6 py-1 rounded-xl shadow-sm hover:bg-primary hover:text-white hover:shadow-md transition"
+                        className="border font-medium text-sm px-6 py-1 rounded-xl hover:border-primary cursor-pointer hover:shadow-md transition-colors pointer-events-auto relative z-10"
                       >
                         Browse
                       </button>
@@ -767,7 +767,7 @@ const CompanyDetailsForm = () => {
                   </div>
                 </label>
 
-                <div className="flex items-center justify-between border border-gray-200 rounded-lg bg-white p-3 hover:shadow transition relative">
+                <div className="flex items-center justify-between border border-gray-200 rounded-lg bg-white p-3  transition relative">
                   <div className="flex items-center gap-2">
                     <LuFactory className="w-6 h-6 text-gray-300" />
                   </div>
@@ -792,7 +792,7 @@ const CompanyDetailsForm = () => {
                     <button
                       type="button"
                       onClick={() => document.getElementById("image").click()}
-                      className="bg-gray-100 text-gray-700 text-[10px] md:text-xs px-2 md:px-4 py-1.5 rounded-md  hover:bg-gray-200 font-medium"
+                      className="bg-gray-100 hover:shadow-lg text-gray-700 text-[10px] md:text-xs px-2 md:px-4 py-1.5 rounded-md  hover:bg-gray-200 font-medium"
                     >
                       Choose Photo
                     </button>
@@ -861,7 +861,6 @@ const CompanyDetailsForm = () => {
             setProductList={setProductList}
             editIndex={editIndex}
             editProduct={editProduct}
-            
             formData={formData}
           />
           {productList.length > 0 && editIndex === null && (
