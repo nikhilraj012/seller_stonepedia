@@ -227,7 +227,10 @@ const GalleryEdit = ({ mode }) => {
       // } else {
       //   router.back(); // fallback: just go back
       // }
-      router.replace(
+      // router.replace(
+      //   `/dashboard/profile/${basePath}/${companySlug}/${toSlug(product.stoneName)}`,
+      // );
+      router.push(
         `/dashboard/profile/${basePath}/${companySlug}/${toSlug(product.stoneName)}`,
       );
     } catch (err) {
