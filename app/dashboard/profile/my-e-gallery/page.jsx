@@ -28,6 +28,7 @@ const page = () => {
     deleteProduct,
     handleCancel,
     updateThumbnail,
+    handleProductFeedback,
     updateCompanyDetails,
   } = useGallery("EGallery");
 
@@ -144,6 +145,7 @@ const page = () => {
                   onEdit: openEdit,
                   onDelete: deleteItem,
                   onProductDelete: deleteProduct,
+                  handleProductFeedback: handleProductFeedback,
                   onViewDetails: handleViewDetails,
                 }}
               />

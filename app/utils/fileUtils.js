@@ -1,7 +1,7 @@
 
 import toast from "react-hot-toast";
-const MAX_IMAGE = 8;
-const MAX_VIDEO = 8;
+const MAX_IMAGE = 3;
+const MAX_VIDEO = 1;
 const MAX_PDF_SIZE_MB = 2;
 const MAX_IMAGE_SIZE_MB = 2;
 const MAX_VIDEO_SIZE_MB = 5;
