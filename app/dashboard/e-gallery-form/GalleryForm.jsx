@@ -36,7 +36,7 @@ const GalleryForm = () => {
   const router = useRouter();
 const { galleryId } = useParams();
 
-// reuse ke liye simple logic
+
 const hasApprovedForm = Boolean(galleryId);
 
   

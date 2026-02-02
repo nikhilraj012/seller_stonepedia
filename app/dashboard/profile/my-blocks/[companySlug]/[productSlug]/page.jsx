@@ -12,6 +12,9 @@ import { FaFilePdf } from "react-icons/fa";
 
 const BlockDetailsPage = () => {
   const params = useParams();
+
+  const { companySlug, productSlug } = params;
+
   const router = useRouter();
   const { uid } = useAuth();
 
@@ -146,7 +149,9 @@ const BlockDetailsPage = () => {
                 <div className="flex gap-2">
                   <button
                     onClick={() => {
-                      const storedData = sessionStorage.getItem("currentBlock");
+                     const storedData =
+                       sessionStorage.getItem("currentProduct");
+
                       if (storedData) {
                         router.push(
                           `/dashboard/profile/my-blocks/${params.companySlug}/${params.productSlug}/edit`,
@@ -157,7 +162,14 @@ const BlockDetailsPage = () => {
                   >
                     <MdOutlineEdit className="text-xl text-gray-700" />
                   </button>
-                  <button className="p-1.5 2xl:p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition">
+                  <button
+                    onClick={() => {
+                      router.push(
+                        `/dashboard/profile/my-blocks/${companySlug}/${productSlug}/edit`,
+                      );
+                    }}
+                    className="p-1.5 2xl:p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
+                  >
                     <RiDeleteBin5Line className="text-xl text-red-600" />
                   </button>
                 </div>
@@ -165,7 +177,9 @@ const BlockDetailsPage = () => {
 
               {/* Pricing */}
               <div className="mb-1 md:mb-2 lg:mb-3 xl:mb-4 2xl:mb-5">
-                <p className="text-[#8f8f8f] text-sm lg:text-base 2xl:text-lg font-medium">Grade A</p>
+                <p className="text-[#8f8f8f] text-sm lg:text-base 2xl:text-lg font-medium">
+                  Grade A
+                </p>
                 <p className="text-[#424242] text-xl lg:text-2xl xl:text-3xl 2xl:text-[34px] font-semibold">
                   {blockData.symbolA} {blockData.priceA}
                 </p>
@@ -199,120 +213,122 @@ const BlockDetailsPage = () => {
 
           {/* Description */}
           <div className="mb-8">
-          <h2 className="text-xl font-semibold text-[#262626] mb-4">
-            Description
-          </h2>
-          <p className="text-[#595959] text-base leading-relaxed">
-            {blockData.description ||
-              "Discover our innovative product block, designed to enhance functionality and aesthetics. Perfect for modern spaces, it combines style with practicality for everyday use."}
-          </p>
-        </div>
+            <h2 className="text-xl font-semibold text-[#262626] mb-4">
+              Description
+            </h2>
+            <p className="text-[#595959] text-base leading-relaxed">
+              {blockData.description ||
+                "Discover our innovative product block, designed to enhance functionality and aesthetics. Perfect for modern spaces, it combines style with practicality for everyday use."}
+            </p>
+          </div>
 
           {/* Block Details */}
           <div className="mb-8">
-          <h2 className="text-xl font-semibold text-[#262626] mb-6">
-            Block details
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 max-md:gap-6 lg:flex lg:justify-between">
-            <div>
-              <p className="text-black font-medium mb-3">Block/stone name</p>
-              <p className="text-[#282828]">{blockData.stoneName}</p>
-            </div>
-            <div>
-              <p className="text-black font-medium mb-3">
-                Height x Width x Length
-              </p>
-              <p className="text-[#282828]">
-                {blockData.height} | {blockData.width} |{" "}
-                {blockData.length} inch
-              </p>
-            </div>
-            <div>
-              <p className="text-black font-medium mb-3">Grade</p>
-              <p className="text-[#282828]">
-                {[
-                  blockData.priceA && "A",
-                  blockData.priceB && "B",
-                  blockData.priceC && "C",
-                ]
-                  .filter(Boolean)
-                  .join(", ")}
-              </p>
-            </div>
-            <div>
-              <p className="text-black font-medium mb-3">Origin</p>
-              <p className="text-[#282828]">{blockData.origin}</p>
-            </div>
-            <div>
-              <p className="text-black font-medium mb-3">Port name</p>
-              <p className="text-[#282828]">{blockData.portName}</p>
-            </div>
-            <div>
-              <p className="text-black font-medium mb-3">Stone category</p>
-              <p className="text-[#282828]">{blockData.stoneCategory}</p>
-            </div>
-            <div>
-              <p className="text-black font-medium mb-3">Available Quantity</p>
-              <p className="text-[#3a3a3a]">
-                {blockData.quantityAvailable || "N/A"}
-              </p>
-            </div>
-            <div>
-              <p className="text-black font-medium mb-3">Supply Capacity</p>
-              <p className="text-[#3a3a3a]">
-                {blockData.supplyCapacity || "N/A"}
-              </p>
-            </div>
-            <div>
-              <p className="text-black font-medium mb-3">Minimum order</p>
-              <p className="text-[#282828]">
-                {blockData.minimumOrder || "N/A"}
-              </p>
+            <h2 className="text-xl font-semibold text-[#262626] mb-6">
+              Block details
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 max-md:gap-6 lg:flex lg:justify-between">
+              <div>
+                <p className="text-black font-medium mb-3">Block/stone name</p>
+                <p className="text-[#282828]">{blockData.stoneName}</p>
+              </div>
+              <div>
+                <p className="text-black font-medium mb-3">
+                  Height x Width x Length
+                </p>
+                <p className="text-[#282828]">
+                  {blockData.height} | {blockData.width} | {blockData.length}{" "}
+                  inch
+                </p>
+              </div>
+              <div>
+                <p className="text-black font-medium mb-3">Grade</p>
+                <p className="text-[#282828]">
+                  {[
+                    blockData.priceA && "A",
+                    blockData.priceB && "B",
+                    blockData.priceC && "C",
+                  ]
+                    .filter(Boolean)
+                    .join(", ")}
+                </p>
+              </div>
+              <div>
+                <p className="text-black font-medium mb-3">Origin</p>
+                <p className="text-[#282828]">{blockData.origin}</p>
+              </div>
+              <div>
+                <p className="text-black font-medium mb-3">Port name</p>
+                <p className="text-[#282828]">{blockData.portName}</p>
+              </div>
+              <div>
+                <p className="text-black font-medium mb-3">Stone category</p>
+                <p className="text-[#282828]">{blockData.stoneCategory}</p>
+              </div>
+              <div>
+                <p className="text-black font-medium mb-3">
+                  Available Quantity
+                </p>
+                <p className="text-[#3a3a3a]">
+                  {blockData.quantityAvailable || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-black font-medium mb-3">Supply Capacity</p>
+                <p className="text-[#3a3a3a]">
+                  {blockData.supplyCapacity || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-black font-medium mb-3">Minimum order</p>
+                <p className="text-[#282828]">
+                  {blockData.minimumOrder || "N/A"}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
           {/* Images Gallery */}
           {blockData.images && blockData.images.length > 0 && (
-          <div className="mb-8">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {blockData.images.slice(0, 10).map((image, index) => (
-                <div
-                  key={index}
-                  className="relative h-[200px] rounded-lg overflow-hidden"
-                >
-                  <img
-                    src={image}
-                    alt={`${blockData.stoneName} ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
+            <div className="mb-8">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {blockData.images.slice(0, 10).map((image, index) => (
+                  <div
+                    key={index}
+                    className="relative h-[200px] rounded-lg overflow-hidden"
+                  >
+                    <img
+                      src={image}
+                      alt={`${blockData.stoneName} ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
           {/* Quarry Documents */}
           {blockData.documents && blockData.documents.length > 0 && (
-          <div>
-            <h2 className="text-xl font-semibold text-[#414141] mb-4">
-              Uploaded Quarry Documents
-            </h2>
-            <div className="space-y-3">
-              {blockData.documents.map((doc, index) => (
-                <div
-                  key={index}
-                  className="bg-[#f5f5f5] border border-[#8b8b8b] rounded-xl p-4 flex items-center gap-3 max-w-[700px]"
-                >
-                  <FaFilePdf className="text-red-600 text-3xl shrink-0" />
-                  <p className="text-black text-lg">
-                    {doc.name || `Quarry certificate ${index + 1}.PDF`}
-                  </p>
-                </div>
-              ))}
+            <div>
+              <h2 className="text-xl font-semibold text-[#414141] mb-4">
+                Uploaded Quarry Documents
+              </h2>
+              <div className="space-y-3">
+                {blockData.documents.map((doc, index) => (
+                  <div
+                    key={index}
+                    className="bg-[#f5f5f5] border border-[#8b8b8b] rounded-xl p-4 flex items-center gap-3 max-w-[700px]"
+                  >
+                    <FaFilePdf className="text-red-600 text-3xl shrink-0" />
+                    <p className="text-black text-lg">
+                      {doc.name || `Quarry certificate ${index + 1}.PDF`}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
         </div>
       </div>
     </div>
