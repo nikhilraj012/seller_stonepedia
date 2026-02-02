@@ -8,6 +8,7 @@ import {
   doc,
   updateDoc,
   serverTimestamp,
+  getDoc,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
@@ -48,7 +49,105 @@ const useGallery = (collectionName ) => {
     fetchData();
   }, [collectionName]);
 
+//   const handleProductFeedback = async (item, product, status) => {
+//   if (!auth.currentUser) return;
+//   const toastId = toast.loading("Sending feedback...");
+
+//   try {
+//     const userUid = auth.currentUser.uid;
+//     const itemRef = doc(db, collectionName, item.id); 
+//     const userRef = doc(db, "SellerDetails", userUid, collectionName, item.id); // user collection
+
+//     // 1️⃣ Update product inside main item
+//     const itemSnap = await getDoc(itemRef);
+//     if (!itemSnap.exists()) return;
+
+//     const data = itemSnap.data();
+//     const updatedProducts = data.products.map((p) =>
+//       p.id === product.id
+//         ? { ...p, feedbackStatus: status, feedbackAt: new Date() }
+//         : p
+//     );
+
+//     // Update both global & user collection
+//     await Promise.all([
+//       updateDoc(itemRef, { products: updatedProducts }),
+//       updateDoc(userRef, { products: updatedProducts }),
+//     ]);
+
+    
+
+//     // Update local state to hide banner
+//     setData((prev) =>
+//       prev.map((i) =>
+//         i.id === item.id
+//           ? {
+//               ...i,
+//               products: i.products.map((p) =>
+//                 p.id === product.id
+//                   ? { ...p, feedbackStatus: status }
+//                   : p
+//               ),
+//             }
+//           : i
+//       )
+//     );
+
+//     toast.success("Feedback sent successfully", { id: toastId });
+//   } catch (error) {
+//     console.error("Error sending feedback:", error);
+//     toast.error("Failed to send feedback", { id: toastId });
+//   }
+// };
+const handleProductFeedback = async (itemId, productId, status) => {
+  if (!auth.currentUser) return;
+
+  // ✅ Add these guards
   
+
+  const toastId = toast.loading("Sending feedback...");
+  
+  try {
+    const userUid = auth.currentUser.uid;
+    const itemRef = doc(db, collectionName, itemId); 
+    const userRef = doc(db, "SellerDetails", userUid, collectionName, itemId);
+
+    const itemSnap = await getDoc(itemRef);
+    if (!itemSnap.exists()) return;
+
+    const data = itemSnap.data();
+    const updatedProducts = data.products.map((p) =>
+      p.id === productId
+        ? { ...p, feedbackStatus: status, feedbackAt: new Date() }
+        : p
+    );
+
+    await Promise.all([
+      updateDoc(itemRef, { products: updatedProducts }),
+      updateDoc(userRef, { products: updatedProducts }),
+    ]);
+
+    setData((prev) =>
+      prev.map((i) =>
+        i.id === itemId
+          ? {
+              ...i,
+              products: i.products.map((p) =>
+                p.id === productId
+                  ? { ...p, feedbackStatus: status }
+                  : p
+              ),
+            }
+          : i
+      )
+    );
+
+    toast.success("Feedback sent successfully", { id: toastId });
+  } catch (error) {
+    console.error("Error sending feedback:", error);
+    toast.error("Failed to send feedback", { id: toastId });
+  }
+};
 
   const handleCancel = async (id) => {
       const toastId = toast.loading("Cancelling...");
@@ -227,6 +326,7 @@ const useGallery = (collectionName ) => {
     deleteProduct,
     updateThumbnail,
     updateCompanyDetails,
+    handleProductFeedback
 
   };
 };

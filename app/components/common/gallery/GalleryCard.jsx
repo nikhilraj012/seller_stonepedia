@@ -3,10 +3,17 @@ import { IoLocation } from "react-icons/io5";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
+const GalleryCard = ({
+  item,
+  updating,
+
+  addSlabRoute,
+  actions,
+}) => {
   const router = useRouter();
   const {
     updateThumbnail,
+    handleProductFeedback,
     onEdit,
     onDelete,
     handleCancel,
@@ -227,18 +234,7 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
           </div>
         </div>
       </div>
-      {item.rejectionReason && (
-        <>
-          <p className="mt-2">
-            <span className="text-primary font-medium text-sm">
-              Rejected Reason:
-            </span>
-            <span className="text-gray-600 text-sm ml-1">
-              {item.rejectionReason}
-            </span>
-          </p>
-        </>
-      )}
+
       <div className="border-b py-3 border-gray-200" />
       <div className="flex  justify-between">
         <h1 className="text-[#000000] mt-4 font-medium  text-sm lg:text-base">
@@ -334,6 +330,37 @@ const GalleryCard = ({ item, updating, addSlabRoute, actions }) => {
                 </button>
               )} */}
             </div>
+            {product.feedbackStatus && product.feedbackStatus !== "ok" && (
+              <div className="bg-pink-50 border-l-4 p-3 mt-2 rounded-md">
+                <p className="text-gray-800 text-sm">
+                  {product.feedbackMessage}
+                </p>
+                <div className=" flex justify-end items-center">
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        if (!item?.id || !product?.id) return;
+
+                        handleProductFeedback(item.id, product.id, "cancel");
+                      }}
+                      className="px-3 py-1 cursor-pointer bg-gray-200 text-black rounded-md hover:bg-gray-300 text-xs md:text-sm"
+                    >
+                      Cancel
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        if (!item?.id || !product?.id) return;
+                        handleProductFeedback(item.id, product.id, "ok");
+                      }}
+                      className="px-3 py-1 cursor-pointer bg-primary text-white rounded-md hover:bg-primary/40 text-xs md:text-sm"
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>

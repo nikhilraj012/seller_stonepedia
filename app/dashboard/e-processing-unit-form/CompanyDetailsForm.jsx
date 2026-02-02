@@ -801,6 +801,7 @@ const CompanyDetailsForm = () => {
               </div>
             </div>
           </div>
+         {(productList.length < 2 || editIndex !== null) && (
           <div>
             <h2 className="text-xs font-medium mb-1">
               Stone Details
@@ -836,6 +837,7 @@ const CompanyDetailsForm = () => {
               handleAddproduct={handleAddproduct}
             />
           </div>
+          )}
         </div>
         <div className="md:w-2/5">
           {productList.length === 0 && (

@@ -39,6 +39,7 @@ const page = () => {
     deleteItem,
     deleteProduct,
     updateThumbnail,
+    handleProductFeedback,
     updateCompanyDetails,
     handleCancel,
   } = useGallery("EGalleryForProcessingUnit");
@@ -48,14 +49,14 @@ const page = () => {
     itemsPerPage: ITEMS_PER_PAGE,
   });
 
-const handleViewDetails = (item, product) => {
-  const companySlug = toSlug(item.companyDetails.shopName);
-  const productSlug = toSlug(product.stoneName);
+  const handleViewDetails = (item, product) => {
+    const companySlug = toSlug(item.companyDetails.shopName);
+    const productSlug = toSlug(product.stoneName);
 
-  router.push(
-    `/dashboard/profile/my-e-processing-unit/${companySlug}/${productSlug}`,
-  );
-};
+    router.push(
+      `/dashboard/profile/my-e-processing-unit/${companySlug}/${productSlug}`,
+    );
+  };
 
   const openEdit = (item) => {
     setEditId(item.id);
@@ -135,6 +136,7 @@ const handleViewDetails = (item, product) => {
                   onProductDelete: deleteProduct,
                   onDelete: deleteItem,
                   onViewDetails: handleViewDetails,
+                  handleProductFeedback: handleProductFeedback,
                 }}
                 addSlabRoute="/dashboard/e-processing-unit-form"
               />
