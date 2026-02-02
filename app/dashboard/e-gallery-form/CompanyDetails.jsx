@@ -81,7 +81,7 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
 
   return (
     <div className="">
-      <h2 className="text-xs font-medium mb-1">Shop Details</h2>
+      <h2 className="text-xs font-medium mb-1">Gallery Details</h2>
       <div className="border border-dashed border-[#000000]/20 rounded-lg p-2 md:p-4 space-y-1 md:space-y-2">
         <div className="space-y-1 md:space-y-2">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full">
@@ -111,7 +111,7 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
             </div>
             <div className="w-full flex flex-col">
               <label htmlFor="shopName" className="mb-0.5 text-xs font-medium ">
-                Shop Name
+                Gallery Name
               </label>
               <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
@@ -286,11 +286,11 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
             <label htmlFor="brochure" className="mb-0.5 text-xs font-medium">
               Upload Brochure
             </label>
-            <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white hover:shadow-md transition min-h-[100px] flex flex-col justify-center items-center">
+            <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white transition min-h-[100px] flex flex-col justify-center items-center">
               <input
                 id="brochure"
                 type="file"
-                className="absolute inset-0 opacity-0 cursor-pointer"
+                className="absolute inset-0 opacity-0"
                 accept=".pdf,application/pdf"
                 name="brochure"
                 onChange={(e) => handleUpload(e, "brochure")}
@@ -312,7 +312,7 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
                   <button
                     type="button"
                     onClick={() => document.getElementById("brochure").click()}
-                    className="inline-product bg-white border font-medium text-sm px-6 py-1 rounded-xl shadow-sm hover:bg-primary hover:text-white hover:shadow-md transition"
+                    className="border font-medium text-sm px-6 py-1 rounded-xl transition "
                   >
                     Browse
                   </button>

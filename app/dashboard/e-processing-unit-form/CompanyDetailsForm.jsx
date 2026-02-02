@@ -499,7 +499,7 @@ const CompanyDetailsForm = () => {
         className="max-md:space-y-5 md:flex justify-center mt-4 md:mt-7 gap-5 xl:gap-10"
       >
         <div className="shadow-lg md:shadow-2xl p-4 rounded-lg md:w-3/5 space-y-2 md:space-y-4">
-          <h2 className="text-xs font-medium mb-1">Shop Details</h2>
+          <h2 className="text-xs font-medium mb-1">Processing Unit Details</h2>
           <div className="border border-dashed border-[#000000]/20 rounded-lg p-2 md:p-4 space-y-1 md:space-y-2">
             <div className="space-y-1 md:space-y-2">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full">
@@ -532,7 +532,7 @@ const CompanyDetailsForm = () => {
                     htmlFor="shopName"
                     className="mb-0.5 text-xs font-medium "
                   >
-                    Shop Name
+                    Processing Unit Name
                   </label>
                   <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                     <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
@@ -754,7 +754,7 @@ const CompanyDetailsForm = () => {
                   </div>
                 </div>
               </div>
-              <div className="w-full">
+              <div className="w-full mt-5">
                 <label htmlFor="image" className="mb-0.5 text-xs ">
                   <div className="flex flex-col gap-0.5">
                     <span className="font-medium mb-0.5">
@@ -803,7 +803,7 @@ const CompanyDetailsForm = () => {
           </div>
           <div>
             <h2 className="text-xs font-medium mb-1">
-              Stone Slab Details
+              Stone Details
               <span className="text-[#CDCDCD] font-normal">
                 {" "}
                 (Add Multiple Products)
