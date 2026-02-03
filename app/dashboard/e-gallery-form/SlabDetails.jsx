@@ -193,19 +193,26 @@ const SlabDetails = forwardRef(
           setProduct={setProduct}
           hideMedia={false}
         />
-        {((!hasApprovedForm &&
-          (productList.length < 2 || editIndex !== null)) ||
-          (hasApprovedForm && productList.length === 0)) && (
-          <div className="flex justify-end gap-2">
+        <div className="flex justify-end gap-2">
+          {editIndex != null ? (
             <button
               type="button"
               onClick={handleAddproduct}
               className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
             >
-              {editIndex != null ? "Save Changes" : "Add Product"}
+              Save Changes
             </button>
-          </div>
-        )}
+          ) : (!hasApprovedForm && productList.length < 2) ||
+            (hasApprovedForm && productList.length === 0) ? (
+            <button
+              type="button"
+              onClick={handleAddproduct}
+              className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
+            >
+              Add Product
+            </button>
+          ) : null}
+        </div>
       </>
     );
   },

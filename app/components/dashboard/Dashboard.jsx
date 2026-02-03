@@ -160,7 +160,7 @@ const Dashboard = () => {
           db,
           "SellerDetails",
           uid,
-          "StoneProducts",
+          "sellStoneProducts",
         );
         const stoneProductSnapshot = await getDocs(stoneProductRef);
 

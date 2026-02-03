@@ -839,12 +839,28 @@ const BlockForm = () => {
         </div>
       )}
       <div className="space-y-1 lg:space-y-2 my-3 md:my-5">
-        <h1 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-medium">
+        {/* <h1 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-medium">
           Register your quarry block.
         </h1>
         <p className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl text-[#BDBDBD]">
           Fill this form to register your block.
-        </p>
+        </p> */}
+        {!hasApprovedForm ? (
+          <>
+            <h1 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-medium">
+              Register your quarry block.
+            </h1>
+            <p className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl text-[#BDBDBD]">
+              Fill this form to register your block.
+            </p>
+          </>
+        ) : (
+          <div className="flex justify-center my-2">
+            <h1 className="rounded-full border border-primary px-6 py-2 text-primary font-semibold lg:text-xl text-center">
+              Add Block
+            </h1>
+          </div>
+        )}
       </div>
 
       <div>
@@ -852,7 +868,7 @@ const BlockForm = () => {
           onSubmit={handleSubmit}
           className="max-md:space-y-5 md:flex gap-5 xl:gap-10"
         >
-          <div className="shadow-lg p-4 rounded-lg md:w-3/5 space-y-2 md:space-y-4">
+          <div className="shadow-lg p-4 border border-gray-200  rounded-lg md:w-3/5 space-y-2 md:space-y-4">
             {/* Company / Quarry Details */}
             {!hasApprovedForm && (
               <div>

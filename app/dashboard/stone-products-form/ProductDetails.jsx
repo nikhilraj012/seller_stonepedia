@@ -1,3 +1,4 @@
+"use client";
 import React, {
   useState,
   useEffect,
@@ -10,7 +11,7 @@ import toast from "react-hot-toast";
 import ProductFormFields from "@/app/components/ProductFormFields";
 
 const ProductDetails = forwardRef(
-  ({ setProductList, editIndex, setEditIndex, editProduct }, ref) => {
+  ({ setProductList, editIndex, setEditIndex,hasApprovedForm,productList, editProduct }, ref) => {
     const initialProductData = {
       productName: "",
       category: "",
@@ -177,13 +178,27 @@ const ProductDetails = forwardRef(
               Cancel
             </button>
           )}
-          <button
-            type="button"
-            onClick={handleAddproduct}
-            className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
-          >
-            {editIndex != null ? "Save Changes" : "Add Product"}
-          </button>
+          <div className="flex justify-end gap-2">
+            {editIndex != null ? (
+              <button
+                type="button"
+                onClick={handleAddproduct}
+                className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
+              >
+                Save Changes
+              </button>
+            ) : // Add button condition
+            (!hasApprovedForm && productList.length < 2) ||
+              (hasApprovedForm && productList.length === 0) ? (
+              <button
+                type="button"
+                onClick={handleAddproduct}
+                className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
+              >
+                Add Product
+              </button>
+            ) : null}
+          </div>
         </div>
       </>
     );

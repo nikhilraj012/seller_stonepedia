@@ -20,25 +20,21 @@ const EditCompanyModal = ({
         </p>
 
         <div className="space-y-3 sm:space-y-4">
-          <div>
-            <label
-              htmlFor="shopName"
-              className="block text-xs md:text-sm font-medium text-black mb-1"
-            >
-              Shop Name
-            </label>
-            <input
-              id="shopName"
-              type="text"
-              required
-              placeholder="Enter shop name"
-              value={editForm.shopName}
-              onChange={(e) =>
-                setEditForm({ ...editForm, shopName: e.target.value })
-              }
-              className=" w-full rounded-lg border border-gray-200 px-3 sm:px-4 py-2 text-xs md:text-sm focus:ring-2 focus:ring-primary/40 outline-none  "
-            />
-          </div>
+          <input
+            id="shopName"
+            type="text"
+            required
+            placeholder="Enter here"
+            value={editForm.companyName || editForm.shopName || ""}
+            onChange={(e) =>
+              setEditForm({
+                ...editForm,
+                companyName: e.target.value, // priority
+                shopName: e.target.value, // backward compatibility
+              })
+            }
+            className=" w-full rounded-lg border border-gray-200 px-3 sm:px-4 py-2 text-xs md:text-sm focus:ring-2 focus:ring-primary/40 outline-none"
+          />
 
           <div>
             <label
