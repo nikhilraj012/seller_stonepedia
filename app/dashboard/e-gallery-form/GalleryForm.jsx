@@ -91,22 +91,27 @@ const GalleryForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    const companyData = companyRef.current.getData();
-
     e.preventDefault();
-
     setIsSubmitting(true);
+    let companyData = null;
+
+    if (!hasApprovedForm) {
+      if (!companyRef.current) {
+        toast.error("Company form not loaded");
+        return;
+      }
+      companyData = companyRef.current.getData();
+      if (!companyData.image || companyData.image.length === 0) {
+        toast.error("Upload at least 1 Shop Image");
+        setIsSubmitting(false);
+        return;
+      }
+    }
 
     try {
       // NEW FORM SUBMISSION
 
       if (!hasApprovedForm) {
-        if (!companyData.image || companyData.image.length === 0) {
-          toast.error("Upload at least 1 Shop Image");
-          setIsSubmitting(false);
-          return;
-        }
-
         const brochureUrls = companyData.brochure
           ? await uploadFiles([companyData.brochure.file], "brochure")
           : [];
@@ -277,7 +282,7 @@ const GalleryForm = () => {
               onEdit={handleEdit}
             />
 
-            {productList.length > 0 && editIndex === null && (
+            {productList.length > 0 && (
               <div className="flex justify-end gap-2 mt-5 text-xs md:text-sm">
                 <button
                   className={`cursor-pointer px-4 py-1 border border-gray-400 rounded-lg ${
