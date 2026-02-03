@@ -24,7 +24,6 @@ import { useAuth } from "@/app/components/context/AuthContext";
 import { db, storage } from "@/app/firebase/config";
 
 const GalleryForm = () => {
- 
   const { isSubmitting, setIsSubmitting } = useUi();
   const { uid, authEmail } = useAuth();
   const [resetForm, setResetForm] = useState(false);
@@ -32,12 +31,11 @@ const GalleryForm = () => {
   const [editProduct, setEditProduct] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
   const slabRef = useRef();
- const companyRef=useRef()
+  const companyRef = useRef();
   const router = useRouter();
-const { galleryId } = useParams();
+  const { galleryId } = useParams();
 
-
-const hasApprovedForm = Boolean(galleryId);
+  const hasApprovedForm = Boolean(galleryId);
   const handleEdit = (i) => {
     setEditIndex(i);
     setEditProduct(productList[i]);
@@ -96,7 +94,7 @@ const hasApprovedForm = Boolean(galleryId);
     const companyData = companyRef.current.getData();
 
     e.preventDefault();
-   
+
     setIsSubmitting(true);
 
     try {
@@ -129,12 +127,12 @@ const hasApprovedForm = Boolean(galleryId);
           brochure: brochureUrls[0],
           image: shopImage[0],
         };
-         
+
         const galleryData = {
           userEmail: authEmail,
           userUid: uid,
           orderId,
-          companyDetails: companyDataFormatted  ,
+          companyDetails: companyDataFormatted,
           products: uploadedProducts,
           status: "pending",
           createdAt: serverTimestamp(),
@@ -237,20 +235,22 @@ const hasApprovedForm = Boolean(galleryId);
         >
           <div className="shadow-lg md:shadow-2xl p-4 rounded-lg md:w-3/5 space-y-2 md:space-y-4">
             {!hasApprovedForm && (
-              <CompanyDetails
-                ref={companyRef}
-               
-                resetForm={resetForm}
-              />
+              <CompanyDetails ref={companyRef} resetForm={resetForm} />
             )}
-
-            <SlabDetails
-              ref={slabRef}
-              setProductList={setProductList}
-              editIndex={editIndex}
-              setEditIndex={setEditIndex}
-              editProduct={editProduct}
-            />
+            {(
+  (!hasApprovedForm && (productList.length < 2 || editIndex !== null)) ||
+  (hasApprovedForm && productList.length === 0)
+) && (
+                <SlabDetails
+                  ref={slabRef}
+                  setProductList={setProductList}
+                  editIndex={editIndex}
+                  setEditIndex={setEditIndex}
+                  productList={productList}
+                  editProduct={editProduct}
+                  hasApprovedForm={hasApprovedForm}
+                />
+              )}
           </div>
 
           <div className="md:w-2/5">

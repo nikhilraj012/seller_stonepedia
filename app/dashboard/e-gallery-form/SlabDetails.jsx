@@ -11,7 +11,17 @@ import toast from "react-hot-toast";
 import SlabFormFields from "@/app/components/SlabFormFields";
 
 const SlabDetails = forwardRef(
-  ({ setProductList, editIndex, setEditIndex, editProduct }, ref) => {
+  (
+    {
+      setProductList,
+      editIndex,
+      setEditIndex,
+      editProduct,
+      productList,
+      hasApprovedForm,
+    },
+    ref,
+  ) => {
     const initialProductData = {
       stoneCategory: "",
       stoneName: "",
@@ -183,14 +193,16 @@ const SlabDetails = forwardRef(
           setProduct={setProduct}
           hideMedia={false}
         />
-        {product.length > 2 && (
+        {((!hasApprovedForm &&
+          (productList.length < 2 || editIndex !== null)) ||
+          (hasApprovedForm && productList.length === 0)) && (
           <div className="flex justify-end gap-2">
             <button
               type="button"
               onClick={handleAddproduct}
               className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
             >
-              Add Product
+              {editIndex != null ? "Save Changes" : "Add Product"}
             </button>
           </div>
         )}
