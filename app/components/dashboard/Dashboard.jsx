@@ -52,6 +52,9 @@ const Dashboard = () => {
   const [blocksCount, setBlocksCount] = useState(0);
   const [eProcessingProductCount, setEProcessingProductCount] = useState(0);
   const [eGalleryProductCount, setEGalleryProductCount] = useState(0);
+  const [stoneProductStatus, setStoneProductStatus] = useState(null);
+  const [stoneProductId, setStoneProductId] = useState(null);
+  const [stoneProductCount, setStoneProductCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -152,6 +155,38 @@ const Dashboard = () => {
             setEGalleryStatus("rejected");
           }
         }
+        // Check Stone Product status
+        const stoneProductRef = collection(
+          db,
+          "SellerDetails",
+          uid,
+          "StoneProducts",
+        );
+        const stoneProductSnapshot = await getDocs(stoneProductRef);
+
+        if (!stoneProductSnapshot.empty) {
+          const docs = stoneProductSnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+
+          const hasApproved = docs.some((doc) => doc.status === "approved");
+          const hasPending = docs.some((doc) => doc.status === "pending");
+          const allRejectedOrCancelled = docs.every(
+            (doc) => doc.status === "rejected" || doc.status === "cancelled",
+          );
+
+          if (hasApproved) {
+            setStoneProductStatus("approved");
+            const approved = docs.find((doc) => doc.status === "approved");
+            setStoneProductId(approved?.id || null);
+            setStoneProductCount(approved?.products?.length || 0);
+          } else if (hasPending) {
+            setStoneProductStatus("pending");
+          } else if (allRejectedOrCancelled) {
+            setStoneProductStatus("rejected");
+          }
+        }
       } catch (error) {
         console.error("Error checking registrations:", error);
       } finally {
@@ -186,13 +221,23 @@ const Dashboard = () => {
       if (eGalleryStatus === "pending") return "My E-Gallery";
       return "Register";
     }
+    if (categoryId === 4) {
+      // Stone Product
+      if (stoneProductStatus === "approved" && stoneProductCount < 2)
+        return "Add Product";
+      if (stoneProductStatus === "approved") return "My Stone Products";
+      if (stoneProductStatus === "pending") return "My Stone Products";
+      return "Register";
+    }
     return "Register";
   };
 
   const getButtonRoute = (category) => {
     if (category.id === 1) {
       // Blocks
-      if (blocksStatus === "approved") return "/dashboard/profile/my-blocks";
+      if (blocksStatus === "approved" && blocksCount < 2)
+        return "/dashboard/blocks-form"; // Add Block
+      if (blocksStatus === "approved") return "/dashboard/profile/my-blocks"; // View Blocks
       if (blocksStatus === "pending") return "/dashboard/profile/my-blocks";
       return category.route;
     }
@@ -224,6 +269,20 @@ const Dashboard = () => {
         return "/dashboard/profile/my-e-gallery";
       if (eGalleryStatus === "pending")
         return "/dashboard/profile/my-e-gallery";
+      return category.route;
+    }
+    if (category.id === 4) {
+      if (
+        stoneProductStatus === "approved" &&
+        stoneProductCount < 2 &&
+        stoneProductId
+      ) {
+        return `/dashboard/stone-products-form/${stoneProductId}/add-product`;
+      }
+      if (stoneProductStatus === "approved")
+        return "/dashboard/profile/my-stone-products";
+      if (stoneProductStatus === "pending")
+        return "/dashboard/profile/my-stone-products";
       return category.route;
     }
     return category.route;
