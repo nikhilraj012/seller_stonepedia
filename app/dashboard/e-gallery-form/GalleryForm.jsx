@@ -237,20 +237,19 @@ const GalleryForm = () => {
             {!hasApprovedForm && (
               <CompanyDetails ref={companyRef} resetForm={resetForm} />
             )}
-            {(
-  (!hasApprovedForm && (productList.length < 2 || editIndex !== null)) ||
-  (hasApprovedForm && productList.length === 0)
-) && (
-                <SlabDetails
-                  ref={slabRef}
-                  setProductList={setProductList}
-                  editIndex={editIndex}
-                  setEditIndex={setEditIndex}
-                  productList={productList}
-                  editProduct={editProduct}
-                  hasApprovedForm={hasApprovedForm}
-                />
-              )}
+            {(hasApprovedForm ||
+              (!hasApprovedForm &&
+                (productList.length < 2 || editIndex !== null))) && (
+              <SlabDetails
+                ref={slabRef}
+                setProductList={setProductList}
+                editIndex={editIndex}
+                setEditIndex={setEditIndex}
+                productList={productList}
+                editProduct={editProduct}
+                hasApprovedForm={hasApprovedForm}
+              />
+            )}
           </div>
 
           <div className="md:w-2/5">
