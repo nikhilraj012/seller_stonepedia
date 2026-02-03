@@ -25,7 +25,7 @@ const ConfirmDialog = ({ message, onConfirm, onCancel }) => {
         </p>
 
         {/* Buttons */}
-        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-5">
+        <div className="flex flex-row justify-center gap-3 sm:gap-5">
           <button
             onClick={onCancel}
             className="

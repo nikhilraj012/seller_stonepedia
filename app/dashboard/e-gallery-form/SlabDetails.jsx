@@ -63,14 +63,20 @@ const SlabDetails = forwardRef(
 
     useEffect(() => {
       if (editProduct) {
-        setProduct(editProduct);
-        setTimeout(() => {
-          refs.current.stoneCategory?.focus();
-          refs.current.stoneCategory?.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-        }, 100);
+        const unitOptions = [
+          { label: "SQM", value: "sqm" },
+          { label: "SQFT", value: "sqft" },
+        ];
+
+        const selectedUnit = unitOptions.find(
+          (u) =>
+            u.value.toLowerCase() === String(editProduct.units).toLowerCase(),
+        );
+
+        setProduct({
+          ...editProduct,
+          units: selectedUnit || null,
+        });
       }
     }, [editProduct]);
 
