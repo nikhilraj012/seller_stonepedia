@@ -41,8 +41,8 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
     const toastId = toast.loading("Deleting...");
     try {
       console.log(uid);
-      await deleteDoc(doc(db, "Users", uid, "SellBlocks", id));
-      await deleteDoc(doc(db, "BuyAndSellBlocks", id));
+      await deleteDoc(doc(db, "SellerDetails", uid, "SellBlocks", id));
+      await deleteDoc(doc(db, "Blocks", id));
 
       setData((prev) => prev.filter((i) => i.id !== id));
       toast.success("Deleted successfully", { id: toastId });
@@ -58,8 +58,8 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
     try {
       if (!uid || !item?.id || !block?.id) throw new Error("Invalid data");
 
-      const userRef = doc(db, "Users", uid, "SellBlocks", item.id);
-      const mainRef = doc(db, "BuyAndSellBlocks", item.id);
+      const userRef = doc(db, "SellerDetails", uid, "SellBlocks", item.id);
+      const mainRef = doc(db, "Blocks", item.id);
 
       const snap = await getDoc(userRef);
       if (!snap.exists()) throw new Error("Document not found");
@@ -103,17 +103,19 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
       ?.toLowerCase()
       .replace(/\s+/g, "-")
       .replace(/[^\w-]/g, "");
-    
-    // Store the data in sessionStorage for the details page to retrieve
-    sessionStorage.setItem('currentProduct', JSON.stringify({
-      docId: item.id,
-      blockId: block.id,
-      companyData: item.quarryDetails
-    }));
-    
-    router.push(`/dashboard/profile/my-blocks/${companySlug}/${productSlug}`);
-  }
 
+    // Store the data in sessionStorage for the details page to retrieve
+    sessionStorage.setItem(
+      "currentProduct",
+      JSON.stringify({
+        docId: item.id,
+        blockId: block.id,
+        companyData: item.quarryDetails,
+      }),
+    );
+
+    router.push(`/dashboard/profile/my-blocks/${companySlug}/${productSlug}`);
+  };
 
   return (
     <div>
@@ -169,7 +171,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
                 : "visible"
             }`}
           >
-            {status === "approved" && (
+            {status === "pending" && (
               <button
                 disabled={updating}
                 onClick={() => onEdit(item)}
@@ -184,7 +186,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
                 <MdOutlineEdit className="text-sm lg:text-xl" />
               </button>
             )}
-            {(status === "approved" || status === "pending") && (
+            {/* { status === "pending" && (
               <button
                 disabled={updating}
                 onClick={() => deleteItem(item.id)}
@@ -197,7 +199,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
               >
                 <RiDeleteBin5Line className="text-sm lg:text-xl" />
               </button>
-            )}
+            )} */}
           </div>
           <div>
             <div
@@ -260,6 +262,14 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
         <h1 className="text-[#000000] font-medium text-sm lg:text-base">
           Uploaded Blocks
         </h1>
+        {status.toLowerCase() === "approved" && item.blocks?.length < 2 && (
+          <button
+            onClick={() => router.push(`${addBlockRoute}/${item.id}/add-block`)}
+            className="mt-2 bg-primary font-medium text-white px-4 md:px-6 cursor-pointer hover:bg-pink-100 hover:text-primary py-1.5 rounded-md text-xs md:text-sm hover:bg-green-700 transition"
+          >
+            Add Block
+          </button>
+        )}
 
         {/* {status.toLowerCase() === "approved" && (
     <button
@@ -369,7 +379,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
                 </button> */}
               </div>
 
-              {(status === "approved" || status === "pending") && (
+              {/* {(status === "approved" || status === "pending") && (
                 <button
                   onClick={() => {
                     setSelectedBlock(block);
@@ -379,7 +389,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
                 >
                   Delete
                 </button>
-              )}
+              )} */}
             </div>
           </div>
         ))}

@@ -6,14 +6,14 @@ import { db } from "@/app/firebase/config";
 import { useAuth } from "@/app/components/context/AuthContext";
 
 const businessCategories = [
-  // {
-  //   id: 1,
-  //   title: "Block",
-  //   description:
-  //     "A block seller trades large quantities of assets, influencing market prices significantly.",
-  //   image: "/images/dashboard/block.webp",
-  //   route: "/dashboard/blocks-form",
-  // },
+  {
+    id: 1,
+    title: "Block",
+    description:
+      "A block seller trades large quantities of assets, influencing market prices significantly.",
+    image: "/images/dashboard/block.webp",
+    route: "/dashboard/blocks-form",
+  },
   {
     id: 2,
     title: "E-processing unit",
@@ -30,14 +30,14 @@ const businessCategories = [
     image: "/images/dashboard/gallery.webp",
     route: "/dashboard/e-gallery-form",
   },
-  // {
-  //   id: 4,
-  //   title: "Stone Product",
-  //   description:
-  //     "A stone product allows sellers to present unique creations to customers worldwide.",
-  //   image: "/images/dashboard/stone-product.webp",
-  //   route: "/dashboard/stone-products-form",
-  // },
+  {
+    id: 4,
+    title: "Stone Product",
+    description:
+      "A stone product allows sellers to present unique creations to customers worldwide.",
+    image: "/images/dashboard/stone-product.webp",
+    route: "/dashboard/stone-products-form",
+  },
 ];
 
 const Dashboard = () => {
@@ -47,7 +47,9 @@ const Dashboard = () => {
   const [eProcessingStatus, setEProcessingStatus] = useState(null);
   const [eGalleryStatus, setEGalleryStatus] = useState(null);
   const [eProcessingGalleryId, setEProcessingGalleryId] = useState(null);
+  const [blockId, setBlockId] = useState(null);
   const [eGalleryId, setEGalleryId] = useState(null);
+  const [blocksCount, setBlocksCount] = useState(0);
   const [eProcessingProductCount, setEProcessingProductCount] = useState(0);
   const [eGalleryProductCount, setEGalleryProductCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -61,42 +63,66 @@ const Dashboard = () => {
 
       try {
         // Check Blocks status
-        // const blocksRef = collection(db, "SellerDetails", uid, "SellBlocks");
-        // const blocksSnapshot = await getDocs(blocksRef);
-        
-        // if (!blocksSnapshot.empty) {
-        //   const docs = blocksSnapshot.docs.map(doc => doc.data());
-        //   const hasApproved = docs.some(doc => doc.status === "approved");
-        //   const hasPending = docs.some(doc => doc.status === "pending");
-        //   const allRejectedOrCancelled = docs.every(doc => 
-        //     doc.status === "rejected" || doc.status === "cancelled"
-        //   );
-          
-        //   if (hasApproved) {
-        //     setBlocksStatus("approved");
-        //   } else if (hasPending) {
-        //     setBlocksStatus("pending");
-        //   } else if (allRejectedOrCancelled) {
-        //     setBlocksStatus("rejected");
-        //   }
-        // }
+        const blocksRef = collection(db, "SellerDetails", uid, "SellBlocks");
+        const blocksSnapshot = await getDocs(blocksRef);
+
+        if (!blocksSnapshot.empty) {
+          const docs = blocksSnapshot.docs.map((doc) => doc.data());
+          const hasApproved = docs.some((doc) => doc.status === "approved");
+          const hasPending = docs.some((doc) => doc.status === "pending");
+          const allRejectedOrCancelled = docs.every(
+            (doc) => doc.status === "rejected" || doc.status === "cancelled",
+          );
+
+          // if (hasApproved) {
+          //   setBlocksStatus("approved");
+          // } else if (hasPending) {
+          //   setBlocksStatus("pending");
+          // } else if (allRejectedOrCancelled) {
+          //   setBlocksStatus("rejected");
+          // }
+
+          if (hasApproved) {
+            setBlocksStatus("approved");
+            // Find the first approved gallery ID and count products
+            const approvedBlocks = docs.find(
+              (doc) => doc.status === "approved",
+            );
+            setBlockId(approvedBlocks?.id || null);
+            setBlocksCount(approvedBlocks?.blocks?.length || 0);
+          } else if (hasPending) {
+            setBlocksStatus("pending");
+          } else if (allRejectedOrCancelled) {
+            setBlocksStatus("rejected");
+          }
+        }
 
         // Check E-Processing Unit status
-        const eProcessingRef = collection(db, "SellerDetails", uid, "EGalleryForProcessingUnit");
+        const eProcessingRef = collection(
+          db,
+          "SellerDetails",
+          uid,
+          "EGalleryForProcessingUnit",
+        );
         const eProcessingSnapshot = await getDocs(eProcessingRef);
-        
+
         if (!eProcessingSnapshot.empty) {
-          const docs = eProcessingSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-          const hasApproved = docs.some(doc => doc.status === "approved");
-          const hasPending = docs.some(doc => doc.status === "pending");
-          const allRejectedOrCancelled = docs.every(doc => 
-            doc.status === "rejected" || doc.status === "cancelled"
+          const docs = eProcessingSnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          const hasApproved = docs.some((doc) => doc.status === "approved");
+          const hasPending = docs.some((doc) => doc.status === "pending");
+          const allRejectedOrCancelled = docs.every(
+            (doc) => doc.status === "rejected" || doc.status === "cancelled",
           );
-          
+
           if (hasApproved) {
             setEProcessingStatus("approved");
             // Find the first approved gallery ID and count products
-            const approvedGallery = docs.find(doc => doc.status === "approved");
+            const approvedGallery = docs.find(
+              (doc) => doc.status === "approved",
+            );
             setEProcessingGalleryId(approvedGallery?.id || null);
             setEProcessingProductCount(approvedGallery?.products?.length || 0);
           } else if (hasPending) {
@@ -109,19 +135,24 @@ const Dashboard = () => {
         // Check E-Gallery status
         const eGalleryRef = collection(db, "SellerDetails", uid, "EGallery");
         const eGallerySnapshot = await getDocs(eGalleryRef);
-        
+
         if (!eGallerySnapshot.empty) {
-          const docs = eGallerySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-          const hasApproved = docs.some(doc => doc.status === "approved");
-          const hasPending = docs.some(doc => doc.status === "pending");
-          const allRejectedOrCancelled = docs.every(doc => 
-            doc.status === "rejected" || doc.status === "cancelled"
+          const docs = eGallerySnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          const hasApproved = docs.some((doc) => doc.status === "approved");
+          const hasPending = docs.some((doc) => doc.status === "pending");
+          const allRejectedOrCancelled = docs.every(
+            (doc) => doc.status === "rejected" || doc.status === "cancelled",
           );
-          
+
           if (hasApproved) {
             setEGalleryStatus("approved");
             // Find the first approved gallery ID and count products
-            const approvedGallery = docs.find(doc => doc.status === "approved");
+            const approvedGallery = docs.find(
+              (doc) => doc.status === "approved",
+            );
             setEGalleryId(approvedGallery?.id || null);
             setEGalleryProductCount(approvedGallery?.products?.length || 0);
           } else if (hasPending) {
@@ -141,19 +172,24 @@ const Dashboard = () => {
   }, [uid]);
 
   const getButtonText = (categoryId) => {
-    if (categoryId === 1) { // Blocks
+    if (categoryId === 1) {
+      // Blocks
       if (blocksStatus === "approved") return "Add Block";
       if (blocksStatus === "pending") return "My Blocks";
       return "Register";
     }
-    if (categoryId === 2) { // E-processing unit
-      if (eProcessingStatus === "approved" && eProcessingProductCount < 2) return "Add Product";
+    if (categoryId === 2) {
+      // E-processing unit
+      if (eProcessingStatus === "approved" && eProcessingProductCount < 2)
+        return "Add Product";
       if (eProcessingStatus === "approved") return "My E-Processing Unit";
       if (eProcessingStatus === "pending") return "My E-Processing Unit";
       return "Register";
     }
-    if (categoryId === 3) { // E-Gallery
-      if (eGalleryStatus === "approved" && eGalleryProductCount < 2) return "Add Product";
+    if (categoryId === 3) {
+      // E-Gallery
+      if (eGalleryStatus === "approved" && eGalleryProductCount < 2)
+        return "Add Product";
       if (eGalleryStatus === "approved") return "My E-Gallery";
       if (eGalleryStatus === "pending") return "My E-Gallery";
       return "Register";
@@ -162,25 +198,40 @@ const Dashboard = () => {
   };
 
   const getButtonRoute = (category) => {
-    if (category.id === 1) { // Blocks
+    if (category.id === 1) {
+      // Blocks
       if (blocksStatus === "approved") return "/dashboard/profile/my-blocks";
       if (blocksStatus === "pending") return "/dashboard/profile/my-blocks";
       return category.route;
     }
-    if (category.id === 2) { // E-processing unit
-      if (eProcessingStatus === "approved" && eProcessingProductCount < 2 && eProcessingGalleryId) {
+    if (category.id === 2) {
+      // E-processing unit
+      if (
+        eProcessingStatus === "approved" &&
+        eProcessingProductCount < 2 &&
+        eProcessingGalleryId
+      ) {
         return `/dashboard/e-processing-unit-form/${eProcessingGalleryId}/add-product`;
       }
-      if (eProcessingStatus === "approved") return "/dashboard/profile/my-e-processing-unit";
-      if (eProcessingStatus === "pending") return "/dashboard/profile/my-e-processing-unit";
+      if (eProcessingStatus === "approved")
+        return "/dashboard/profile/my-e-processing-unit";
+      if (eProcessingStatus === "pending")
+        return "/dashboard/profile/my-e-processing-unit";
       return category.route;
     }
-    if (category.id === 3) { // E-Gallery
-      if (eGalleryStatus === "approved" && eGalleryProductCount < 2 && eGalleryId) {
+    if (category.id === 3) {
+      // E-Gallery
+      if (
+        eGalleryStatus === "approved" &&
+        eGalleryProductCount < 2 &&
+        eGalleryId
+      ) {
         return `/dashboard/e-gallery-form/${eGalleryId}/add-product`;
       }
-      if (eGalleryStatus === "approved") return "/dashboard/profile/my-e-gallery";
-      if (eGalleryStatus === "pending") return "/dashboard/profile/my-e-gallery";
+      if (eGalleryStatus === "approved")
+        return "/dashboard/profile/my-e-gallery";
+      if (eGalleryStatus === "pending")
+        return "/dashboard/profile/my-e-gallery";
       return category.route;
     }
     return category.route;

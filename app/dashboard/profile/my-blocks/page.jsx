@@ -87,7 +87,7 @@ const Page = () => {
 
       await Promise.all([
         updateDoc(doc(db, "SellerDetails", uid, "SellBlocks", editId), payload),
-        updateDoc(doc(db, "BuyAndSellBlocks", editId), payload),
+        updateDoc(doc(db, "Blocks", editId), payload),
       ]);
 
       setData((prev) =>
@@ -263,6 +263,7 @@ const Page = () => {
             setData={setData}
             item={{ ...item, blocks: item.blocks }}
             updating={updating}
+            addBlockRoute="/dashboard/blocks-form"
             onEdit={openEdit}
           />
         ))}

@@ -1,15 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/app/firebase/config";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db, storage } from "@/app/firebase/config";
+import { TiDeleteOutline } from "react-icons/ti";
 import { useAuth } from "@/app/components/context/AuthContext";
 import { MdOutlineEdit } from "react-icons/md";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { IoLocationOutline } from "react-icons/io5";
 import { FaFilePdf } from "react-icons/fa";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
+import toast from "react-hot-toast";
 const BlockDetailsPage = () => {
   const params = useParams();
 
@@ -17,12 +20,12 @@ const BlockDetailsPage = () => {
 
   const router = useRouter();
   const { uid } = useAuth();
-
+  const [isUpdating, setIsUpdating] = useState(false);
   const [blockData, setBlockData] = useState(null);
   const [quarryData, setQuarryData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const fileRef = useRef(null);
   useEffect(() => {
     const fetchBlockDetails = async () => {
       if (!uid) {
@@ -50,7 +53,11 @@ const BlockDetailsPage = () => {
 
           if (block) {
             setBlockData(block);
-            setQuarryData(data.quarryDetails);
+
+            setQuarryData({
+              ...data.quarryDetails,
+              status: data.status,
+            });
           } else {
             setError("Block not found");
           }
@@ -68,6 +75,185 @@ const BlockDetailsPage = () => {
     fetchBlockDetails();
   }, [uid]);
 
+  const status = quarryData?.status?.toLowerCase();
+  const canEdit = status === "pending";
+
+  console.log(status);
+  // const handleThumbnailChange = async (e) => {
+  //   const file = e.target.files?.[0];
+  //   if (!file) return;
+  //   setIsUpdating(true);
+  //   const toastId = toast.loading("Updating thumbnail...");
+  //   try {
+  //     const uploadFiles = async (files, path) => {
+  //       if (!files) return [];
+  //       const fileArray = Array.isArray(files) ? files : [files];
+
+  //       return Promise.all(
+  //         fileArray.map(async (f) => {
+  //           const file = f.file || f;
+  //           const name = file.name || `file_${Date.now()}`;
+  //           const fileRef = ref(storage, `"SellBlocks/${uid}/${path}/${name}`);
+
+  //           await uploadBytes(fileRef, file);
+  //           return { url: await getDownloadURL(fileRef), type: file.type };
+  //         }),
+  //       );
+  //     };
+
+  //     const uploaded = await uploadFiles([file], `products/${product.id}`);
+
+  //     const newThumbnail = uploaded[0];
+  //     setProduct((prev) => ({
+  //       ...prev,
+  //       thumbnail: newThumbnail,
+  //     }));
+  //     setItem((prev) => ({
+  //       ...prev,
+  //       products: prev.products.map((p) =>
+  //         p.id === product.id ? { ...p, thumbnail: newThumbnail } : p,
+  //       ),
+  //     }));
+
+  //     if (!isAuthenticated) return;
+  //     console.log(item.id);
+  //     const gRef = doc(db, "Blocks", item.id);
+  //     const uRef = doc(db, "SellerDetails", uid, "SellBlocks", item.id);
+
+  //     const updateProductThumbnail = (products) =>
+  //       products.map((p) =>
+  //         p.id === product.id ? { ...p, thumbnail: newThumbnail } : p,
+  //       );
+
+  //     const snap = await getDoc(gRef);
+  //     if (!snap.exists()) return;
+
+  //     const updatedProducts = updateProductThumbnail(snap.data().products);
+  //     console.log(updatedProducts);
+  //     await updateDoc(gRef, { products: updatedProducts });
+  //     await updateDoc(uRef, { products: updatedProducts });
+
+  //     toast.success("Thumbnail updated successfully!", { id: toastId });
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error("Thumbnail update failed", { id: toastId });
+  //   } finally {
+  //     setIsUpdating(false);
+  //   }
+  // };
+  const handleThumbnailChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !uid) return;
+
+    setIsUpdating(true);
+    const toastId = toast.loading("Updating thumbnail...");
+
+    try {
+      const storageRef = ref(
+        storage,
+        `SellBlocks/${uid}/thumbnails/${Date.now()}_${file.name}`,
+      );
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+
+      // Update locally
+      setBlockData((prev) => ({ ...prev, thumbnail: url }));
+
+      // Update Firestore
+      const storedData = JSON.parse(sessionStorage.getItem("currentProduct"));
+      if (!storedData) return;
+      const { docId, blockId } = storedData;
+
+      const docRef = doc(db, "SellerDetails", uid, "SellBlocks", docId);
+      const snap = await getDoc(docRef);
+      if (!snap.exists()) throw new Error("Document not found");
+
+      const data = snap.data();
+      const updatedBlocks = data.blocks.map((b) =>
+        b.id === blockId ? { ...b, thumbnail: url } : b,
+      );
+
+      await updateDoc(docRef, { blocks: updatedBlocks });
+
+      toast.success("Thumbnail updated!", { id: toastId });
+    } catch (err) {
+      console.error(err);
+      toast.error("Thumbnail upload failed", { id: toastId });
+    } finally {
+      setIsUpdating(false);
+      e.target.value = ""; // reset input
+    }
+  };
+  // const handleThumbnailRemove = async (productId) => {
+  //   setIsUpdating(true);
+  //   const toastId = toast.loading("Removing thumbnail...");
+
+  //   try {
+  //     if (!isAuthenticated || !item) return;
+
+  //     const updateProducts = (products) =>
+  //       products.map((p) =>
+  //         p.id === productId ? { ...p, thumbnail: null } : p,
+  //       );
+
+  //     const userRef = doc(db, "SellerDetails", uid, "SellBlocks", item.id);
+  //     const globalRef = doc(db, "Blocks", item.id);
+
+  //     const snap = await getDoc(globalRef);
+  //     if (!snap.exists()) return;
+
+  //     const updatedProducts = updateProducts(snap.data().products);
+
+  //     await updateDoc(userRef, { products: updatedProducts });
+  //     await updateDoc(globalRef, { products: updatedProducts });
+  //     setItem((prev) => ({
+  //       ...prev,
+  //       products: updateProducts(prev.products),
+  //     }));
+
+  //     setProduct((prev) => ({
+  //       ...prev,
+  //       thumbnail: null,
+  //     }));
+  //     toast.success("Thumbnail removed", { id: toastId });
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error("Failed to remove thumbnail", { id: toastId });
+  //   } finally {
+  //     setIsUpdating(false);
+  //   }
+  // };
+  const handleThumbnailRemove = async () => {
+    if (!uid || !blockData) return;
+
+    setIsUpdating(true);
+    const toastId = toast.loading("Removing thumbnail...");
+
+    try {
+      setBlockData((prev) => ({ ...prev, thumbnail: null }));
+
+      const storedData = JSON.parse(sessionStorage.getItem("currentProduct"));
+      if (!storedData) return;
+      const { docId, blockId } = storedData;
+
+      const docRef = doc(db, "SellerDetails", uid, "SellBlocks", docId);
+      const snap = await getDoc(docRef);
+      if (!snap.exists()) throw new Error("Document not found");
+
+      const data = snap.data();
+      const updatedBlocks = data.blocks.map((b) =>
+        b.id === blockId ? { ...b, thumbnail: null } : b,
+      );
+
+      await updateDoc(docRef, { blocks: updatedBlocks });
+      toast.success("Thumbnail removed!", { id: toastId });
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to remove thumbnail", { id: toastId });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
   if (loading) {
     return (
       <div className="pt-16 px-4 md:px-6 lg:px-24 xl:px-32">
@@ -106,13 +292,41 @@ const BlockDetailsPage = () => {
         <div className="">
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
             <div className="lg:w-[270px] xl:w-[300px] 2xl:w-[350px] shrink-0">
-              <div className="bg-[#f6f6f6] border border-[#e9e9e9] rounded-lg h-[250px] lg:h-[220px] xl:h-[250px] 2xl:h-[300px] flex items-center justify-center overflow-hidden">
+              <input
+                ref={fileRef}
+                id="thumbnail"
+                type="file"
+                disabled={isUpdating}
+                accept="image/*"
+                className="hidden"
+                onChange={handleThumbnailChange}
+              />
+              <div
+                onClick={() => {
+                  if (canEdit && !isUpdating) fileRef.current?.click();
+                }}
+                className="bg-[#f6f6f6] border border-[#e9e9e9] rounded-lg h-[250px] lg:h-[220px] xl:h-[250px] 2xl:h-[300px] flex items-center justify-center overflow-hidden relative group"
+              >
                 {blockData.thumbnail ? (
-                  <img
-                    src={blockData.thumbnail}
-                    alt={blockData.stoneName}
-                    className="w-full h-full object-cover"
-                  />
+                  <>
+                    <img
+                      src={blockData.thumbnail}
+                      alt={blockData.stoneName}
+                      className="w-full h-full object-cover"
+                    />
+                    {canEdit && (
+                      <button
+                        type="button"
+                        onClick={(ev) => {
+                          ev.stopPropagation();
+                          handleThumbnailRemove(); // ✅ fixed
+                        }}
+                        className="absolute bg-white text-red-600 rounded-full -top-0.5 right-0 cursor-pointer opacity-0 group-hover:opacity-100"
+                      >
+                        <TiDeleteOutline className="w-3 h-3 md:w-5 md:h-5" />
+                      </button>
+                    )}
+                  </>
                 ) : (
                   <div className="flex flex-col items-center text-[#323232]">
                     <svg
@@ -128,7 +342,9 @@ const BlockDetailsPage = () => {
                         d="M12 4v16m8-8H4"
                       />
                     </svg>
-                    <p className="text-xs">Add thumbnail</p>
+                    <span>
+                      {canEdit ? "Add Thumbnail" : "No Thumbnail Added"}
+                    </span>
                   </div>
                 )}
               </div>
@@ -147,31 +363,40 @@ const BlockDetailsPage = () => {
                 </div>
 
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                     const storedData =
-                       sessionStorage.getItem("currentProduct");
+                  {status === "pending" && (
+                    <button
+                      onClick={() => {
+                        const storedData =
+                          sessionStorage.getItem("currentProduct");
 
-                      if (storedData) {
-                        router.push(
-                          `/dashboard/profile/my-blocks/${params.companySlug}/${params.productSlug}/edit`,
-                        );
-                      }
-                    }}
-                    className="p-1.5 2xl:p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
-                  >
-                    <MdOutlineEdit className="text-xl text-gray-700" />
-                  </button>
-                  <button
+                        if (storedData) {
+                          router.push(
+                            `/dashboard/profile/my-blocks/${params.companySlug}/${params.productSlug}/edit`,
+                          );
+                        }
+                      }}
+                      disabled={isUpdating}
+                      className={`p-1.5   2xl:p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition
+                         ${
+                      isUpdating
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer hover:text-gray-500"
+                    }`}
+                    
+                    >
+                      <MdOutlineEdit className="text-xl text-gray-700" />
+                    </button>
+                  )}
+                  {/* <button
                     onClick={() => {
                       router.push(
                         `/dashboard/profile/my-blocks/${companySlug}/${productSlug}/edit`,
                       );
                     }}
-                    className="p-1.5 2xl:p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
+                    className="p-1.5 2xl:p-2 cursor-pointer rounded-lg border border-gray-300 hover:bg-gray-50 transition"
                   >
                     <RiDeleteBin5Line className="text-xl text-red-600" />
-                  </button>
+                  </button> */}
                 </div>
               </div>
 
