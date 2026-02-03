@@ -330,7 +330,7 @@ const GalleryCard = ({
                 </button>
               )} */}
             </div>
-            {product.feedbackStatus && product.feedbackStatus !== "ok" && (
+            {product.feedbackStatus && product.feedbackStatus === "pending" && (
               <div className="bg-pink-50 p-3 mt-2 rounded-md">
                 <p className="text-gray-800 mb-2 text-xs md:text-sm">
                   {product.feedbackMessage}
