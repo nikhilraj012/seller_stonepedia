@@ -183,16 +183,17 @@ const SlabDetails = forwardRef(
           setProduct={setProduct}
           hideMedia={false}
         />
-        {}
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={handleAddproduct}
-            className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
-          >
-            Add Product
-          </button>
-        </div>
+        {product.length > 2 && (
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={handleAddproduct}
+              className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
+            >
+              Add Product
+            </button>
+          </div>
+        )}
       </>
     );
   },
