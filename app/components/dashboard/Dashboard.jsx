@@ -48,6 +48,8 @@ const Dashboard = () => {
   const [eGalleryStatus, setEGalleryStatus] = useState(null);
   const [eProcessingGalleryId, setEProcessingGalleryId] = useState(null);
   const [eGalleryId, setEGalleryId] = useState(null);
+  const [eProcessingProductCount, setEProcessingProductCount] = useState(0);
+  const [eGalleryProductCount, setEGalleryProductCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -93,9 +95,10 @@ const Dashboard = () => {
           
           if (hasApproved) {
             setEProcessingStatus("approved");
-            // Find the first approved gallery ID
+            // Find the first approved gallery ID and count products
             const approvedGallery = docs.find(doc => doc.status === "approved");
             setEProcessingGalleryId(approvedGallery?.id || null);
+            setEProcessingProductCount(approvedGallery?.products?.length || 0);
           } else if (hasPending) {
             setEProcessingStatus("pending");
           } else if (allRejectedOrCancelled) {
@@ -117,9 +120,10 @@ const Dashboard = () => {
           
           if (hasApproved) {
             setEGalleryStatus("approved");
-            // Find the first approved gallery ID
+            // Find the first approved gallery ID and count products
             const approvedGallery = docs.find(doc => doc.status === "approved");
             setEGalleryId(approvedGallery?.id || null);
+            setEGalleryProductCount(approvedGallery?.products?.length || 0);
           } else if (hasPending) {
             setEGalleryStatus("pending");
           } else if (allRejectedOrCancelled) {
@@ -143,12 +147,14 @@ const Dashboard = () => {
       return "Register";
     }
     if (categoryId === 2) { // E-processing unit
-      if (eProcessingStatus === "approved" ) return "Add Product";
+      if (eProcessingStatus === "approved" && eProcessingProductCount < 2) return "Add Product";
+      if (eProcessingStatus === "approved") return "My E-Processing Unit";
       if (eProcessingStatus === "pending") return "My E-Processing Unit";
       return "Register";
     }
     if (categoryId === 3) { // E-Gallery
-      if (eGalleryStatus === "approved") return "Add Product";
+      if (eGalleryStatus === "approved" && eGalleryProductCount < 2) return "Add Product";
+      if (eGalleryStatus === "approved") return "My E-Gallery";
       if (eGalleryStatus === "pending") return "My E-Gallery";
       return "Register";
     }
@@ -162,16 +168,18 @@ const Dashboard = () => {
       return category.route;
     }
     if (category.id === 2) { // E-processing unit
-      if (eProcessingStatus === "approved" && eProcessingGalleryId) {
+      if (eProcessingStatus === "approved" && eProcessingProductCount < 2 && eProcessingGalleryId) {
         return `/dashboard/e-processing-unit-form/${eProcessingGalleryId}/add-product`;
       }
+      if (eProcessingStatus === "approved") return "/dashboard/profile/my-e-processing-unit";
       if (eProcessingStatus === "pending") return "/dashboard/profile/my-e-processing-unit";
       return category.route;
     }
     if (category.id === 3) { // E-Gallery
-      if (eGalleryStatus === "approved" && eGalleryId) {
+      if (eGalleryStatus === "approved" && eGalleryProductCount < 2 && eGalleryId) {
         return `/dashboard/e-gallery-form/${eGalleryId}/add-product`;
       }
+      if (eGalleryStatus === "approved") return "/dashboard/profile/my-e-gallery";
       if (eGalleryStatus === "pending") return "/dashboard/profile/my-e-gallery";
       return category.route;
     }
