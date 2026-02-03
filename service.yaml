@@ -1,0 +1,60 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: sellers-stonepedia
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: '0'
+        autoscaling.knative.dev/maxScale: '10'
+    spec:
+      containerConcurrency: 80
+      containers:
+        image: ${IMAGE_URL}
+        ports:
+          containerPort: 8080
+        env:
+            # Firebase Configuration
+            - name: NEXT_PUBLIC_FIREBASE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: NEXT_PUBLIC_FIREBASE_API_KEY
+                  key: latest
+            - name: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+                  key: latest
+            - name: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+                  key: latest
+            - name: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+                  key: latest
+            - name: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+                  key: latest
+            - name: NEXT_PUBLIC_FIREBASE_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: NEXT_PUBLIC_FIREBASE_APP_ID
+                  key: latest
+            - name: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+                  key: latest
+        resources:
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+          requests:
+            cpu: "1"
+            memory: "2Gi"
