@@ -183,23 +183,14 @@ const SlabDetails = forwardRef(
           setProduct={setProduct}
           hideMedia={false}
         />
+        {}
         <div className="flex justify-end gap-2">
-          {editIndex != null && (
-            <button
-              type="button"
-              onClick={editCancel}
-              disabled={editIndex === null}
-              className="px-4 py-2 md:px-8 border border-gray-300 rounded-md text-gray-700 text-xs cursor-pointer hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-          )}
           <button
             type="button"
             onClick={handleAddproduct}
             className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
           >
-            {editIndex != null ? "Save Changes" : "Add Product"}
+            Add Product
           </button>
         </div>
       </>
