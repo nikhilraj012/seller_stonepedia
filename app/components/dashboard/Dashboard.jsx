@@ -143,7 +143,7 @@ const Dashboard = () => {
       return "Register";
     }
     if (categoryId === 2) { // E-processing unit
-      if (eProcessingStatus === "approved") return "Add Product";
+      if (eProcessingStatus === "approved" ) return "Add Product";
       if (eProcessingStatus === "pending") return "My E-Processing Unit";
       return "Register";
     }

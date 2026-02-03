@@ -240,7 +240,7 @@ const GalleryCard = ({
         <h1 className="text-[#000000] mt-4 font-medium  text-sm lg:text-base">
           Uploaded Slabs
         </h1>
-        {status.toLowerCase() === "approved" && (
+        {status.toLowerCase() === "approved" && item.products.length < 2 && (
           <button
             onClick={() =>
               router.push(`${addSlabRoute}/${item.id}/add-product`)
