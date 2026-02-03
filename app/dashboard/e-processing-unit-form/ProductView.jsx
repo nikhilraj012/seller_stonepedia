@@ -77,13 +77,13 @@ const ProductView = ({
   const handleDelete = (index) => {
     setProductList((prev) => {
       const updated = prev.filter((_, i) => i !== index);
-      toast("Product deleted successfully!", {
-        style: {
-          backgroundColor: "#ffe6e6",
-          color: "#d32f2f",
-          fontWeight: "500",
-        },
-      });
+      // toast("Product deleted successfully!", {
+      //   style: {
+      //     backgroundColor: "#ffe6e6",
+      //     color: "#d32f2f",
+      //     fontWeight: "500",
+      //   },
+      // });
       // toast.success("Product deleted successfully!");
       //
       return updated;
@@ -324,7 +324,7 @@ const ProductView = ({
                 </div>
                 <div className="space-y-1.5 my-4">
                   <h2 className="text-[#414141] font-semibold">
-                    Upload Block Image / Video
+                    Upload Image / Video
                   </h2>
                   <div className="grid px-0.5 grid-cols-2 w-full sm:grid-cols-3 md:grid-cols-4  gap-x-2 gap-y-3">
                     <div>
@@ -342,7 +342,7 @@ const ProductView = ({
                       >
                         <div className="flex flex-col items-center justify-center gap-2 md:h-25 h-24 border border-dashed border-primary rounded-md">
                           <FaPlus />
-                          <span className="text-[11px]">Upload Media</span>
+                          <span className="text-[11px]">Upload Image / Video</span>
                         </div>
                       </label>
                     </div>

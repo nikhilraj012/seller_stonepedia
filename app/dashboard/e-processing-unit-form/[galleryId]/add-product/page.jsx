@@ -876,7 +876,7 @@ const AddSlabPage = () => {
                 />
                 <FiUpload size={20} className="mb-2 text-gray-900" />
                 <p className="text-[#2C2C2C] text-[10px] md:text-xs font-medium tracking-wide pointer-events-none mb-1">
-                  Choose a Image/Video or drag & drop it here
+                  Choose a Image/Video
                 </p>
                 <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
                   Image up to 2MB,Video up to 5MB
@@ -898,7 +898,7 @@ const AddSlabPage = () => {
             </div>
 
             <div className="flex justify-end gap-2">
-              {editIndex != null && (
+              {/* {editIndex != null && (
                 <button
                   type="button"
                   onClick={editCancel}
@@ -907,21 +907,21 @@ const AddSlabPage = () => {
                 >
                   Cancel
                 </button>
-              )}
-              {(productList.length < 2 || editIndex !== null) && (
+              )} */}
+              {productList.length < 1 && (
                 <button
                   type="button"
                   onClick={handleAddproduct}
                   className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
                 >
-                  {editIndex != null ? "Save Changes" : "Add Product"}
+                  Add Product
                 </button>
               )}
             </div>
           </div>
         </div>
         <div className="md:w-2/5 md:mt-4">
-          {productList.length === 0 && (
+          {productList.length < 1 && (
             <div
               className="cursor-pointer bg-[#F4F4F4] text-[#3B3B3B] gap-1 text-xs lg:text-sm py-2 rounded-lg flex items-center justify-center"
               onClick={() => {
