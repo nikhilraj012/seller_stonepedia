@@ -73,15 +73,6 @@ const Dashboard = () => {
           const allRejectedOrCancelled = docs.every(
             (doc) => doc.status === "rejected" || doc.status === "cancelled",
           );
-
-          // if (hasApproved) {
-          //   setBlocksStatus("approved");
-          // } else if (hasPending) {
-          //   setBlocksStatus("pending");
-          // } else if (allRejectedOrCancelled) {
-          //   setBlocksStatus("rejected");
-          // }
-
           if (hasApproved) {
             setBlocksStatus("approved");
             // Find the first approved gallery ID and count products
@@ -174,8 +165,9 @@ const Dashboard = () => {
   const getButtonText = (categoryId) => {
     if (categoryId === 1) {
       // Blocks
-      if (blocksStatus === "approved") return "Add Block";
-      if (blocksStatus === "pending") return "My Blocks";
+      if (blocksStatus === "approved" && blocksCount < 2) return "Add Product";
+      if (blocksStatus === "approved") return "My Blocks";
+      if (blocksStatus === "pending") return "My E-Processing Unit";
       return "Register";
     }
     if (categoryId === 2) {
