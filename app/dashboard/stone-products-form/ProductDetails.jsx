@@ -11,7 +11,17 @@ import toast from "react-hot-toast";
 import ProductFormFields from "@/app/components/ProductFormFields";
 
 const ProductDetails = forwardRef(
-  ({ setProductList, editIndex, setEditIndex,hasApprovedForm,productList, editProduct }, ref) => {
+  (
+    {
+      setProductList,
+      editIndex,
+      setEditIndex,
+      hasApprovedForm,
+      productList,
+      editProduct,
+    },
+    ref,
+  ) => {
     const initialProductData = {
       productName: "",
       category: "",
@@ -133,8 +143,12 @@ const ProductDetails = forwardRef(
         return;
       }
 
-      if (product.media.length === 0) {
-        toast.error("Upload at least 1 image or video", { duration: 1000 });
+      const hasImage = tempProduct.media?.some((m) =>
+        m.type?.startsWith("image/"),
+      );
+
+      if (!hasImage) {
+        toast.error("Please upload at least 1 image");
         return;
       }
 
