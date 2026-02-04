@@ -199,8 +199,14 @@ const BlockForm = () => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
-    const maxSize = type === "videos" ? 50 * 1024 * 1024 : 20 * 1024 * 1024;
-    const maxFiles = type === "videos" ? 10 : 20; // Limit number of files
+    const maxSize =
+      type === "videos"
+        ? 5 * 1024 * 1024
+        : type === "images"
+          ? 2 * 1024 * 1024
+          : 2 * 1024 * 1024;
+
+    const maxFiles = type === "videos" ? 1 : 3; // Limit number of files
     const maxDocuments = 1; // Limit documents to 1 file
     const validFiles = [];
     let hasError = false;
@@ -217,8 +223,8 @@ const BlockForm = () => {
       }
 
       // Check file size for thumbnail (5MB limit)
-      if (files[0].size > 5 * 1024 * 1024) {
-        toast.error(`${files[0].name} exceeds 5MB limit`, {
+      if (files[0].size > 2 * 1024 * 1024) {
+        toast.error(`${files[0].name} exceeds 2MB limit`, {
           duration: 2000,
         });
         e.target.value = "";
@@ -649,172 +655,6 @@ const BlockForm = () => {
       setIsSubmitting(false);
     }
   };
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setIsSubmitting(true);
-
-  //   try {
-  //     // if (!isAuthenticated || !uid) {
-  //     //   setShowUserLogin(true);
-  //     //   toast.error("Please sign in before submitting the form", {
-  //     //     duration: 2000,
-  //     //   });
-  //     //   setIsSubmitting(false);
-  //     //   return;
-  //     // }
-  //     const storage = getStorage();
-
-  //     // Process each block in the blocksList
-  //     const processedBlocks = await Promise.all(
-  //       blocksList.map(async (block) => {
-  //         // Upload videos for this block
-  //         const videoUrls =
-  //           block.videos.length > 0
-  //             ? await Promise.all(
-  //                 block.videos.map(async (file, index) => {
-  //                   const storageRef = ref(
-  //                     storage,
-  //                     `blocks/${
-  //                       uid
-  //                     }/videos/${Date.now()}_${index}_${file.name}`,
-  //                   );
-  //                   await uploadBytes(storageRef, file);
-  //                   return getDownloadURL(storageRef);
-  //                 }),
-  //               )
-  //             : [];
-
-  //         // Upload images for this block
-  //         const imageUrls =
-  //           block.images.length > 0
-  //             ? await Promise.all(
-  //                 block.images.map(async (file, index) => {
-  //                   const storageRef = ref(
-  //                     storage,
-  //                     `blocks/${
-  //                       uid
-  //                     }/images/${Date.now()}_${index}_${file.name}`,
-  //                   );
-  //                   await uploadBytes(storageRef, file);
-  //                   return getDownloadURL(storageRef);
-  //                 }),
-  //               )
-  //             : [];
-
-  //         // Upload documents for this block
-  //         const documentFiles =
-  //           block.documents.length > 0
-  //             ? await Promise.all(
-  //                 block.documents.map(async (file, index) => {
-  //                   const storageRef = ref(
-  //                     storage,
-  //                     `blocks/${uid}/documents/${Date.now()}_${index}_${file.name}`,
-  //                   );
-  //                   await uploadBytes(storageRef, file);
-  //                   const url = await getDownloadURL(storageRef);
-
-  //                   return {
-  //                     name: file.name,
-  //                     url: url,
-  //                   };
-  //                 }),
-  //               )
-  //             : [];
-
-  //         // Upload thumbnail if exists for this block
-  //         let thumbnailUrl = null;
-  //         if (block.thumbnail) {
-  //           const thumbnailRef = ref(
-  //             storage,
-  //             `blocks/${uid}/thumbnails/${Date.now()}_${block.thumbnail.name}`,
-  //           );
-  //           await uploadBytes(thumbnailRef, block.thumbnail);
-  //           thumbnailUrl = await getDownloadURL(thumbnailRef);
-  //         }
-
-  //         // Return processed block with URLs instead of file objects
-  //         return {
-  //           ...block,
-  //           videos: videoUrls,
-  //           images: imageUrls,
-  //           documents: documentFiles,
-
-  //           thumbnail: thumbnailUrl,
-  //           // Convert Select objects to simple values
-  //           origin: block.origin ? block.origin.label : null,
-  //           units: block.units ? block.units.value : null,
-  //           symbolA: block.symbolA ? block.symbolA.label : null,
-  //           symbolB: block.symbolB ? block.symbolB.label : null,
-  //           symbolC: block.symbolC ? block.symbolC.label : null,
-  //         };
-  //       }),
-  //     );
-
-  //     // Helper function to format date
-  //     // const formatDate = () => {
-  //     //   const date = new Date();
-  //     //   const pad = (num) => String(num).padStart(2, "0");
-  //     //   return `${pad(date.getDate())}-${pad(
-  //     //     date.getMonth() + 1
-  //     //   )}-${date.getFullYear()} ${pad(date.getHours())}:${pad(
-  //     //     date.getMinutes()
-  //     //   )}`;
-  //     // };
-
-  //     // Prepare the data to be saved to Firestore
-  //     const blocksData = {
-  //       userId: uid,
-  //       userEmail: authEmail,
-  //       orderId: Math.floor(70000 + Math.random() * 10000),
-  //       quarryDetails: {
-  //         ...formData,
-  //         // Convert Select objects to simple values
-  //         quarryCountry: formData.quarryCountry
-  //           ? formData.quarryCountry.label
-  //           : null,
-  //         quarryState: formData.quarryState ? formData.quarryState.label : null,
-  //         quarryCity: formData.quarryCity ? formData.quarryCity.label : null,
-  //       },
-  //       blocks: processedBlocks,
-  //       status: "pending", // Initial status
-  //       createdAt: serverTimestamp(),
-  //     };
-  //     console.log(blocksData);
-  //     console.log(uid, authEmail);
-  //     // Save to Firestore
-  //     // const blocksCollectionRef = collection(db, "BuyAndSellBlocks");
-  //     // // const docRef = await addDoc(blocksCollectionRef, blocksData);
-
-  //     // Save to Firestore
-  //     const docRef = await addDoc(collection(db, "Blocks"), blocksData);
-
-  //     // // Save to user's Orders subcollection
-  //     // await addDoc(
-  //     //   collection(db, "Users", uid, "SellBlocks"),
-  //     //   blocksData
-  //     // );
-  //     await setDoc(
-  //       doc(db, "SellerDetails", uid, "SellBlocks", docRef.id),
-  //       blocksData,
-  //     );
-
-  //     toast.success("Blocks submitted successfully!", { duration: 3000 });
-  //     // console.log("Document written with ID: ", docRef.id);
-
-  //     // Reset form after successful submission
-  //     resetFormFields();
-  //     resetBlockFields();
-  //     setBlocksList([]);
-  //     router.push("/dashboard/profile/my-blocks");
-  //   } catch (error) {
-  //     console.error("Error submitting form:", error);
-  //     toast.error(error.message || "Failed to submit form. Please try again.", {
-  //       duration: 2000,
-  //     });
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
 
   useEffect(() => {
     if (isSubmitting) {
@@ -1111,8 +951,7 @@ const BlockForm = () => {
             )}
             {/* Blocks Details */}
             {(hasApprovedForm ||
-              (!hasApprovedForm &&
-                (blocksList.length < 2 || editingBlockId !== null))) && (
+              (!hasApprovedForm && (blocksList.length < 2 || isEditMode))) && (
               <div className="my-3">
                 <h2 className="text-xs font-semibold mb-1">Blocks Details</h2>
                 <div
@@ -1529,7 +1368,7 @@ const BlockForm = () => {
                           Upload Videos
                         </span>
                         <span className="text-[8px] text-gray-500">
-                          Upload videos of block (max 50MB each, max 10 files)
+                          up to 5 MB
                         </span>
                         <span className="mt-2 text-[8px] text-gray-600 font-semibold">
                           {block.videos.length > 0
@@ -1552,7 +1391,7 @@ const BlockForm = () => {
                           Upload Images
                         </span>
                         <span className="text-[8px] text-gray-500">
-                          JPEG, PNG formats up to 20MB (max 20 files)
+                          up to 2 MB
                         </span>
                         <span className="mt-2 text-[8px] text-gray-600 font-semibold">
                           {block.images.length > 0
@@ -1614,8 +1453,8 @@ const BlockForm = () => {
                     ></textarea>
                   </div>
 
-                  {((!hasApprovedForm &&
-                    (blocksList.length < 2 || editingBlockId !== null)) ||
+                  {(isEditMode ||
+                    (!hasApprovedForm && blocksList.length < 2) ||
                     (hasApprovedForm && blocksList.length === 0)) && (
                     <div className="flex justify-end">
                       <button
