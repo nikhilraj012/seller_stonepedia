@@ -39,13 +39,13 @@ const Footer = () => {
             Get In Touch
           </button>
         </div>
-        <div className="grid grid-cols-2 text-white text-xs lg:text-sm gap-2 md:flex md:gap-4 lg:gap-6 xl:gap-10 2xl:gap-14">
+        {/* <div className="grid grid-cols-2 text-white text-xs lg:text-sm gap-2 md:flex md:gap-4 lg:gap-6 xl:gap-10 2xl:gap-14">
           {navLinks.map((link) => (
             <button key={link.label} className="max-md:text-left cursor-pointer hover:text-primary" onClick={() => handleNavClick(link.href)}>
               {link.label}
             </button>
           ))}
-        </div>
+        </div> */}
         <button onClick={openGetInTouch} className="max-md:hidden md:block bg-white rounded-[10px] px-4 py-2 lg:px-6 lg:py-3 xl:px-8 text-xs lg:text-sm xl:text-base">
           Get In Touch
         </button>
