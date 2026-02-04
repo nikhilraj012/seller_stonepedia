@@ -16,7 +16,7 @@ const businessCategories = [
   // },
   {
     id: 1,
-    title: "E-processing unit",
+    title: "E-Processing Unit",
     description:
       "List electronic processing units here to reach the right buyers faster.",
     image: "/images/dashboard/processing-unit.webp",
