@@ -193,25 +193,39 @@ const BlocksFormProducts = ({
                     type="button"
                     disabled={isSubmitting}
                     className="p-1 bg-[#F7F7F7] text-sm lg:text-lg rounded-md cursor-pointer"
+                    // onClick={() => {
+                    //   // Get the current block data
+                    //   const currentBlock = blocksList.find(
+                    //     (b) => b.id === block.id,
+                    //   );
+
+                    //   // Send the block data to the parent component for editing
+                    //   if (typeof window !== "undefined") {
+                    //     // Create a custom event with the block data
+                    //     const editEvent = new CustomEvent("editBlock", {
+                    //       detail: { block: currentBlock },
+                    //     });
+
+                    //     // Dispatch the event
+                    //     window.dispatchEvent(editEvent);
+                    //     window.scrollTo({ top: 0, behavior: "smooth" });
+
+                    //     // Expand this block
+                    //     setExpandedBlockId(block.id);
+                    //   }
+                    // }}
                     onClick={() => {
-                      // Get the current block data
                       const currentBlock = blocksList.find(
                         (b) => b.id === block.id,
                       );
 
-                      // Send the block data to the parent component for editing
                       if (typeof window !== "undefined") {
-                        // Create a custom event with the block data
                         const editEvent = new CustomEvent("editBlock", {
                           detail: { block: currentBlock },
                         });
 
-                        // Dispatch the event
                         window.dispatchEvent(editEvent);
                         window.scrollTo({ top: 0, behavior: "smooth" });
-
-                        // Expand this block
-                        setExpandedBlockId(block.id);
                       }
                     }}
                   >

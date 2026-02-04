@@ -332,7 +332,13 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
             <div className="mt-2 text-xs md:text-sm text-[#838383] space-y-1">
               <div className="flex  flex-col md:flex-row md:justify-between md:items-center mt-3">
                 <h2 className="text-[18px] md:text-lg xl:text-[25px] font-semibold text-[#424242]">
-                  {block.symbolA} {block.priceA}
+                  {block.symbolA
+                    ? `${block.symbolA} ${block.priceA}`
+                    : block.symbolB
+                      ? `${block.symbolB} ${block.priceB}`
+                      : block.symbolC
+                        ? `${block.symbolC} ${block.priceC}`
+                        : "Price Not Available"}
                 </h2>
 
                 <span className="text-xs md:text-sm font-medium text-gray-800 ">

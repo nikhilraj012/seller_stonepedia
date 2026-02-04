@@ -26,6 +26,7 @@ const BlockDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const fileRef = useRef(null);
+
   useEffect(() => {
     const fetchBlockDetails = async () => {
       if (!uid) {
@@ -79,68 +80,7 @@ const BlockDetailsPage = () => {
   const canEdit = status === "pending";
 
   console.log(status);
-  // const handleThumbnailChange = async (e) => {
-  //   const file = e.target.files?.[0];
-  //   if (!file) return;
-  //   setIsUpdating(true);
-  //   const toastId = toast.loading("Updating thumbnail...");
-  //   try {
-  //     const uploadFiles = async (files, path) => {
-  //       if (!files) return [];
-  //       const fileArray = Array.isArray(files) ? files : [files];
 
-  //       return Promise.all(
-  //         fileArray.map(async (f) => {
-  //           const file = f.file || f;
-  //           const name = file.name || `file_${Date.now()}`;
-  //           const fileRef = ref(storage, `"SellBlocks/${uid}/${path}/${name}`);
-
-  //           await uploadBytes(fileRef, file);
-  //           return { url: await getDownloadURL(fileRef), type: file.type };
-  //         }),
-  //       );
-  //     };
-
-  //     const uploaded = await uploadFiles([file], `products/${product.id}`);
-
-  //     const newThumbnail = uploaded[0];
-  //     setProduct((prev) => ({
-  //       ...prev,
-  //       thumbnail: newThumbnail,
-  //     }));
-  //     setItem((prev) => ({
-  //       ...prev,
-  //       products: prev.products.map((p) =>
-  //         p.id === product.id ? { ...p, thumbnail: newThumbnail } : p,
-  //       ),
-  //     }));
-
-  //     if (!isAuthenticated) return;
-  //     console.log(item.id);
-  //     const gRef = doc(db, "Blocks", item.id);
-  //     const uRef = doc(db, "SellerDetails", uid, "SellBlocks", item.id);
-
-  //     const updateProductThumbnail = (products) =>
-  //       products.map((p) =>
-  //         p.id === product.id ? { ...p, thumbnail: newThumbnail } : p,
-  //       );
-
-  //     const snap = await getDoc(gRef);
-  //     if (!snap.exists()) return;
-
-  //     const updatedProducts = updateProductThumbnail(snap.data().products);
-  //     console.log(updatedProducts);
-  //     await updateDoc(gRef, { products: updatedProducts });
-  //     await updateDoc(uRef, { products: updatedProducts });
-
-  //     toast.success("Thumbnail updated successfully!", { id: toastId });
-  //   } catch (err) {
-  //     console.error(err);
-  //     toast.error("Thumbnail update failed", { id: toastId });
-  //   } finally {
-  //     setIsUpdating(false);
-  //   }
-  // };
   const handleThumbnailChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file || !uid) return;
@@ -378,11 +318,10 @@ const BlockDetailsPage = () => {
                       disabled={isUpdating}
                       className={`p-1.5   2xl:p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition
                          ${
-                      isUpdating
-                        ? "opacity-50 cursor-not-allowed"
-                        : "cursor-pointer hover:text-gray-500"
-                    }`}
-                    
+                           isUpdating
+                             ? "opacity-50 cursor-not-allowed"
+                             : "cursor-pointer hover:text-gray-500"
+                         }`}
                     >
                       <MdOutlineEdit className="text-xl text-gray-700" />
                     </button>
