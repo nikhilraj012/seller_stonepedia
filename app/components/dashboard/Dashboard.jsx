@@ -202,7 +202,7 @@ const Dashboard = () => {
       // Blocks
       if (blocksStatus === "approved" && blocksCount < 2) return "Add Product";
       if (blocksStatus === "approved") return "My Blocks";
-      if (blocksStatus === "pending") return "My E-Processing Unit";
+      if (blocksStatus === "pending") return "My Blocks";
       return "Register";
     }
     if (categoryId === 2) {
