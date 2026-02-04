@@ -245,7 +245,7 @@ const GalleryCard = ({
             onClick={() =>
               router.push(`${addSlabRoute}/${item.id}/add-product`)
             }
-            className="mt-2 bg-primary font-medium text-white px-4 md:px-6 cursor-pointer hover:bg-pink-100 hover:text-primary py-1.5 rounded-md text-xs md:text-sm hover:bg-green-700 transition"
+            className="mt-2 bg-primary font-medium text-white px-4 md:px-6 cursor-pointer hover:bg-pink-100 hover:text-primary py-1.5 rounded-md text-xs md:text-sm transition"
           >
             Add Product
           </button>
