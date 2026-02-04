@@ -265,7 +265,10 @@ const ProductCard = ({
               )}
 
               <img
-                src={product.thumbnail?.url || product.media?.[0]?.url}
+                src={
+                  product.thumbnail?.url ||
+                  product.media?.find((m) => m?.type?.startsWith("image"))?.url
+                }
                 alt={product.productName}
                 onLoad={() =>
                   setProductImageLoading((prev) => ({ ...prev, [i]: false }))
