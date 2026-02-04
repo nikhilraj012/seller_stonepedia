@@ -198,14 +198,14 @@ const Dashboard = () => {
   }, [uid]);
 
   const getButtonText = (categoryId) => {
+    // if (categoryId === 1) {
+    //   // Blocks
+    //   if (blocksStatus === "approved" && blocksCount < 2) return "Add Product";
+    //   if (blocksStatus === "approved") return "My Blocks";
+    //   if (blocksStatus === "pending") return "My E-Processing Unit";
+    //   return "Register";
+    // }
     if (categoryId === 1) {
-      // Blocks
-      if (blocksStatus === "approved" && blocksCount < 2) return "Add Product";
-      if (blocksStatus === "approved") return "My Blocks";
-      if (blocksStatus === "pending") return "My E-Processing Unit";
-      return "Register";
-    }
-    if (categoryId === 2) {
       // E-processing unit
       if (eProcessingStatus === "approved" && eProcessingProductCount < 2)
         return "Add Product";
@@ -213,7 +213,7 @@ const Dashboard = () => {
       if (eProcessingStatus === "pending") return "My E-Processing Unit";
       return "Register";
     }
-    if (categoryId === 3) {
+    if (categoryId === 2) {
       // E-Gallery
       if (eGalleryStatus === "approved" && eGalleryProductCount < 2)
         return "Add Product";
@@ -221,27 +221,27 @@ const Dashboard = () => {
       if (eGalleryStatus === "pending") return "My E-Gallery";
       return "Register";
     }
-    if (categoryId === 4) {
-      // Stone Product
-      if (stoneProductStatus === "approved" && stoneProductCount < 2)
-        return "Add Product";
-      if (stoneProductStatus === "approved") return "My Stone Products";
-      if (stoneProductStatus === "pending") return "My Stone Products";
-      return "Register";
-    }
+    // if (categoryId === 4) {
+    //   // Stone Product
+    //   if (stoneProductStatus === "approved" && stoneProductCount < 2)
+    //     return "Add Product";
+    //   if (stoneProductStatus === "approved") return "My Stone Products";
+    //   if (stoneProductStatus === "pending") return "My Stone Products";
+    //   return "Register";
+    // }
     return "Register";
   };
 
   const getButtonRoute = (category) => {
+    // if (category.id === 1) {
+    //   // Blocks
+    //   if (blocksStatus === "approved" && blocksCount < 2)
+    //     return "/dashboard/blocks-form"; // Add Block
+    //   if (blocksStatus === "approved") return "/dashboard/profile/my-blocks"; // View Blocks
+    //   if (blocksStatus === "pending") return "/dashboard/profile/my-blocks";
+    //   return category.route;
+    // }
     if (category.id === 1) {
-      // Blocks
-      if (blocksStatus === "approved" && blocksCount < 2)
-        return "/dashboard/blocks-form"; // Add Block
-      if (blocksStatus === "approved") return "/dashboard/profile/my-blocks"; // View Blocks
-      if (blocksStatus === "pending") return "/dashboard/profile/my-blocks";
-      return category.route;
-    }
-    if (category.id === 2) {
       // E-processing unit
       if (
         eProcessingStatus === "approved" &&
@@ -256,7 +256,7 @@ const Dashboard = () => {
         return "/dashboard/profile/my-e-processing-unit";
       return category.route;
     }
-    if (category.id === 3) {
+    if (category.id === 2) {
       // E-Gallery
       if (
         eGalleryStatus === "approved" &&
@@ -271,20 +271,20 @@ const Dashboard = () => {
         return "/dashboard/profile/my-e-gallery";
       return category.route;
     }
-    if (category.id === 4) {
-      if (
-        stoneProductStatus === "approved" &&
-        stoneProductCount < 2 &&
-        stoneProductId
-      ) {
-        return `/dashboard/stone-products-form/${stoneProductId}/add-product`;
-      }
-      if (stoneProductStatus === "approved")
-        return "/dashboard/profile/my-stone-products";
-      if (stoneProductStatus === "pending")
-        return "/dashboard/profile/my-stone-products";
-      return category.route;
-    }
+    // if (category.id === 4) {
+    //   if (
+    //     stoneProductStatus === "approved" &&
+    //     stoneProductCount < 2 &&
+    //     stoneProductId
+    //   ) {
+    //     return `/dashboard/stone-products-form/${stoneProductId}/add-product`;
+    //   }
+    //   if (stoneProductStatus === "approved")
+    //     return "/dashboard/profile/my-stone-products";
+    //   if (stoneProductStatus === "pending")
+    //     return "/dashboard/profile/my-stone-products";
+    //   return category.route;
+    // }
     return category.route;
   };
 

@@ -283,7 +283,7 @@ const CompanyDetailsForm = () => {
           address: formData.address,
           pincode: formData.pincode,
           about: formData.about,
-          brochure: brochureUrls[0],
+          brochure: brochureUrls[0] || null,
           image: processingImages[0],
         },
         products: uploadedProducts,
