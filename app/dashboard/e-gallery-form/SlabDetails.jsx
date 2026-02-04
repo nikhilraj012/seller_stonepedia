@@ -165,11 +165,14 @@ const SlabDetails = forwardRef(
         toast.error("Please select width");
         return;
       }
-      if (product.media.length === 0) {
-        toast.error("Upload at least 1 image or video", { duration: 1000 });
+      const hasImage = tempProduct.media?.some((m) =>
+        m.type?.startsWith("image/"),
+      );
+
+      if (!hasImage) {
+        toast.error("Please upload at least 1 image");
         return;
       }
-
       if (editIndex !== null) {
         setProductList((prev) =>
           prev.map((p, i) => (i === editIndex ? tempProduct : p)),

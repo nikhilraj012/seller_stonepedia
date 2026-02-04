@@ -79,7 +79,7 @@ const CompanyDetailsForm = () => {
   const refs = useRef({});
 
   const MAX_FILE_SIZE_MB = 2;
-  
+
   const bindRef = (name) => (el) => {
     refs.current[name] = el;
   };
@@ -283,7 +283,7 @@ const CompanyDetailsForm = () => {
           address: formData.address,
           pincode: formData.pincode,
           about: formData.about,
-          brochure: brochureUrls[0] || null,
+          brochure: brochureUrls[0] || [],
           image: processingImages[0],
         },
         products: uploadedProducts,
@@ -319,8 +319,6 @@ const CompanyDetailsForm = () => {
       setIsSubmitting(false);
     }
   };
-
-  
 
   const handleFile = (e) => {
     const files = Array.from(e.target.files);
@@ -431,8 +429,12 @@ const CompanyDetailsForm = () => {
       toast.error("Please select width");
       return;
     }
-    if (product.media.length === 0) {
-      toast.error("Upload at least 1 image or video", { duration: 1000 });
+    const hasImage = tempProduct.media?.some((m) =>
+      m.type?.startsWith("image/"),
+    );
+
+    if (!hasImage) {
+      toast.error("Please upload at least 1 image");
       return;
     }
 
@@ -801,42 +803,42 @@ const CompanyDetailsForm = () => {
               </div>
             </div>
           </div>
-         {(productList.length < 2 || editIndex !== null) && (
-          <div>
-            <h2 className="text-xs font-medium mb-1">
-              Stone Details
-              <span className="text-[#CDCDCD] font-normal">
-                {" "}
-                (Add Multiple Products)
-              </span>
-            </h2>
-            <SlabDetailsForm
-              product={product}
-              setProduct={setProduct}
-              refs={refs}
-              bindRef={bindRef}
-              openDropdown={openDropdown}
-              setOpenDropdown={setOpenDropdown}
-              finishOptions={finishOptions}
-              thicknessOptions={thicknessOptions}
-              heightOptions={heightOptions}
-              widthOptions={widthOptions}
-              selectedFinish={selectedFinish}
-              selectedThickness={selectedThickness}
-              selectedHeight={selectedHeight}
-              selectedWidth={selectedWidth}
-              setSelectedHeight={setSelectedHeight}
-              setSelectedWidth={setSelectedWidth}
-              toggleOption={toggleOption}
-              customThickness={customThickness}
-              setCustomThickness={setCustomThickness}
-              addCustomThickness={addCustomThickness}
-              handleFile={handleFile}
-              editIndex={editIndex}
-              editCancel={editCancel}
-              handleAddproduct={handleAddproduct}
-            />
-          </div>
+          {(productList.length < 2 || editIndex !== null) && (
+            <div>
+              <h2 className="text-xs font-medium mb-1">
+                Stone Details
+                <span className="text-[#CDCDCD] font-normal">
+                  {" "}
+                  (Add Multiple Products)
+                </span>
+              </h2>
+              <SlabDetailsForm
+                product={product}
+                setProduct={setProduct}
+                refs={refs}
+                bindRef={bindRef}
+                openDropdown={openDropdown}
+                setOpenDropdown={setOpenDropdown}
+                finishOptions={finishOptions}
+                thicknessOptions={thicknessOptions}
+                heightOptions={heightOptions}
+                widthOptions={widthOptions}
+                selectedFinish={selectedFinish}
+                selectedThickness={selectedThickness}
+                selectedHeight={selectedHeight}
+                selectedWidth={selectedWidth}
+                setSelectedHeight={setSelectedHeight}
+                setSelectedWidth={setSelectedWidth}
+                toggleOption={toggleOption}
+                customThickness={customThickness}
+                setCustomThickness={setCustomThickness}
+                addCustomThickness={addCustomThickness}
+                handleFile={handleFile}
+                editIndex={editIndex}
+                editCancel={editCancel}
+                handleAddproduct={handleAddproduct}
+              />
+            </div>
           )}
         </div>
         <div className="md:w-2/5">
