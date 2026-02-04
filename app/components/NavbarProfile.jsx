@@ -1,14 +1,17 @@
 import React from "react";
+import { doc, updateDoc } from "firebase/firestore";
+
 import { useAuth } from "./context/AuthContext";
 import { useUi } from "./context/UiContext";
 import { useRouter } from "next/navigation";
 import ProfileAvatar from "./common/ProfileAvatar";
+import { db } from "../firebase/config";
 
 const profilePages = [
-  // {
-  //   title: "My Blocks",
-  //   href: "/dashboard/profile/my-blocks",
-  // },
+  {
+    title: "My Blocks",
+    href: "/dashboard/profile/my-blocks",
+  },
   {
     title: "My E-Processing Unit",
     href: "/dashboard/profile/my-e-processing-unit",
@@ -17,10 +20,10 @@ const profilePages = [
     title: "My E-Gallery",
     href: "/dashboard/profile/my-e-gallery",
   },
-  // {
-  //   title: "My Stone Products",
-  //   href: "/dashboard/profile/my-stone-products",
-  // },
+  {
+    title: "My Stone Products",
+    href: "/dashboard/profile/my-stone-products",
+  },
 ];
 
 const NavbarProfile = ({ isMobile = false }) => {
@@ -43,6 +46,40 @@ const NavbarProfile = ({ isMobile = false }) => {
       setIsMenuOpen(false);
     } else {
       setShowProfileDropdown(false);
+    }
+  };
+  const handleFixAccount = async () => {
+    if (!sellerDetails?.id) return;
+
+    const updates = {};
+
+    if (!sellerDetails.accountStatus) {
+      updates.accountStatus = "pending";
+    }
+
+    if (sellerDetails.emailVerified === undefined) {
+      updates.emailVerified = false;
+    }
+
+    if (!sellerDetails.role) {
+      updates.role = "seller";
+    }
+
+    if (!sellerDetails.provider) {
+      updates.provider = "password";
+    }
+
+    // agar kuch missing hai tabhi update
+    if (Object.keys(updates).length > 0) {
+      try {
+        const sellerRef = doc(db, "SellerDetails", sellerDetails.id);
+        await updateDoc(sellerRef, updates);
+        alert("Account Updated");
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      alert("Already OK");
     }
   };
 
@@ -98,6 +135,12 @@ const NavbarProfile = ({ isMobile = false }) => {
           </div>
         </div>
       </div>
+      <button
+        onClick={handleFixAccount}
+        className="w-full bg-blue-500 text-white py-2 rounded mt-2"
+      >
+        Fix Account
+      </button>
 
       <div className="border-t border-gray-100">
         {profilePages.map((page) => (

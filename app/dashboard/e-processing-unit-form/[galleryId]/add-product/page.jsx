@@ -439,6 +439,7 @@ const AddSlabPage = () => {
           Add Product
         </h1>
       </div>
+
       <form
         onSubmit={handleSubmit}
         className="max-md:space-y-5  md:flex   gap-5 xl:gap-10"
@@ -908,13 +909,13 @@ const AddSlabPage = () => {
                   Cancel
                 </button>
               )} */}
-              {productList.length < 1 && (
+              {(productList.length < 1 || editIndex !== null) && (
                 <button
                   type="button"
                   onClick={handleAddproduct}
                   className="bg-primary hover:bg-[#6a1545] px-4 py-2 md:px-8 lg:px-10 xl:px-14 rounded-md text-white text-xs cursor-pointer"
                 >
-                  Add Product
+                  {editIndex != null ? "Save Changes" : "Add Product"}
                 </button>
               )}
             </div>

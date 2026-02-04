@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { LuUserRound } from "react-icons/lu";
 import { LuFactory } from "react-icons/lu";
@@ -8,7 +9,7 @@ import { LocationSelector } from "@/app/components/LocationSelector";
 const CompanyDetails = ({ onDataChange, resetForm }) => {
   const initialFormData = {
     name: "",
-    companyName: "",
+    shopName: "",
     gstNumber: "",
     email: "",
     country: null,
@@ -89,7 +90,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
             </div>
             <div className="w-full flex flex-col">
               <label
-                htmlFor="companyName"
+                htmlFor="shopName"
                 className="mb-0.5 text-xs font-medium "
               >
                 Shop Name
@@ -97,14 +98,14 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
               <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                   <input
-                    id="companyName"
+                    id="shopName"
                     required
                     type="text"
                     placeholder="Shop Name"
-                    value={formData.companyName}
+                    value={formData.shopName}
                     onChange={handleInputChange}
                     className="flex-1 bg-transparent outline-none border-0 p-3 text-xs w-full"
-                    name="companyName"
+                    name="shopName"
                   />
                 </div>
               </div>

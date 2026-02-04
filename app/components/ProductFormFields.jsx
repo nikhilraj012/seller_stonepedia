@@ -1,10 +1,11 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import Select from "react-select";
 
 import { selectCommonStyles, selectCommonTheme } from "./styles/select.config";
 import CustomDropdown from "./common/CustomDropdown";
-
+import { processFiles } from "../utils/fileUtils";
 
 const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -24,40 +25,9 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
       document.removeEventListener("keydown", onKey);
     };
   }, [openDropdown]);
-  const processFiles = (files, mediaArray = []) => {
-    if (!files?.length) return [];
-    const imagesCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("image/"),
-    ).length;
-    const videosCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("video/"),
-    ).length;
-    const imageFiles = files.filter((f) => (f.type || "").startsWith("image/"));
-    const videoFiles = files.filter((f) => (f.type || "").startsWith("video/"));
-    if (imagesCount + imageFiles.length > 20) {
-      toast.error(`Maximum 20 images allowed`);
-      return [];
-    }
-    if (videosCount + videoFiles.length > 10) {
-      toast.error(`Maximum 10 videos allowed`);
-      return [];
-    }
-    return validateFiles(files, 20).map((f) => ({
-      file: f,
-      url: URL.createObjectURL(f),
-      type: f.type,
-    }));
-  };
+ 
 
-  const validateFiles = (files, maxSizeMB) => {
-    return Array.from(files).filter((file) => {
-      if (file.size > maxSizeMB * 1024 * 1024) {
-        toast.error(`${file.name} exceeds ${maxSizeMB}MB limit`);
-        return false;
-      }
-      return true;
-    });
-  };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -239,8 +209,11 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
                     placeholder="Enter price per product"
                     value={product.pricePerProduct}
                     onChange={handleProductChange}
-                    className="flex-1 bg-transparent outline-none border-0 p-3 text-xs w-full"
+                    className={`flex-1 bg-transparent outline-none border-0 p-3 text-xs w-full ${
+                      !product.currency ? "bg-gray-100 cursor-not-allowed" : ""
+                    }`}
                     name="pricePerProduct"
+                    disabled={!product.currency} // <-- Disable if currency not selected
                   />
 
                   {!product.currency && (

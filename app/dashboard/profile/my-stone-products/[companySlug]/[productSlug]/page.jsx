@@ -23,7 +23,7 @@ import MediaGrid from "@/app/components/common/MediaGrid";
 import { db, storage } from "@/app/firebase/config";
 import { toSlug } from "@/app/utils/helpers";
 
-const GalleryDetails = ({ mode }) => {
+const page = () => {
   const router = useRouter();
 
   const { isAuthenticated, uid } = useAuth();
@@ -35,11 +35,11 @@ const GalleryDetails = ({ mode }) => {
   const [item, setItem] = useState(null);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  // const mode = "gallery";
+  const mode = "stoneProduct";
   const MODE_CONFIG = {
-    gallery: {
-      collectionName: "EGallery",
-      basePath: "my-e-gallery",
+    stoneProduct: {
+      collectionName: "sellStoneProducts",
+      basePath: "my-stone-products",
     },
     processing: {
       collectionName: "EGalleryForProcessingUnit",
@@ -51,7 +51,6 @@ const GalleryDetails = ({ mode }) => {
 
   const status = item?.status?.toLowerCase();
   const canEdit = status === "pending";
-
 
   useEffect(() => {
     if (!uid) return;
@@ -69,7 +68,7 @@ const GalleryDetails = ({ mode }) => {
 
           if (toSlug(data.companyDetails.shopName) === companySlug) {
             const prod = data.products.find(
-              (p) => toSlug(p.stoneName) === productSlug,
+              (p) => toSlug(p.productName) === productSlug,
             );
 
             if (prod) {
@@ -317,11 +316,11 @@ const GalleryDetails = ({ mode }) => {
               </div>
               <div className="text-xs capitalize sm:text-[15px] space-y-0.5">
                 <h1 className="text-sm sm:text-xl lg:text-[27px] font-semibold text-[#262626] wrap-break-word">
-                  {product.stoneName}
+                  {product.productName}
                 </h1>
 
                 <p className="text-xs  sm:text-[15px] text-[#7F7F7F] font-medium">
-                  {product.stoneCategory}
+                  {product.category}
                 </p>
 
                 <p className="text-xs lg:mt-3  sm:text-[15px] text-[#8F8F8F] font-medium">
@@ -351,7 +350,7 @@ const GalleryDetails = ({ mode }) => {
                     //   );
                     // }}
                     onClick={() => {
-                      const newSlug = toSlug(product.stoneName);
+                      const newSlug = toSlug(product.productName);
                       router.replace(
                         `/dashboard/profile/${basePath}/${companySlug}/${newSlug}/edit`,
                       );
@@ -395,21 +394,13 @@ const GalleryDetails = ({ mode }) => {
 
           <div className="grid capitalize grid-cols-1 sm:grid-cols-2  text-[#838383] md:grid-cols-3 lg:grid-cols-4 text-xs sm:text-sm  gap-y-2 gap-x-10">
             <p>
-              <span className="font-medium text-[#000000]">Finish:</span>{" "}
-              {product.finish.join(", ")}
+              <span className="font-medium text-[#000000]">Weight:</span>{" "}
+              {product.weight}
             </p>
-            <p>
-              <span className="font-medium text-[#000000]">Thickness:</span>{" "}
-              {product.thickness.join(", ")}
-            </p>
-            <p>
-              <span className="font-medium text-[#000000]">Unit:</span>{" "}
-              {product.units}
-            </p>
+
             <p>
               <span className="font-medium text-[#000000]">Sizes:</span> H:{" "}
-              {product.size.height.join(", ")} | W:{" "}
-              {product.size.height.join(", ")}
+              {product?.size?.height || "-"} | W: {product?.size?.width || "-"}
             </p>
           </div>
         </div>
@@ -432,4 +423,4 @@ const GalleryDetails = ({ mode }) => {
     </div>
   );
 };
-export default GalleryDetails;
+export default page;

@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import CompanyDetails from "./CompanyDetails";
 import { v4 as uuidv4 } from "uuid";
-import SlabDetails from "./SlabDetails";
+import ProductDetails from "./ProductDetails";
 import ProductView from "./ProductView";
 import { FaPlus } from "react-icons/fa6";
 import toast from "react-hot-toast";
@@ -12,30 +12,37 @@ import {
   addDoc,
   doc,
   setDoc,
+  where,
+  query,
+  getDocs,
   getDoc,
   updateDoc,
   arrayUnion,
   serverTimestamp,
 } from "firebase/firestore";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useUi } from "@/app/components/context/UiContext";
 import { useAuth } from "@/app/components/context/AuthContext";
 import { db, storage } from "@/app/firebase/config";
-
-const GalleryForm = () => {
+const Form = () => {
   const { isSubmitting, setIsSubmitting } = useUi();
+
   const { uid, authEmail } = useAuth();
+
+  const router = useRouter();
+  const { galleryId } = useParams();
+  console.log(galleryId);
+  const hasApprovedForm = Boolean(galleryId);
   const [resetForm, setResetForm] = useState(false);
+
   const [productList, setProductList] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
-  const slabRef = useRef();
-  const companyRef = useRef();
-  const router = useRouter();
-  const { galleryId } = useParams();
+  const [companyData, setCompanyData] = useState({});
 
-  const hasApprovedForm = Boolean(galleryId);
+  const slabRef = useRef();
+
   const handleEdit = (i) => {
     setEditIndex(i);
     setEditProduct(productList[i]);
@@ -57,7 +64,10 @@ const GalleryForm = () => {
       fileArray.map(async (f) => {
         const file = f.file || f;
         const name = file.name || `file_${Date.now()}`;
-        const fileRef = ref(storage, `EGallery/${uid}/${path}/${name}`);
+        const fileRef = ref(
+          storage,
+          `sellStoneProducts/${uid}/${path}/${name}`,
+        );
         const metadata = {
           contentType: file.type,
           contentDisposition: `attachment; filename="${file.name}"`,
@@ -93,28 +103,22 @@ const GalleryForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    let companyData = null;
 
-    if (!hasApprovedForm) {
-      if (!companyRef.current) {
-        toast.error("Company form not loaded");
-        return;
-      }
-      companyData = companyRef.current.getData();
-      if (!companyData.image || companyData.image.length === 0) {
-        toast.error("Upload at least 1 Shop Image");
-        setIsSubmitting(false);
-        return;
-      }
-    }
+    // if (!isAuthenticated || !uid) {
+    //   setShowUserLogin(true);
+    //   toast.error("Please sign in before submitting the form");
+    //   return setIsSubmitting(false);
+    // }
 
     try {
       // NEW FORM SUBMISSION
 
       if (!hasApprovedForm) {
-        const brochureUrls = companyData.brochure
-          ? await uploadFiles([companyData.brochure.file], "brochure")
-          : [];
+        if (!companyData.image || companyData.image.length === 0) {
+          toast.error("Upload at least 1 Shop Image");
+          setIsSubmitting(false);
+          return;
+        }
 
         const shopImage = await uploadFiles(companyData.image, "images");
 
@@ -129,7 +133,7 @@ const GalleryForm = () => {
           country: companyData.country?.label,
           state: companyData.state?.label,
           city: companyData.city?.label,
-          brochure: brochureUrls[0],
+
           image: shopImage[0],
         };
 
@@ -143,17 +147,20 @@ const GalleryForm = () => {
           createdAt: serverTimestamp(),
         };
         console.log(galleryData);
-        const ref1 = await addDoc(collection(db, "EGallery"), galleryData);
-        await setDoc(
-          doc(db, "SellerDetails", uid, "EGallery", ref1.id),
+        const ref1 = await addDoc(
+          collection(db, "sellStoneProducts"),
           galleryData,
         );
-        console.log("Saved in SellerDetails also:", ref1.id);
+        await setDoc(
+          doc(db, "SellerDetails", uid, "sellStoneProducts", ref1.id),
+          galleryData,
+        );
+        console.log("Saved in Users also:", ref1.id);
         console.log("hu", productList);
         toast.success("Form submitted successfully!");
-        router.push("/dashboard/profile/my-e-gallery");
+        router.push("/dashboard/profile/my-stone-products");
         setProductList([]);
-        companyRef.current.reset();
+        setCompanyData({});
         setResetForm(true);
         setTimeout(() => setResetForm(false), 0);
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -164,7 +171,7 @@ const GalleryForm = () => {
       // ADD NEW PRODUCTS TO EXISTING GALLERY
       //
       if (!galleryId) {
-        toast.error("Gallery not found");
+        toast.error("Sell Stone Products not found");
         return;
       }
 
@@ -175,12 +182,17 @@ const GalleryForm = () => {
 
       const newProducts = await Promise.all(productList.map(uploadProduct));
 
-      const gRef = doc(db, "EGallery", galleryId);
-      const uRef = doc(db, "SellerDetails", uid, "EGallery", galleryId);
-
+      const gRef = doc(db, "sellStoneProducts", galleryId);
+      const uRef = doc(
+        db,
+        "SellerDetails",
+        uid,
+        "sellStoneProducts",
+        galleryId,
+      );
       const gSnap = await getDoc(gRef);
       if (!gSnap.exists()) {
-        toast.error("Gallery not found");
+        toast.error("Sell Stone Products not found");
         setIsSubmitting(false);
         return;
       }
@@ -194,9 +206,9 @@ const GalleryForm = () => {
       });
       console.log("p", newProducts);
       toast.success("New slabs added!");
+      router.push("/dashboard/profile/my-stone-products");
       setProductList([]);
       window.scrollTo({ top: 0, behavior: "smooth" });
-      router.push("/dashboard/profile/my-e-gallery");
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");
@@ -204,6 +216,7 @@ const GalleryForm = () => {
       setIsSubmitting(false);
     }
   };
+
   useEffect(() => {
     if (isSubmitting) {
       document.body.style.overflow = "hidden";
@@ -225,14 +238,14 @@ const GalleryForm = () => {
           />
         </div>
       )}
-      <div className=" my-3 md:my-5 mx-auto ">
+      <div className="my-3 md:my-5 mx-auto ">
         {!hasApprovedForm ? (
           <>
             <h1 className="font-medium text-primary text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl">
-              E - Gallery
+              Sell Stone Products
             </h1>
             <p className="text-[#6E6E6E] text-sm md:text-md lg:text-lg xl:text-xl">
-              Fill this form to Upload your E-Gallery
+              Share details of your artefact to list it for sell securely.
             </p>
           </>
         ) : (
@@ -243,6 +256,7 @@ const GalleryForm = () => {
           </div>
         )}
       </div>
+
       <div className=" relative">
         <form
           onSubmit={handleSubmit}
@@ -250,19 +264,22 @@ const GalleryForm = () => {
         >
           <div className="shadow-lg md:shadow-2xl p-4 rounded-lg md:w-3/5 space-y-2 md:space-y-4">
             {!hasApprovedForm && (
-              <CompanyDetails ref={companyRef} resetForm={resetForm} />
+              <CompanyDetails
+                onDataChange={setCompanyData}
+                resetForm={resetForm}
+              />
             )}
             {(hasApprovedForm ||
               (!hasApprovedForm &&
                 (productList.length < 2 || editIndex !== null))) && (
-              <SlabDetails
+              <ProductDetails
                 ref={slabRef}
                 setProductList={setProductList}
                 editIndex={editIndex}
-                setEditIndex={setEditIndex}
-                productList={productList}
-                editProduct={editProduct}
                 hasApprovedForm={hasApprovedForm}
+                productList={productList}
+                setEditIndex={setEditIndex}
+                editProduct={editProduct}
               />
             )}
           </div>
@@ -292,7 +309,7 @@ const GalleryForm = () => {
               onEdit={handleEdit}
             />
 
-            {productList.length > 0 && (
+            {productList.length > 0 && editIndex === null && (
               <div className="flex justify-end gap-2 mt-5 text-xs md:text-sm">
                 <button
                   className={`cursor-pointer px-4 py-1 border border-gray-400 rounded-lg ${
@@ -355,4 +372,4 @@ const GalleryForm = () => {
   );
 };
 
-export default GalleryForm;
+export default Form;

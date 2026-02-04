@@ -3,7 +3,7 @@ import { IoLocation } from "react-icons/io5";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const GalleryCard = ({
+const ProductCard = ({
   item,
   updating,
 
@@ -266,7 +266,7 @@ const GalleryCard = ({
 
               <img
                 src={product.thumbnail?.url || product.media?.[0]?.url}
-                alt={product.stoneName}
+                alt={product.productName}
                 onLoad={() =>
                   setProductImageLoading((prev) => ({ ...prev, [i]: false }))
                 }
@@ -280,35 +280,28 @@ const GalleryCard = ({
             </div>
 
             <h3 className="font-medium text-[#292929] capitalize text-sm  md:text-base ">
-              {product.stoneName}
+              {product.productName}
             </h3>
 
             <p className="text-xs capitalize font-medium md:text-sm text-[#838383]">
-              {product.stoneCategory}
+              {product.category}
+            </p>
+            <p className="text-base capitalize font-medium md:text-xl xl:text-[22px] ">
+              {/* <span className="font-medium text-[#000000]">
+                Price Per Unit:
+              </span>{" "} */}
+              {product.currency} {product.pricePerProduct}
             </p>
 
-            <div className="flex flex-col text-[#838383]  text-xs  md:text-sm mt-2 md:gap-4 md:gap-y-1">
+            <div className="flex  justify-between text-[#838383]  text-xs  md:text-sm mt-2 md:gap-4 md:gap-y-1">
               <p>
-                <span className="font-medium text-[#000000]">Finishes:</span>{" "}
-                {product.finish.join(", ")}
-              </p>
-
-              <p>
-                <span className="font-medium text-[#000000]">Thickness:</span>{" "}
-                {product.thickness.toString().includes("MM")
-                  ? product.thickness.join(", ")
-                  : `${product.thickness.join(", ")} MM`}
-              </p>
-
-              <p>
-                <span className="font-medium text-[#000000]">Unit:</span>{" "}
-                {product.units}
+                <span className="font-medium text-[#000000]">Weight:</span>{" "}
+                {product.weight}
               </p>
               <p>
-                <span className="font-medium text-[#000000]">Stone Sizes:</span>{" "}
-                H:
-                {product.size.height.join(", ")} | W:{" "}
-                {product.size.height.join(", ")}
+                <span className="font-medium text-[#000000]">Sizes:</span> H:{" "}
+                {product?.size?.height || "-"} | W:{" "}
+                {product?.size?.width || "-"}
               </p>
             </div>
 
@@ -368,4 +361,4 @@ const GalleryCard = ({
   );
 };
 
-export default GalleryCard;
+export default ProductCard;
