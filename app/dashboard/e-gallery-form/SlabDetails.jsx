@@ -172,7 +172,7 @@ const SlabDetails = forwardRef(
       if (!hasImage) {
         toast.error("Please upload at least 1 image");
         return;
-      }
+      } 
       if (editIndex !== null) {
         setProductList((prev) =>
           prev.map((p, i) => (i === editIndex ? tempProduct : p)),
