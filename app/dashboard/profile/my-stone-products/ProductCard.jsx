@@ -286,10 +286,10 @@ const ProductCard = ({
             <p className="text-xs capitalize font-medium md:text-sm text-[#838383]">
               {product.category}
             </p>
-            <p>
-              <span className="font-medium text-[#000000]">
+            <p className="text-base capitalize font-medium md:text-xl xl:text-[22px] ">
+              {/* <span className="font-medium text-[#000000]">
                 Price Per Unit:
-              </span>{" "}
+              </span>{" "} */}
               {product.currency} {product.pricePerProduct}
             </p>
 
