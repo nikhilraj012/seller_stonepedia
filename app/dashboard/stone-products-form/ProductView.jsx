@@ -39,18 +39,16 @@ const ProductView = ({
   const displayArray = (arr) => (arr && arr.length > 0 ? arr.join(", ") : "-");
 
   const handleDelete = (index) => {
-    setProductList((prev) => {
-      const updated = prev.filter((_, i) => i !== index);
-      toast("Product deleted successfully!", {
-        style: {
-          backgroundColor: "#ffe6e6",
-          color: "#d32f2f",
-          fontWeight: "500",
-        },
-      });
-      return updated;
-    });
-  };
+  setProductList((prev) => prev.filter((_, i) => i !== index));
+  toast("Product deleted successfully!", {
+    style: {
+      backgroundColor: "#ffe6e6",
+      color: "#d32f2f",
+      fontWeight: "500",
+    },
+  });
+};
+
 
   const handleFileUpload = (e, index) => {
     const files = Array.from(e.target.files);

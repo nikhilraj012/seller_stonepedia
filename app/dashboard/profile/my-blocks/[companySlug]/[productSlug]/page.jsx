@@ -81,6 +81,49 @@ const BlockDetailsPage = () => {
 
   console.log(status);
 
+  // const handleThumbnailChange = async (e) => {
+  //   const file = e.target.files?.[0];
+  //   if (!file || !uid) return;
+
+  //   setIsUpdating(true);
+  //   const toastId = toast.loading("Updating thumbnail...");
+
+  //   try {
+  //     const storageRef = ref(
+  //       storage,
+  //       `SellBlocks/${uid}/thumbnails/${Date.now()}_${file.name}`,
+  //     );
+  //     await uploadBytes(storageRef, file);
+  //     const url = await getDownloadURL(storageRef);
+
+  //     // Update locally
+  //     setBlockData((prev) => ({ ...prev, thumbnail: url }));
+
+  //     // Update Firestore
+  //     const storedData = JSON.parse(sessionStorage.getItem("currentProduct"));
+  //     if (!storedData) return;
+  //     const { docId, blockId } = storedData;
+
+  //     const docRef = doc(db, "SellerDetails", uid, "SellBlocks", docId);
+  //     const snap = await getDoc(docRef);
+  //     if (!snap.exists()) throw new Error("Document not found");
+
+  //     const data = snap.data();
+  //     const updatedBlocks = data.blocks.map((b) =>
+  //       b.id === blockId ? { ...b, thumbnail: url } : b,
+  //     );
+
+  //     await updateDoc(docRef, { blocks: updatedBlocks });
+
+  //     toast.success("Thumbnail updated!", { id: toastId });
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error("Thumbnail upload failed", { id: toastId });
+  //   } finally {
+  //     setIsUpdating(false);
+  //     e.target.value = ""; // reset input
+  //   }
+  // };
   const handleThumbnailChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file || !uid) return;
@@ -96,32 +139,44 @@ const BlockDetailsPage = () => {
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
 
-      // Update locally
+      // Local state
       setBlockData((prev) => ({ ...prev, thumbnail: url }));
 
-      // Update Firestore
       const storedData = JSON.parse(sessionStorage.getItem("currentProduct"));
       if (!storedData) return;
       const { docId, blockId } = storedData;
 
-      const docRef = doc(db, "SellerDetails", uid, "SellBlocks", docId);
-      const snap = await getDoc(docRef);
-      if (!snap.exists()) throw new Error("Document not found");
+      // 1️⃣ Seller collection
+      const sellerRef = doc(db, "SellerDetails", uid, "SellBlocks", docId);
+      const sellerSnap = await getDoc(sellerRef);
 
-      const data = snap.data();
-      const updatedBlocks = data.blocks.map((b) =>
+      const sellerData = sellerSnap.data();
+      const updatedBlocks = sellerData.blocks.map((b) =>
         b.id === blockId ? { ...b, thumbnail: url } : b,
       );
 
-      await updateDoc(docRef, { blocks: updatedBlocks });
+      await updateDoc(sellerRef, { blocks: updatedBlocks });
 
-      toast.success("Thumbnail updated!", { id: toastId });
+      // 2️⃣ Main Blocks collection
+      const mainRef = doc(db, "Blocks", docId);
+      const mainSnap = await getDoc(mainRef);
+
+      if (mainSnap.exists()) {
+        const mainData = mainSnap.data();
+        const mainUpdatedBlocks = mainData.blocks.map((b) =>
+          b.id === blockId ? { ...b, thumbnail: url } : b,
+        );
+
+        await updateDoc(mainRef, { blocks: mainUpdatedBlocks });
+      }
+
+      toast.success("Thumbnail updated in both collections!", { id: toastId });
     } catch (err) {
       console.error(err);
       toast.error("Thumbnail upload failed", { id: toastId });
     } finally {
       setIsUpdating(false);
-      e.target.value = ""; // reset input
+      e.target.value = "";
     }
   };
   // const handleThumbnailRemove = async (productId) => {

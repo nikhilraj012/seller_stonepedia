@@ -19,6 +19,7 @@ const ProductDetails = forwardRef(
       hasApprovedForm,
       productList,
       editProduct,
+      resetForm,
     },
     ref,
   ) => {
@@ -38,6 +39,12 @@ const ProductDetails = forwardRef(
     };
 
     const [product, setProduct] = useState(initialProductData);
+    useEffect(() => {
+      if (resetForm) {
+        setProduct(initialProductData);
+      }
+    }, [resetForm]);
+
     const refs = useRef({
       category: null,
     });

@@ -280,6 +280,7 @@ const Form = () => {
                 productList={productList}
                 setEditIndex={setEditIndex}
                 editProduct={editProduct}
+                resetForm={resetForm}
               />
             )}
           </div>
