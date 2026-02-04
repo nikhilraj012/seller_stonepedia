@@ -284,7 +284,7 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
           </div>
           <div className="w-full">
             <label htmlFor="brochure" className="mb-0.5 text-xs font-medium">
-              Upload Brochure
+              Upload Brochure <span className="text-[#BCBCBC]">(Optional)</span>
             </label>
             <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white transition min-h-[100px] flex flex-col justify-center items-center">
               <input
@@ -324,10 +324,10 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
             <label htmlFor="image" className="mb-0.5 text-xs ">
               <div className="flex flex-col gap-0.5">
                 <span className="font-medium mb-0.5">Upload Shop Image</span>
-                <span className="text-[11px] mb-2 text-[#8F8F8F] font-normal">
+                {/* <span className="text-[11px] mb-2 text-[#8F8F8F] font-normal">
                   <span className="text-red-500 ml-0.5">*</span> For shop
                   profile Image
-                </span>
+                </span> */}
               </div>
             </label>
 

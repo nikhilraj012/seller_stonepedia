@@ -129,7 +129,7 @@ const GalleryForm = () => {
           country: companyData.country?.label,
           state: companyData.state?.label,
           city: companyData.city?.label,
-          brochure: brochureUrls[0],
+          brochure: brochureUrls[0] || [],
           image: shopImage[0],
         };
 

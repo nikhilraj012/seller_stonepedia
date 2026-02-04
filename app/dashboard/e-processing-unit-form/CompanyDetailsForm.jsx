@@ -718,7 +718,8 @@ const CompanyDetailsForm = () => {
                   htmlFor="brochure"
                   className="mb-0.5 text-xs font-medium"
                 >
-                  Upload Brochure
+                  Upload Brochure{" "}
+                  <span className="text-[#BCBCBC]">(Optional)</span>
                 </label>
                 <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white transition min-h-[100px] flex flex-col justify-center items-center">
                   <input
@@ -762,10 +763,10 @@ const CompanyDetailsForm = () => {
                     <span className="font-medium mb-0.5">
                       Upload Processing Unit Image
                     </span>
-                    <span className="text-[11px] mb-2 text-[#8F8F8F] font-normal">
+                    {/* <span className="text-[11px] mb-2 text-[#8F8F8F] font-normal">
                       <span className="text-red-500 ml-0.5">*</span> For
                       Processing Unit profile Image
-                    </span>
+                    </span> */}
                   </div>
                 </label>
 
