@@ -6,16 +6,16 @@ import { db } from "@/app/firebase/config";
 import { useAuth } from "@/app/components/context/AuthContext";
 
 const businessCategories = [
+  // {
+  //   id: 1,
+  //   title: "Block",
+  //   description:
+  //     "A block seller trades large quantities of assets, influencing market prices significantly.",
+  //   image: "/images/dashboard/block.webp",
+  //   route: "/dashboard/blocks-form",
+  // },
   {
     id: 1,
-    title: "Block",
-    description:
-      "A block seller trades large quantities of assets, influencing market prices significantly.",
-    image: "/images/dashboard/block.webp",
-    route: "/dashboard/blocks-form",
-  },
-  {
-    id: 2,
     title: "E-processing unit",
     description:
       "List electronic processing units here to reach the right buyers faster.",
@@ -23,21 +23,21 @@ const businessCategories = [
     route: "/dashboard/e-processing-unit-form",
   },
   {
-    id: 3,
+    id: 2,
     title: "E-Gallery",
     description:
       "An E-gallery empowers sellers to showcase and sell their art to a global audience.",
     image: "/images/dashboard/gallery.webp",
     route: "/dashboard/e-gallery-form",
   },
-  {
-    id: 4,
-    title: "Stone Product",
-    description:
-      "A stone product allows sellers to present unique creations to customers worldwide.",
-    image: "/images/dashboard/stone-product.webp",
-    route: "/dashboard/stone-products-form",
-  },
+  // {
+  //   id: 4,
+  //   title: "Stone Product",
+  //   description:
+  //     "A stone product allows sellers to present unique creations to customers worldwide.",
+  //   image: "/images/dashboard/stone-product.webp",
+  //   route: "/dashboard/stone-products-form",
+  // },
 ];
 
 const Dashboard = () => {

@@ -8,10 +8,10 @@ import ProfileAvatar from "./common/ProfileAvatar";
 import { db } from "../firebase/config";
 
 const profilePages = [
-  {
-    title: "My Blocks",
-    href: "/dashboard/profile/my-blocks",
-  },
+  // {
+  //   title: "My Blocks",
+  //   href: "/dashboard/profile/my-blocks",
+  // },
   {
     title: "My E-Processing Unit",
     href: "/dashboard/profile/my-e-processing-unit",
@@ -20,10 +20,10 @@ const profilePages = [
     title: "My E-Gallery",
     href: "/dashboard/profile/my-e-gallery",
   },
-  {
-    title: "My Stone Products",
-    href: "/dashboard/profile/my-stone-products",
-  },
+  // {
+  //   title: "My Stone Products",
+  //   href: "/dashboard/profile/my-stone-products",
+  // },
 ];
 
 const NavbarProfile = ({ isMobile = false }) => {
@@ -135,12 +135,12 @@ const NavbarProfile = ({ isMobile = false }) => {
           </div>
         </div>
       </div>
-      <button
+      {/* <button
         onClick={handleFixAccount}
         className="w-full bg-blue-500 text-white py-2 rounded mt-2"
       >
         Fix Account
-      </button>
+      </button> */}
 
       <div className="border-t border-gray-100">
         {profilePages.map((page) => (
