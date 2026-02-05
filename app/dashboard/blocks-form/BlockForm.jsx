@@ -688,7 +688,7 @@ const BlockForm = () => {
         {!hasApprovedForm ? (
           <>
             <h1 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-medium">
-              Register your quarry block.
+              Register Your Block.
             </h1>
             <p className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl text-[#BDBDBD]">
               Fill this form to register your block.
@@ -717,7 +717,7 @@ const BlockForm = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full">
                     <div className="w-full flex flex-col">
                       <label htmlFor="quarryName" className="mb-0.5 text-xs">
-                        Quarry / Company Name
+                        Company Name
                       </label>
                       <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                         <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
@@ -726,7 +726,7 @@ const BlockForm = () => {
                             type="text"
                             required
                             name="quarryName"
-                            placeholder="Quarry / Company Name"
+                            placeholder="Company Name"
                             value={formData.quarryName}
                             onChange={(e) =>
                               setFormData({
@@ -748,7 +748,7 @@ const BlockForm = () => {
                     </div>
                     <div className="w-full flex flex-col">
                       <label htmlFor="Quarrypincode" className="mb-0.5 text-xs">
-                        Quarry / Company Pincode
+                        Company Pincode
                       </label>
                       <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                         <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
@@ -868,7 +868,7 @@ const BlockForm = () => {
                     </div>
 
                     <div className="min-w-0">
-                      <label className="mb-0.5 text-xs">District / Area</label>
+                      <label className="mb-0.5 text-xs">City</label>
                       <Select
                         options={cityOptions}
                         value={formData.quarryCity}
@@ -961,7 +961,7 @@ const BlockForm = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full">
                     <div className="w-full flex flex-col">
                       <label htmlFor="stoneCategory" className="mb-0.5 text-xs">
-                        Stone Category
+                        Block Category
                       </label>
                       <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                         <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
@@ -986,7 +986,7 @@ const BlockForm = () => {
 
                     <div className="w-full flex flex-col">
                       <label htmlFor="stoneName" className="mb-0.5 text-xs">
-                        Block / Stone Name
+                        Block Name
                       </label>
                       <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                         <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
@@ -1373,7 +1373,7 @@ const BlockForm = () => {
                         <span className="mt-2 text-[8px] text-gray-600 font-semibold">
                           {block.videos.length > 0
                             ? `Uploaded ${block.videos.length}`
-                            : "Browse"}
+                            : ""}
                         </span>
                         <input
                           type="file"
@@ -1396,7 +1396,7 @@ const BlockForm = () => {
                         <span className="mt-2 text-[8px] text-gray-600 font-semibold">
                           {block.images.length > 0
                             ? `Uploaded ${block.images.length}`
-                            : "Browse"}
+                            : ""}
                         </span>
                         <input
                           type="file"
@@ -1422,7 +1422,7 @@ const BlockForm = () => {
                       <span className="mt-2 text-[8px] text-gray-600 font-semibold">
                         {block.documents.length > 0
                           ? `${block.documents[0].name}`
-                          : "Browse"}
+                          : ""}
                       </span>
                       <input
                         type="file"

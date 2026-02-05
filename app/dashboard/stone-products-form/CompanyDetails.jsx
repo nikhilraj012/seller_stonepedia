@@ -253,10 +253,10 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
                 <span className="font-medium mb-0.5">
                   Upload Company Logo Image
                 </span>
-                <span className="text-[11px] mb-2 text-[#8F8F8F] font-normal">
+                {/* <span className="text-[11px] mb-2 text-[#8F8F8F] font-normal">
                   <span className="text-red-500 ml-0.5">*</span>For Company unit
                   profile Image
-                </span>
+                </span> */}
               </div>
             </label>
 

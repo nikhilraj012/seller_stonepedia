@@ -16,7 +16,7 @@ const businessCategories = [
   },
   {
     id: 2,
-    title: "E-processing unit",
+    title: "E-Processing Unit",
     description:
       "List electronic processing units here to reach the right buyers faster.",
     image: "/images/dashboard/processing-unit.webp",
@@ -70,7 +70,10 @@ const Dashboard = () => {
         const blocksSnapshot = await getDocs(blocksRef);
 
         if (!blocksSnapshot.empty) {
-          const docs = blocksSnapshot.docs.map((doc) => doc.data());
+          const docs = blocksSnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
           const hasApproved = docs.some((doc) => doc.status === "approved");
           const hasPending = docs.some((doc) => doc.status === "pending");
           const allRejectedOrCancelled = docs.every(
@@ -202,7 +205,7 @@ const Dashboard = () => {
       // Blocks
       if (blocksStatus === "approved" && blocksCount < 2) return "Add Product";
       if (blocksStatus === "approved") return "My Blocks";
-      if (blocksStatus === "pending") return "My E-Processing Unit";
+      if (blocksStatus === "pending") return "My Blocks";
       return "Register";
     }
     if (categoryId === 2) {
@@ -235,8 +238,13 @@ const Dashboard = () => {
   const getButtonRoute = (category) => {
     if (category.id === 1) {
       // Blocks
-      if (blocksStatus === "approved" && blocksCount < 2)
-        return "/dashboard/blocks-form"; // Add Block
+      if (
+        blocksStatus === "approved" &&
+        blocksCount < 2 &&
+        blockId
+      ) {
+        return `/dashboard/blocks-form/${blockId}/add-block`;
+      }
       if (blocksStatus === "approved") return "/dashboard/profile/my-blocks"; // View Blocks
       if (blocksStatus === "pending") return "/dashboard/profile/my-blocks";
       return category.route;

@@ -238,14 +238,14 @@ const GalleryCard = ({
       <div className="border-b py-3 border-gray-200" />
       <div className="flex  justify-between">
         <h1 className="text-[#000000] mt-4 font-medium  text-sm lg:text-base">
-          Uploaded Slabs
+          Uploaded Products
         </h1>
         {status.toLowerCase() === "approved" && item.products.length < 2 && (
           <button
             onClick={() =>
               router.push(`${addSlabRoute}/${item.id}/add-product`)
             }
-            className="mt-2 bg-primary font-medium text-white px-4 md:px-6 cursor-pointer hover:bg-pink-100 hover:text-primary py-1.5 rounded-md text-xs md:text-sm hover:bg-green-700 transition"
+            className="mt-2 bg-primary font-medium text-white px-4 md:px-6 cursor-pointer hover:bg-pink-100 hover:text-primary py-1.5 rounded-md text-xs md:text-sm transition"
           >
             Add Product
           </button>
@@ -276,7 +276,7 @@ const GalleryCard = ({
                 onError={() =>
                   setProductImageLoading((prev) => ({ ...prev, [i]: false }))
                 }
-                className={`w-full h-40 object-cover object-top rounded-lg transition ${
+                className={`w-full h-40 object-cover rounded-lg transition ${
                   productImageLoading[i] !== false ? "opacity-0" : "opacity-100"
                 }`}
               />

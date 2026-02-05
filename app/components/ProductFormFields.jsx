@@ -25,9 +25,6 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
       document.removeEventListener("keydown", onKey);
     };
   }, [openDropdown]);
- 
-
-  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -272,13 +269,13 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
           {!hideMedia && (
             <div className="w-full md:col-span-2">
               <label htmlFor="media" className="mb-0.5 text-xs font-medium">
-                Upload Block image/Video
+                Upload Image/Video
               </label>
-              <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white hover:shadow-md transition min-h-[100px] flex flex-col justify-center items-center">
+              <div className="border border-dashed  border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white transition min-h-[100px] flex flex-col justify-center items-center">
                 <input
                   id="media"
                   type="file"
-                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  className="absolute inset-0 opacity-0 "
                   accept="video/*,image/*"
                   name="media"
                   multiple
@@ -286,10 +283,10 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
                 />
                 <FiUpload size={20} className="mb-2 text-gray-900" />
                 <p className="text-[#2C2C2C] text-[10px] md:text-xs font-medium tracking-wide pointer-events-none mb-1">
-                  Choose a Image/Video or drag & drop it here
+                  Choose a Image/Video
                 </p>
                 <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
-                  JPEG, PNG and MP4 formats up to 20MB
+                  Image up to 2MB,Video up to 5MB
                 </span>
                 <div className="h-6">
                   {product.media?.length > 0 ? (
@@ -298,7 +295,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
                     <button
                       type="button"
                       onClick={() => document.getElementById("media").click()} // <-- media here
-                      className="inline-product bg-white border font-medium text-sm px-6 py-1 rounded-xl shadow-sm hover:bg-primary hover:text-white  transition"
+                       className="border font-medium text-sm px-6 py-1 rounded-xl hover:border-primary cursor-pointer hover:shadow-md transition-colors pointer-events-auto relative z-10"
                     >
                       Browse
                     </button>

@@ -40,7 +40,6 @@ export default function RootLayout({ children }) {
             </UiProvider>
           </GlobalLoading>
         </AuthProvider>
-        
       </body>
     </html>
   );
