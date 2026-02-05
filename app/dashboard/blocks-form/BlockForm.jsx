@@ -706,7 +706,7 @@ const BlockForm = () => {
       <div>
         <form
           onSubmit={handleSubmit}
-          className="max-md:space-y-5 md:flex gap-5 xl:gap-10"
+          className="max-md:space-y-5  md:flex  items-start gap-5 xl:gap-10"
         >
           <div className="shadow-lg p-4 border border-gray-200  rounded-lg md:w-3/5 space-y-2 md:space-y-4">
             {/* Company / Quarry Details */}

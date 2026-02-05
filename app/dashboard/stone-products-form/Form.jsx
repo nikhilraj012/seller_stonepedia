@@ -260,7 +260,7 @@ const Form = () => {
       <div className=" relative">
         <form
           onSubmit={handleSubmit}
-          className="max-md:space-y-5 md:flex  mt-4 md:mt-7 gap-5 xl:gap-10"
+          className="max-md:space-y-5  items-start md:flex  mt-4 md:mt-7 gap-5 xl:gap-10"
         >
           <div className="shadow-lg md:shadow-2xl p-4 rounded-lg md:w-3/5 space-y-2 md:space-y-4">
             {!hasApprovedForm && (

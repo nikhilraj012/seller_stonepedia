@@ -135,12 +135,12 @@ const NavbarProfile = ({ isMobile = false }) => {
           </div>
         </div>
       </div>
-      <button
+      {/* <button
         onClick={handleFixAccount}
         className="w-full bg-blue-500 text-white py-2 rounded mt-2"
       >
         Fix Account
-      </button>
+      </button> */}
 
       <div className="border-t border-gray-100">
         {profilePages.map((page) => (
