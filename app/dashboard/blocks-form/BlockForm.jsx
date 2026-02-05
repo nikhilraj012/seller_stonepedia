@@ -12,16 +12,6 @@ import {
 import { FiUpload } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa6";
 import toast from "react-hot-toast";
-// import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-// import {
-//   collection,
-//   addDoc,
-//   serverTimestamp,
-//   setDoc,
-//   doc,
-// } from "firebase/firestore";
-// import { db, auth } from "../../../../firebase/config";
-
 import { v4 as uuidv4 } from "uuid";
 
 import { useUi } from "@/app/components/context/UiContext";

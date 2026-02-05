@@ -559,9 +559,24 @@ const CompanyDetailsForm = () => {
                     htmlFor="gstNumber"
                     className="mb-0.5 text-xs font-medium"
                   >
-                    GST Number
+                    GST / Government Id
                   </label>
                   <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
+                    <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
+                      <input
+                        id="gstNumber"
+                        type="text"
+                        name="gstNumber"
+                        onInput={(e) => e.target.setCustomValidity("")}
+                        placeholder="GST Number"
+                        value={formData.gstNumber}
+                        onChange={handleInputChange}
+                        className="flex-1 bg-transparent outline-none border-0 p-3 text-xs appearance-none w-full"
+                        style={{ WebkitAppearance: "none" }}
+                      />
+                    </div>
+                  </div>
+                  {/* <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                     <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
                       <input
                         id="gstNumber"
@@ -583,7 +598,7 @@ const CompanyDetailsForm = () => {
                         style={{ WebkitAppearance: "none" }}
                       />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="w-full flex flex-col">
                   <label htmlFor="email" className="mb-0.5 text-xs font-medium">
