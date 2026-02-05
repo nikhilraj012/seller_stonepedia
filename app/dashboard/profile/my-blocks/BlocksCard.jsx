@@ -299,7 +299,11 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
               )}
 
               <img
-                src={block.thumbnail || block.images?.[0]}
+                src={
+                  typeof block.thumbnail === "string"
+                    ? block.thumbnail
+                    : block.thumbnail?.url || block.images?.[0]
+                }
                 alt={block.stoneName}
                 onLoad={() =>
                   setProductImageLoading((prev) => ({ ...prev, [i]: false }))

@@ -94,7 +94,11 @@ const Form = () => {
       product.thumbnail?.url &&
       !String(product.thumbnail.url).startsWith("blob:")
     ) {
-      thumbnail = product.thumbnail;
+      thumbnail = {
+        url: product.thumbnail.url,
+        
+        name: product.thumbnail.name || "thumbnail",
+      };
     }
 
     return { ...product, media, thumbnail, createdAt: formatDate() };

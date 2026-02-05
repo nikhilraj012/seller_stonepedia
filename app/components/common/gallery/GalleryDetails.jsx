@@ -52,7 +52,6 @@ const GalleryDetails = ({ mode }) => {
   const status = item?.status?.toLowerCase();
   const canEdit = status === "pending";
 
-
   useEffect(() => {
     if (!uid) return;
 
@@ -97,7 +96,6 @@ const GalleryDetails = ({ mode }) => {
       const uploadFiles = async (files, path) => {
         if (!files) return [];
         const fileArray = Array.isArray(files) ? files : [files];
-
         return Promise.all(
           fileArray.map(async (f) => {
             const file = f.file || f;
@@ -108,7 +106,9 @@ const GalleryDetails = ({ mode }) => {
             );
 
             await uploadBytes(fileRef, file);
-            return { url: await getDownloadURL(fileRef), type: file.type };
+            const url = await getDownloadURL(fileRef);
+
+            return { url, type: file.type, name };
           }),
         );
       };

@@ -139,8 +139,14 @@ const BlockDetailsPage = () => {
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
 
+      const thumbnailData = {
+        url,
+        name: file.name,
+        type: file.type,
+      };
+
       // Local state
-      setBlockData((prev) => ({ ...prev, thumbnail: url }));
+      setBlockData((prev) => ({ ...prev, thumbnail: thumbnailData }));
 
       const storedData = JSON.parse(sessionStorage.getItem("currentProduct"));
       if (!storedData) return;
@@ -152,7 +158,7 @@ const BlockDetailsPage = () => {
 
       const sellerData = sellerSnap.data();
       const updatedBlocks = sellerData.blocks.map((b) =>
-        b.id === blockId ? { ...b, thumbnail: url } : b,
+        b.id === blockId ? { ...b, thumbnail: thumbnailData } : b,
       );
 
       await updateDoc(sellerRef, { blocks: updatedBlocks });
@@ -164,7 +170,7 @@ const BlockDetailsPage = () => {
       if (mainSnap.exists()) {
         const mainData = mainSnap.data();
         const mainUpdatedBlocks = mainData.blocks.map((b) =>
-          b.id === blockId ? { ...b, thumbnail: url } : b,
+          b.id === blockId ? { ...b, thumbnail: thumbnailData } : b,
         );
 
         await updateDoc(mainRef, { blocks: mainUpdatedBlocks });
@@ -179,45 +185,7 @@ const BlockDetailsPage = () => {
       e.target.value = "";
     }
   };
-  // const handleThumbnailRemove = async (productId) => {
-  //   setIsUpdating(true);
-  //   const toastId = toast.loading("Removing thumbnail...");
 
-  //   try {
-  //     if (!isAuthenticated || !item) return;
-
-  //     const updateProducts = (products) =>
-  //       products.map((p) =>
-  //         p.id === productId ? { ...p, thumbnail: null } : p,
-  //       );
-
-  //     const userRef = doc(db, "SellerDetails", uid, "SellBlocks", item.id);
-  //     const globalRef = doc(db, "Blocks", item.id);
-
-  //     const snap = await getDoc(globalRef);
-  //     if (!snap.exists()) return;
-
-  //     const updatedProducts = updateProducts(snap.data().products);
-
-  //     await updateDoc(userRef, { products: updatedProducts });
-  //     await updateDoc(globalRef, { products: updatedProducts });
-  //     setItem((prev) => ({
-  //       ...prev,
-  //       products: updateProducts(prev.products),
-  //     }));
-
-  //     setProduct((prev) => ({
-  //       ...prev,
-  //       thumbnail: null,
-  //     }));
-  //     toast.success("Thumbnail removed", { id: toastId });
-  //   } catch (err) {
-  //     console.error(err);
-  //     toast.error("Failed to remove thumbnail", { id: toastId });
-  //   } finally {
-  //     setIsUpdating(false);
-  //   }
-  // };
   const handleThumbnailRemove = async () => {
     if (!uid || !blockData) return;
 
@@ -305,7 +273,7 @@ const BlockDetailsPage = () => {
                 {blockData.thumbnail ? (
                   <>
                     <img
-                      src={blockData.thumbnail}
+                      src={blockData.thumbnail.url || blockData.thumbnail}
                       alt={blockData.stoneName}
                       className="w-full h-full object-cover"
                     />

@@ -340,14 +340,15 @@ const AddSlabPage = () => {
               [product.thumbnail.file],
               `products/${product.id}`,
             );
-            uploadedThumbnail = t[0] || null;
+            uploadedThumbnail = t[0];
           } else if (
             product.thumbnail?.url &&
             !String(product.thumbnail.url).startsWith("blob:")
           ) {
             uploadedThumbnail = {
               url: product.thumbnail.url,
-              type: product.thumbnail.type || "image/*",
+             
+              name: product.thumbnail.name || `file_${Date.now()}`,
             };
           }
           const { height, width, ...cleanProduct } = product;

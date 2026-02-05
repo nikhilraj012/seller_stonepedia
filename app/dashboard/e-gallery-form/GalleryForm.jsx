@@ -84,7 +84,11 @@ const GalleryForm = () => {
       product.thumbnail?.url &&
       !String(product.thumbnail.url).startsWith("blob:")
     ) {
-      thumbnail = product.thumbnail;
+      thumbnail = {
+        url: product.thumbnail.url,
+        type: product.thumbnail.type || "",
+        name: product.thumbnail.name || "thumbnail",
+      };
     }
 
     return { ...product, media, thumbnail, createdAt: formatDate() };
@@ -242,7 +246,7 @@ const GalleryForm = () => {
             </h1>
           </div>
         )}
-      </div> 
+      </div>
       <div className=" relative">
         <form
           onSubmit={handleSubmit}

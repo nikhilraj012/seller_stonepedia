@@ -224,14 +224,15 @@ const CompanyDetailsForm = () => {
               [product.thumbnail.file],
               `products/${product.id}`,
             );
-            uploadedThumbnail = t[0];
+            uploadedThumbnail = t[0]; // name bhi ab h
           } else if (
             product.thumbnail?.url &&
             !String(product.thumbnail.url).startsWith("blob:")
           ) {
             uploadedThumbnail = {
               url: product.thumbnail.url,
-              type: product.thumbnail.type,
+           
+              name: product.thumbnail.name || `file_${Date.now()}`,
             };
           }
           const { height, width, ...cleanProduct } = product;
