@@ -76,10 +76,10 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
             value={product.category}
             onChange={handleInputChange}
             options={[
-              "Artifact",
+              "Artefact",
               "Fixture / Stone furniture",
               "Wall panelling",
-              "Temple/Accessories",
+              "Temple / Accessories",
               "Idol’s",
               "Other",
             ]}
