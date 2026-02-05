@@ -549,15 +549,22 @@ const BlockForm = () => {
                 )
               : [];
 
-          // Upload thumbnail
-          let thumbnailUrl = null;
+          let thumbnailData = null;
+
           if (block.thumbnail) {
+            const fileName = `${Date.now()}_${block.thumbnail.name}`;
             const thumbnailRef = ref(
               storage,
-              `blocks/${uid}/thumbnails/${Date.now()}_${block.thumbnail.name}`,
+              `blocks/${uid}/thumbnails/${fileName}`,
             );
             await uploadBytes(thumbnailRef, block.thumbnail);
-            thumbnailUrl = await getDownloadURL(thumbnailRef);
+
+            const url = await getDownloadURL(thumbnailRef);
+
+            thumbnailData = {
+              url,
+              name: block.thumbnail.name,
+            };
           }
 
           return {
@@ -565,7 +572,7 @@ const BlockForm = () => {
             videos: videoUrls,
             images: imageUrls,
             documents: documentFiles,
-            thumbnail: thumbnailUrl,
+            thumbnail: thumbnailData || null,
             origin: block.origin ? block.origin.label : null,
             units: block.units ? block.units.value : null,
             symbolA: block.symbolA ? block.symbolA.label : null,

@@ -107,7 +107,9 @@ const page = () => {
             );
 
             await uploadBytes(fileRef, file);
-            return { url: await getDownloadURL(fileRef), type: file.type };
+            const url = await getDownloadURL(fileRef);
+
+            return { url, type: file.type, name };
           }),
         );
       };
