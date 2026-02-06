@@ -311,7 +311,8 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
                 onError={() =>
                   setProductImageLoading((prev) => ({ ...prev, [i]: false }))
                 }
-                className={`w-full h-40 object-cover rounded-lg transition ${
+                className={`w-full h-50 
+                   rounded-lg transition ${
                   productImageLoading[i] !== false ? "opacity-0" : "opacity-100"
                 }`}
               />

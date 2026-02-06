@@ -51,7 +51,7 @@ const GalleryCard = ({
             id={`thumbnail-${item.id}`}
             name={`thumbnail-${item.id}`}
             type="file"
-            accept="image/*"
+            accept="image/jpeg,image/jpg,image/png"
             className="hidden"
             onChange={(e) => updateThumbnail(e.target.files[0], item.id)}
           />
@@ -109,9 +109,9 @@ const GalleryCard = ({
               {item.companyDetails.shopName}
             </h1>
             {item.companyDetails.gstNumber && (
-            <p className="break-all whitespace-normal">
-              {item.companyDetails.gstNumber}
-            </p>
+              <p className="break-all whitespace-normal">
+                {item.companyDetails.gstNumber}
+              </p>
             )}
             <p className="break-all whitespace-normal">
               {item.companyDetails.email}
@@ -278,7 +278,7 @@ const GalleryCard = ({
                 onError={() =>
                   setProductImageLoading((prev) => ({ ...prev, [i]: false }))
                 }
-                className={`w-full h-40 object-cover rounded-lg transition ${
+                className={`w-full h-50  rounded-lg transition ${
                   productImageLoading[i] !== false ? "opacity-0" : "opacity-100"
                 }`}
               />

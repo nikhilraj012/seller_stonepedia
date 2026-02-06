@@ -209,6 +209,18 @@ const BlockDetailsPage = () => {
       );
 
       await updateDoc(docRef, { blocks: updatedBlocks });
+
+      const mainRef = doc(db, "Blocks", docId);
+      const mainSnap = await getDoc(mainRef);
+
+      if (mainSnap.exists()) {
+        const mainData = mainSnap.data();
+        const mainUpdatedBlocks = mainData.blocks.map((b) =>
+          b.id === blockId ? { ...b, thumbnail: null } : b,
+        );
+
+        await updateDoc(mainRef, { blocks: mainUpdatedBlocks });
+      }
       toast.success("Thumbnail removed!", { id: toastId });
     } catch (err) {
       console.error(err);
@@ -275,7 +287,7 @@ const BlockDetailsPage = () => {
                     <img
                       src={blockData.thumbnail.url || blockData.thumbnail}
                       alt={blockData.stoneName}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full "
                     />
                     {canEdit && (
                       <button

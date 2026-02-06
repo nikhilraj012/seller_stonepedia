@@ -260,7 +260,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
                 id="image"
                 type="file"
                 className="absolute inset-0 opacity-0 cursor-pointer"
-                accept="image/*"
+               accept="image/jpeg, image/jpg, image/png"
                 name="image"
                 onChange={(e) => handleUpload(e, "image")}
                 required

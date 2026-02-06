@@ -132,7 +132,7 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full">
             <div className="w-full flex flex-col">
               <label htmlFor="gstNumber" className="mb-0.5 text-xs font-medium">
-               GST / Government Id
+                GST / Government Id
               </label>
               <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
@@ -359,7 +359,7 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
                 id="image"
                 type="file"
                 className="absolute inset-0 opacity-0 cursor-pointer"
-                accept="image/*"
+                accept="image/jpeg,image/jpg,image/png"
                 name="image"
                 onChange={(e) => handleUpload(e, "image")}
                 required

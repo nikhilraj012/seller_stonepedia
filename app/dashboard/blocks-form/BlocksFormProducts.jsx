@@ -107,7 +107,7 @@ const BlocksFormProducts = ({
                 {/* Hidden file input */}
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image/jpeg,image/jpg,image/png"
                   className="hidden"
                   ref={(el) => (fileInputRefs.current[block.id] = el)}
                   onChange={(e) => handleFileChange(e, block.id)}
@@ -321,7 +321,7 @@ const BlocksFormProducts = ({
                     {/* Hidden file inputs */}
                     <input
                       type="file"
-                      accept="image/*"
+                      accept="image/jpeg,image/jpg,image/png"
                       multiple
                       className="hidden"
                       ref={(el) => (imageInputRefs.current[block.id] = el)}
@@ -329,7 +329,7 @@ const BlocksFormProducts = ({
                     />
                     <input
                       type="file"
-                      accept="video/*"
+                      accept="video/mp4"
                       multiple
                       className="hidden"
                       ref={(el) => (videoInputRefs.current[block.id] = el)}

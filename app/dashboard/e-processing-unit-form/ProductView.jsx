@@ -182,7 +182,7 @@ const ProductView = ({
                   id={`thumbnail-${i}`}
                   name={`thumbnail-${i}`}
                   type="file"
-                  accept="image/*"
+               accept="image/jpeg,image/jpg,image/png"
                   className="hidden"
                   onChange={(e) => handleThumbnailChange(e, i)}
                 />
@@ -331,7 +331,7 @@ const ProductView = ({
                       <input
                         id={`product-file-video-${i}`}
                         type="file"
-                        accept="video/*,image/*"
+                        accept="image/jpeg,image/jpg,image/png,video/mp4"
                         multiple
                         className="hidden"
                         onChange={(e) => handleFileUpload(e, i)}

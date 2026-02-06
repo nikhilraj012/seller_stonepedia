@@ -58,10 +58,14 @@ const GalleryForm = () => {
         const file = f.file || f;
         const name = file.name || `file_${Date.now()}`;
         const fileRef = ref(storage, `EGallery/${uid}/${path}/${name}`);
-        const metadata = {
-          contentType: file.type,
+       const isPDF = file.type === "application/pdf";
+
+      const metadata = {
+        contentType: file.type,
+        ...(isPDF && {
           contentDisposition: `attachment; filename="${file.name}"`,
-        };
+        }),
+      };
 
         await uploadBytes(fileRef, file, metadata);
         return { url: await getDownloadURL(fileRef), type: file.type };

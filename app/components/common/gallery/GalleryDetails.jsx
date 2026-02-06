@@ -256,7 +256,7 @@ const GalleryDetails = ({ mode }) => {
                 id="thumbnail"
                 type="file"
                 disabled={isUpdating}
-                accept="image/*"
+                accept="image/jpeg,image/jpg,image/png"
                 className="hidden"
                 onChange={handleThumbnailChange}
               />
@@ -276,7 +276,7 @@ const GalleryDetails = ({ mode }) => {
                     <img
                       src={product.thumbnail.url}
                       alt="Thumbnail"
-                      className="h-full w-full object-cover rounded-md"
+                      className="h-full w-full  rounded-md"
                     />
                     {canEdit && (
                       <button
@@ -305,10 +305,7 @@ const GalleryDetails = ({ mode }) => {
                         />
                       </svg>
                     </div>
-                    <span>
-                      {" "}
-                      {canEdit ? "Add Thumbnail" : "No Thumbnail"}
-                    </span>
+                    <span> {canEdit ? "Add Thumbnail" : "No Thumbnail"}</span>
                   </>
                 )}
                 {isUpdating && (

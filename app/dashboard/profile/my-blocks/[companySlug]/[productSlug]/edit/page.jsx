@@ -240,7 +240,11 @@ const Page = () => {
       await updateDoc(blockRef, {
         blocks: updatedBlocks,
       });
+      const mainBlockRef = doc(db, "Blocks", docId);
 
+      await updateDoc(mainBlockRef, {
+        blocks: updatedBlocks,
+      });
       toast.success("Block updated successfully");
       sessionStorage.setItem(
         "currentProduct",

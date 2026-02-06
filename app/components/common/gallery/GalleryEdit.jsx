@@ -220,6 +220,7 @@ const GalleryEdit = ({ mode }) => {
       const uRef = doc(db, "SellerDetails", uid, collectionName, gallery.id);
       const gRef = doc(db, collectionName, gallery.id);
 
+      
       await updateDoc(uRef, { products: updatedProducts });
       await updateDoc(gRef, { products: updatedProducts });
 

@@ -192,10 +192,14 @@ const CompanyDetailsForm = () => {
               storage,
               `EGalleryForProcessingUnit/${uid}/${folderName}/${fileName}`,
             );
-            const metadata = {
-              contentType: file.type,
-              contentDisposition: `attachment; filename="${file.name}"`,
-            };
+           const isPDF = file.type === "application/pdf";
+
+      const metadata = {
+        contentType: file.type,
+        ...(isPDF && {
+          contentDisposition: `attachment; filename="${file.name}"`,
+        }),
+      };
 
             await uploadBytes(fileRef, file, metadata);
             const url = await getDownloadURL(fileRef);
@@ -768,7 +772,7 @@ const CompanyDetailsForm = () => {
                     id="image"
                     type="file"
                     className="absolute inset-0 opacity-0 cursor-pointer"
-                    accept="image/*"
+                   accept="image/jpeg,image/jpg,image/png"
                     name="image"
                     onChange={(e) => handleUpload(e, "image")}
                     required

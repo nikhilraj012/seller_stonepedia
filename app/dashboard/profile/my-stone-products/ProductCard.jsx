@@ -80,7 +80,7 @@ const ProductCard = ({
                     alt="Thumbnail"
                     onLoad={() => setImageLoading(false)}
                     onError={() => setImageLoading(false)}
-                    className={`h-full w-full object-cover rounded-md transition ${
+                    className={`h-full w-full  rounded-md transition ${
                       imageLoading ? "opacity-0" : "opacity-100"
                     }`}
                   />
@@ -278,7 +278,7 @@ const ProductCard = ({
                 onError={() =>
                   setProductImageLoading((prev) => ({ ...prev, [i]: false }))
                 }
-                className={`w-full h-40 object-cover object-top rounded-lg transition ${
+                className={`w-full h-50 rounded-lg transition ${
                   productImageLoading[i] !== false ? "opacity-0" : "opacity-100"
                 }`}
               />

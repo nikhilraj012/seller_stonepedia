@@ -68,11 +68,14 @@ const Form = () => {
           storage,
           `sellStoneProducts/${uid}/${path}/${name}`,
         );
+        const isPDF = file.type === "application/pdf";
+
         const metadata = {
           contentType: file.type,
-          contentDisposition: `attachment; filename="${file.name}"`,
+          ...(isPDF && {
+            contentDisposition: `attachment; filename="${file.name}"`,
+          }),
         };
-
         await uploadBytes(fileRef, file, metadata);
         return { url: await getDownloadURL(fileRef), type: file.type };
       }),
@@ -96,7 +99,7 @@ const Form = () => {
     ) {
       thumbnail = {
         url: product.thumbnail.url,
-        
+
         name: product.thumbnail.name || "thumbnail",
       };
     }
