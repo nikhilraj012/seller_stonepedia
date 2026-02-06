@@ -768,9 +768,9 @@ const CompanyDetailsForm = () => {
                   <p className="text-[#2C2C2C] text-[10px] md:text-xs font-medium tracking-wide pointer-events-none mb-1">
                     Choose a file
                   </p>
-                  {/* <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
-                    up to 2MB
-                  </span> */}
+                  <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
+                    PDF Only
+                  </span>
                   <div className="h-6">
                     {formData.brochure ? (
                       <p className="text-[#2C2C2C] text-[10px] font-medium">
