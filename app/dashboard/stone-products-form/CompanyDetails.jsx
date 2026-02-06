@@ -114,7 +114,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full">
             <div className="w-full flex flex-col">
               <label htmlFor="gstNumber" className="mb-0.5 text-xs font-medium">
-                GST Number
+               GST / Government Id
               </label>
               <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
@@ -122,14 +122,6 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
                     id="gstNumber"
                     type="text"
                     name="gstNumber"
-                    required
-                    maxLength={15}
-                    pattern=".{15}"
-                    onInvalid={(e) =>
-                      e.target.setCustomValidity(
-                        "GST number must follow these rules:\n1. Must be 15 characters\n2. Example: 22AAAAA0000A1Z5",
-                      )
-                    }
                     onInput={(e) => e.target.setCustomValidity("")}
                     placeholder="GST Number"
                     value={formData.gstNumber}

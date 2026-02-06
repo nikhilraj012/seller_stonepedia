@@ -1384,7 +1384,7 @@ const BlockForm = () => {
                         </span>
                         <input
                           type="file"
-                          accept="video/*"
+                         accept="video/mp4"
                           className="hidden"
                           onChange={(e) => handleFile(e, "videos")}
                           multiple
@@ -1407,7 +1407,7 @@ const BlockForm = () => {
                         </span>
                         <input
                           type="file"
-                          accept="image/*"
+                         accept="image/jpeg, image/jpg, image/png"
                           className="hidden"
                           onChange={(e) => handleFile(e, "images")}
                           multiple

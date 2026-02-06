@@ -308,7 +308,7 @@ const page = () => {
                     </div>
                     <span>
                       {" "}
-                      {canEdit ? "Add Thumbnail" : "No Thumbnail Added"}
+                      {canEdit ? "Add Thumbnail" : "No Thumbnail"}
                     </span>
                   </>
                 )}

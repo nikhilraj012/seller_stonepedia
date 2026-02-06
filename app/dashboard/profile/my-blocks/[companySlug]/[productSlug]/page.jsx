@@ -260,7 +260,7 @@ const BlockDetailsPage = () => {
                 id="thumbnail"
                 type="file"
                 disabled={isUpdating}
-                accept="image/*"
+                accept="image/jpeg, image/jpg, image/png"
                 className="hidden"
                 onChange={handleThumbnailChange}
               />
@@ -305,9 +305,7 @@ const BlockDetailsPage = () => {
                         d="M12 4v16m8-8H4"
                       />
                     </svg>
-                    <span>
-                      {canEdit ? "Add Thumbnail" : "No Thumbnail Added"}
-                    </span>
+                    <span>{canEdit ? "Add Thumbnail" : "No Thumbnail"}</span>
                   </div>
                 )}
               </div>

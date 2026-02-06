@@ -1,4 +1,3 @@
-
 import { FaPlus, FaPlay, FaPause } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useRef, useState } from "react";
@@ -78,7 +77,7 @@ const MediaUploader = ({ product, setProduct }) => {
         <input
           type="file"
           multiple
-          accept="image/*,video/*"
+          accept="image/jpeg,image/jpg,image/png,video/mp4"
           hidden
           onChange={handleFileUpload}
         />

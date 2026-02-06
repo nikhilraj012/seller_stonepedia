@@ -108,9 +108,11 @@ const ProductCard = ({
             <h1 className=" font-semibold capitalize  text-[13px] md:text-[20px] lg:text-[22px] text-[#3B3B3B] wrap-break-word whitespace-normal">
               {item.companyDetails.shopName}
             </h1>
-            <p className="break-all whitespace-normal">
-              {item.companyDetails.gstNumber}
-            </p>
+            {item.companyDetails.gstNumber && (
+              <p className="break-all whitespace-normal">
+                {item.companyDetails.gstNumber}
+              </p>
+            )}
             <p className="break-all whitespace-normal">
               {item.companyDetails.email}
             </p>

@@ -111,7 +111,7 @@ const MediaUploader = ({ product, setProduct }) => {
               id="media-upload"
               type="file"
               multiple
-              accept="image/*,video/*"
+              accept="image/jpeg,image/jpg,image/png,video/mp4"
               className="hidden"
               onChange={handleFileUpload}
             />
