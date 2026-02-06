@@ -406,7 +406,7 @@ const handleFileChange = (e, blockId) => {
                           />
                           <button
                             type="button"
-                            className="absolute text-[10px] cursor-pointer -top-1 -right-2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                            className="absolute text-[10px] cursor-pointer -top-1 -right-2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors"
                             onClick={() => {
                               setBlocksList((prevBlocks) =>
                                 prevBlocks.map((b) =>
@@ -481,7 +481,7 @@ const handleFileChange = (e, blockId) => {
                           />
                           <button
                             type="button"
-                            className="absolute text-[10px] cursor-pointer -top-1 -right-2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100 z-20"
+                            className="absolute text-[10px] cursor-pointer -top-1 -right-2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors z-20"
                             onClick={() => {
                               setBlocksList((prevBlocks) =>
                                 prevBlocks.map((b) =>
