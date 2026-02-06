@@ -451,7 +451,8 @@ export default function SlabDetailsForm({
             id="media"
             type="file"
             className="absolute inset-0 opacity-0"
-            accept="video/*,image/*"
+             accept="image/jpeg,image/jpg,image/png,video/mp4"
+               
             name="media"
             multiple
             onChange={handleFile}
