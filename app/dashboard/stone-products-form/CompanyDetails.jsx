@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { LuUserRound } from "react-icons/lu";
 import { LuFactory } from "react-icons/lu";
 import { CiMobile3 } from "react-icons/ci";
-
+import toast from "react-hot-toast";
 import { LocationSelector } from "@/app/components/LocationSelector";
 
 const CompanyDetails = ({ onDataChange, resetForm }) => {
