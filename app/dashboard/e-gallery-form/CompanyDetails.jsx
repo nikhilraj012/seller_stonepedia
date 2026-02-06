@@ -39,7 +39,6 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
       setFormData(initialFormData);
     }
   }, [resetForm]);
- 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -51,24 +50,50 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
     }));
   };
 
+  // const handleUpload = (e, type) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+
+  //   // if (file.size > MAX_SIZE) {
+  //   //   toast.error(`${file.name} exceeds 2MB limit`);
+  //   //   e.target.value = "";
+  //   //   return;
+  //   // }
+
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [type]: {
+  //       file,
+  //       url: URL.createObjectURL(file),
+  //       type: file.type,
+  //       name: file.name,
+  //     },
+  //   }));
+  // };
   const handleUpload = (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // if (file.size > MAX_SIZE) {
-    //   toast.error(`${file.name} exceeds 2MB limit`);
-    //   e.target.value = "";
-    //   return;
-    // }
-      const isPDF =
-    file.type === "application/pdf" ||
-    file.name.toLowerCase().endsWith(".pdf");
+    const isPDF =
+      file.type === "application/pdf" ||
+      file.name.toLowerCase().endsWith(".pdf");
 
-  if (!isPDF) {
-    toast.error("Only PDF allowed");
-    e.target.value = "";
-    return;
-  }
+    const isImage =
+      file.type === "image/jpeg" ||
+      file.type === "image/jpg" ||
+      file.type === "image/png";
+
+    if (type === "brochure" && !isPDF) {
+      toast.error("Only PDF file allowed for brochure");
+      e.target.value = "";
+      return;
+    }
+
+    if (type === "image" && !isImage) {
+      toast.error("Only JPG or PNG image allowed");
+      e.target.value = "";
+      return;
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -328,9 +353,9 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
               <p className="text-[#2C2C2C] text-[10px] md:text-xs font-medium tracking-wide pointer-events-none mb-1">
                 Choose a file
               </p>
-              {/* <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
-                up to 2MB
-              </span> */}
+              <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
+                PDF Only
+              </span>
               <div className="h-6">
                 {formData.brochure ? (
                   <p className="text-[#2C2C2C] text-[10px] font-medium">
