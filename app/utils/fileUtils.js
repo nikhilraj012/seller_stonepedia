@@ -79,14 +79,11 @@ export const validateFiles = (files) => {
       ALLOWED_VIDEO_TYPES.includes(file.type) ||
       ALLOWED_VIDEO_TYPES.includes(`video/${ext}`);
 
-    if (!isImage) {
-      toast.error("Only JPG, JPEG, PNG allowed");
+    if (!isImage && !isVideo) {
+      toast.error("Only JPG, JPEG, PNG, MP4 allowed");
       return false;
     }
-if( !isVideo) {
-      toast.error("MP4 allowed");
-      return false;
-    }
+
    
     return true;
   });
