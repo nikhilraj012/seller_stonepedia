@@ -885,7 +885,7 @@ const AddSlabPage = () => {
                   Choose a Image/Video
                 </p>
                 <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
-                  Image up to 2MB,Video up to 5MB
+                  Image JPG, JPEG, PNG / Video mp4 
                 </span>
                 <div className="h-6">
                   {product.media?.length > 0 ? (
