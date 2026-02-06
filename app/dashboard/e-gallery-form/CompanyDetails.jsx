@@ -90,7 +90,7 @@ const CompanyDetails = forwardRef(({ resetForm }, ref) => {
     }
 
     if (type === "image" && !isImage) {
-      toast.error("Only JPG or PNG image allowed");
+      toast.error("Only JPG, JPEG, PNG image allowed");
       e.target.value = "";
       return;
     }

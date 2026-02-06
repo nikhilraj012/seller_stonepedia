@@ -466,6 +466,17 @@ const CompanyDetailsForm = () => {
   const handleUpload = (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
+    const isImage =
+      file.type === "image/jpeg" ||
+      file.type === "image/jpg" ||
+      file.type === "image/png";
+
+    
+    if (type === "image" && !isImage) {
+      toast.error("Only JPG, JPEG, PNG image allowed");
+      e.target.value = "";
+      return;
+    }
 
     setFormData((prev) => ({
       ...prev,
