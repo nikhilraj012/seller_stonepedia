@@ -61,14 +61,11 @@ const EditCompanyModal = ({
               htmlFor="gstNumber"
               className="block text-xs md:text-sm font-medium text-black mb-1"
             >
-              GST Number
+              GST / Government Id
             </label>
             <input
               id="gstNumber"
               type="text"
-              required
-              maxLength={15}
-              pattern=".{15}"
               placeholder="22AAAAA0000A1Z5"
               value={editForm.gstNumber}
               onChange={(e) =>
