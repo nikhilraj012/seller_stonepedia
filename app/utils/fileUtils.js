@@ -55,6 +55,7 @@
 //     return true;
 //   });
 // };
+import toast from "react-hot-toast";
 export const processFiles = (files) => {
   if (!files?.length) return [];
 
