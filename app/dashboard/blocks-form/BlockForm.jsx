@@ -195,52 +195,167 @@ const BlockForm = () => {
     }
   };
   const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
-const ALLOWED_VIDEO_TYPES = ["video/mp4"];
+  const ALLOWED_VIDEO_TYPES = ["video/mp4"];
+  const ALLOWED_PDF_TYPES = ["application/pdf"];
 
-const handleFile = (e, type, targetBlockId = null) => {
-  const files = Array.from(e.target.files || []);
-  if (!files.length) return;
+  const handleFile = (e, type, targetBlockId = null) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
 
-  const validFiles = files.filter((file) => {
-    const ext = file.name.split(".").pop()?.toLowerCase();
-    const isImage =
-      ALLOWED_IMAGE_TYPES.includes(file.type) ||
-      ALLOWED_IMAGE_TYPES.includes(`image/${ext}`);
-    const isVideo =
-      ALLOWED_VIDEO_TYPES.includes(file.type) ||
-      ALLOWED_VIDEO_TYPES.includes(`video/${ext}`);
+    const maxFiles = type === "videos" ? 1 : 3; // Limit number of files
+    const validFiles = [];
+    let hasError = false;
 
-    if (!isImage && !isVideo) {
-      toast.error("Only JPG, JPEG, PNG, MP4 allowed");
-      return false;
+    // Special handling for thumbnail type
+    if (type === "thumbnail") {
+      if (files.length > 1) {
+        toast.error("Only one thumbnail can be uploaded", { duration: 1000 });
+        e.target.value = "";
+        return;
+      }
+
+      // Format check for thumbnail
+      const file = files[0];
+      const ext = file.name.split(".").pop()?.toLowerCase();
+      const isImage =
+        ALLOWED_IMAGE_TYPES.includes(file.type) ||
+        ALLOWED_IMAGE_TYPES.includes(`image/${ext}`);
+
+      if (!isImage) {
+        toast.error("Only JPG, PNG images allowed for thumbnail");
+        e.target.value = "";
+        return;
+      }
+
+      if (targetBlockId) {
+        setBlocksList((prevBlocks) =>
+          prevBlocks.map((b) =>
+            b.id === targetBlockId ? { ...b, thumbnail: file } : b,
+          ),
+        );
+        toast.success("Thumbnail uploaded successfully", { duration: 1000 });
+        e.target.value = "";
+        return;
+      }
     }
 
-    return true;
-  });
+    // If targetBlockId is provided
+    if (targetBlockId) {
+      const targetBlock = blocksList.find((b) => b.id === targetBlockId);
+      if (!targetBlock) {
+        e.target.value = "";
+        return;
+      }
 
-  if (!validFiles.length) {
-    e.target.value = "";
-    return;
-  }
+      if (type === "documents") {
+        if (targetBlock.documents && targetBlock.documents.length > 0) {
+          if (files.length > 1) {
+            toast.error("Only one document can be uploaded", {
+              duration: 1000,
+            });
+            e.target.value = "";
+            return;
+          }
+        }
+      } else {
+        if (targetBlock[type]?.length + files.length > maxFiles) {
+          toast.error(`Maximum ${maxFiles} ${type} allowed`, {
+            duration: 1000,
+          });
+          e.target.value = "";
+          return;
+        }
+      }
+    } else {
+      if (type === "documents") {
+        if (block.documents && block.documents.length > 0) {
+          if (files.length > 1) {
+            toast.error("Only one document can be uploaded", {
+              duration: 1000,
+            });
+            e.target.value = "";
+            return;
+          }
+        }
+      } else if (block[type].length + files.length > maxFiles) {
+        toast.error(`Maximum ${maxFiles} ${type} allowed`, { duration: 1000 });
+        e.target.value = "";
+        return;
+      }
+    }
 
-  if (targetBlockId) {
-    setBlocksList((prev) =>
-      prev.map((b) =>
-        b.id === targetBlockId
-          ? { ...b, [type]: [...(b[type] || []), ...validFiles] }
-          : b
-      )
-    );
-  } else {
-    setBlock({
-      ...block,
-      [type]: [...block[type], ...validFiles],
+    // ===== FORMAT VALIDATION (NO SIZE) =====
+    files.forEach((file) => {
+      const ext = file.name.split(".").pop()?.toLowerCase();
+
+      const isImage =
+        ALLOWED_IMAGE_TYPES.includes(file.type) ||
+        ALLOWED_IMAGE_TYPES.includes(`image/${ext}`);
+
+      const isVideo =
+        ALLOWED_VIDEO_TYPES.includes(file.type) ||
+        ALLOWED_VIDEO_TYPES.includes(`video/${ext}`);
+
+      const isPDF =
+        ALLOWED_PDF_TYPES.includes(file.type) ||
+        file.name.toLowerCase().endsWith(".pdf");
+
+      if (type === "images" && !isImage) {
+        toast.error("Only JPG, PNG images allowed");
+        hasError = true;
+        return;
+      }
+
+      if (type === "videos" && !isVideo) {
+        toast.error("Only MP4 videos allowed");
+        hasError = true;
+        return;
+      }
+
+      if (type === "documents" && !isPDF) {
+        toast.error("Only PDF documents allowed");
+        hasError = true;
+        return;
+      }
+
+      validFiles.push(file);
     });
-  }
 
-  e.target.value = "";
-};
+    if (hasError || validFiles.length === 0) {
+      e.target.value = "";
+      return;
+    }
 
+    // Update state
+    if (targetBlockId) {
+      setBlocksList((prevBlocks) =>
+        prevBlocks.map((b) => {
+          if (b.id === targetBlockId) {
+            if (type === "documents") {
+              return { ...b, [type]: validFiles };
+            } else {
+              return { ...b, [type]: [...(b[type] || []), ...validFiles] };
+            }
+          }
+          return b;
+        }),
+      );
+    } else {
+      if (type === "documents") {
+        setBlock({
+          ...block,
+          [type]: validFiles,
+        });
+      } else {
+        setBlock({
+          ...block,
+          [type]: [...block[type], ...validFiles],
+        });
+      }
+    }
+
+    e.target.value = "";
+  };
   // const handleFile = (e, type, targetBlockId = null) => {
   //   const files = Array.from(e.target.files || []);
   //   if (files.length === 0) return;
@@ -1421,7 +1536,7 @@ const handleFile = (e, type, targetBlockId = null) => {
                           Upload Videos
                         </span>
                         <span className="text-[8px] text-gray-500">
-Video mp4 
+                          Video mp4
                         </span>
                         <span className="mt-2 text-[8px] text-gray-600 font-semibold">
                           {block.videos.length > 0
@@ -1444,7 +1559,7 @@ Video mp4
                           Upload Images
                         </span>
                         <span className="text-[8px] text-gray-500">
-                          Image JPG, JPEG, PNG 
+                          Image JPG, JPEG, PNG
                         </span>
                         <span className="mt-2 text-[8px] text-gray-600 font-semibold">
                           {block.images.length > 0
