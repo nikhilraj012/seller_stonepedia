@@ -285,7 +285,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
   )} */}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-3 mb-4">
         {item.blocks?.map((block, i) => (
           <div
             key={i}
@@ -319,7 +319,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
             </div>
 
             {/* BASIC INFO */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mt-14">
               <div>
                 <h3 className="capitalize font-semibold text-base md:text-lg xl:text-[22px] text-[#262626]">
                   {block.stoneName}
