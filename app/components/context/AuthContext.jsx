@@ -49,14 +49,14 @@ export const AuthProvider = ({ children }) => {
           duration: 4000,
           position: "top-center",
         });
-        
+
         // Fetch seller details after successful registration
         const sellerResult = await getSellerDetails(result.user.uid);
         if (sellerResult.success) {
           setSellerDetails(sellerResult.data);
         }
-        
-        router.push("/dashboard");
+
+        router.replace("/dashboard");
         return { success: true };
       } else {
         toast.error(result.error || "Registration failed. Please try again.", {
@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
           duration: 4000,
           position: "top-center",
         });
-        router.push("/dashboard");
+        router.replace("/dashboard");
         return { success: true };
       } else {
         toast.error(
@@ -114,7 +114,7 @@ export const AuthProvider = ({ children }) => {
           duration: 3000,
           position: "top-center",
         });
-        router.push("/");
+        router.replace("/");
         return { success: true };
       } else {
         setLoggingOut(false);
@@ -137,15 +137,15 @@ export const AuthProvider = ({ children }) => {
   const updateAppUser = (userData) => {
     // Update user state with new data (e.g., photoURL)
     if (userData.photoURL) {
-      setUser(prevUser => ({ ...prevUser, photoURL: userData.photoURL }));
+      setUser((prevUser) => ({ ...prevUser, photoURL: userData.photoURL }));
     }
     // Update sellerDetails if provided
     if (userData.sellerDetails) {
       setSellerDetails(userData.sellerDetails);
     }
   };
-  
-const isAuthenticated = !!user;
+
+  const isAuthenticated = !!user;
 
   return (
     <AuthContext.Provider
