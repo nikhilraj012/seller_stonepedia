@@ -47,23 +47,51 @@ const BlocksFormProducts = ({
     };
   }, []);
 
-  const handleFileChange = (e, blockId) => {
-    const file = e.target.files[0];
+  // const handleFileChange = (e, blockId) => {
+  //   const file = e.target.files[0];
 
-    const maxSize = 5 * 1024 * 1024;
-    if (file.size > maxSize) {
-      toast.error(`Image size should be less than 5MB`);
-      return;
-    }
+  //   const maxSize = 5 * 1024 * 1024;
+  //   if (file.size > maxSize) {
+  //     toast.error(`Image size should be less than 5MB`);
+  //     return;
+  //   }
 
-    // Update the block with the new image
-    setBlocksList((prevBlocks) =>
-      prevBlocks.map((block) =>
-        block.id === blockId ? { ...block, thumbnail: file } : block,
-      ),
-    );
-  };
+  //   // Update the block with the new image
+  //   setBlocksList((prevBlocks) =>
+  //     prevBlocks.map((block) =>
+  //       block.id === blockId ? { ...block, thumbnail: file } : block,
+  //     ),
+  //   );
 
+  // };
+
+  const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+
+const handleFileChange = (e, blockId) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+
+  const ext = file.name.split(".").pop()?.toLowerCase();
+  const isImage =
+    ALLOWED_IMAGE_TYPES.includes(file.type) ||
+    ALLOWED_IMAGE_TYPES.includes(`image/${ext}`);
+
+  if (!isImage) {
+    toast.error("Only JPG, JPEG, PNG images allowed");
+    e.target.value = "";
+    return;
+  }
+
+  
+  setBlocksList((prevBlocks) =>
+    prevBlocks.map((block) =>
+      block.id === blockId ? { ...block, thumbnail: file } : block
+    )
+  );
+
+  e.target.value = "";
+};
   // Trigger file input click when thumbnail div is clicked
   const handleThumbnailClick = (blockId) => {
     if (fileInputRefs.current[blockId]) {
@@ -378,7 +406,7 @@ const BlocksFormProducts = ({
                           />
                           <button
                             type="button"
-                            className="absolute text-[10px] cursor-pointer -top-1 -right-2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                            className="absolute text-[10px] cursor-pointer -top-1 -right-2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors"
                             onClick={() => {
                               setBlocksList((prevBlocks) =>
                                 prevBlocks.map((b) =>
@@ -453,7 +481,7 @@ const BlocksFormProducts = ({
                           />
                           <button
                             type="button"
-                            className="absolute text-[10px] cursor-pointer -top-1 -right-2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100 z-20"
+                            className="absolute text-[10px] cursor-pointer -top-1 -right-2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors z-20"
                             onClick={() => {
                               setBlocksList((prevBlocks) =>
                                 prevBlocks.map((b) =>

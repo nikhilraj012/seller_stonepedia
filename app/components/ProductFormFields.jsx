@@ -276,7 +276,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
                   id="media"
                   type="file"
                   className="absolute inset-0 opacity-0 "
-                 accept="image/jpeg,image/jpg,image/png,video/mp4"
+                  accept="image/jpeg,image/jpg,image/png,video/mp4"
                   name="media"
                   multiple
                   onChange={handleFile}
@@ -286,7 +286,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
                   Choose a Image/Video
                 </p>
                 <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
-                  Image up to 2MB,Video up to 5MB
+                  Image JPG, JPEG, PNG / Video mp4
                 </span>
                 <div className="h-6">
                   {product.media?.length > 0 ? (
@@ -295,7 +295,7 @@ const ProductFormFields = ({ product, setProduct, hideMedia = false }) => {
                     <button
                       type="button"
                       onClick={() => document.getElementById("media").click()} // <-- media here
-                       className="border font-medium text-sm px-6 py-1 rounded-xl hover:border-primary cursor-pointer hover:shadow-md transition-colors pointer-events-auto relative z-10"
+                      className="border font-medium text-sm px-6 py-1 rounded-xl hover:border-primary cursor-pointer hover:shadow-md transition-colors pointer-events-auto relative z-10"
                     >
                       Browse
                     </button>

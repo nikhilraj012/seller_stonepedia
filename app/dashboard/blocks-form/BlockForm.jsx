@@ -194,76 +194,61 @@ const BlockForm = () => {
       });
     }
   };
+  const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+  const ALLOWED_VIDEO_TYPES = ["video/mp4"];
+  const ALLOWED_PDF_TYPES = ["application/pdf"];
 
   const handleFile = (e, type, targetBlockId = null) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
-    const maxSize =
-      type === "videos"
-        ? 5 * 1024 * 1024
-        : type === "images"
-          ? 2 * 1024 * 1024
-          : 2 * 1024 * 1024;
-
     const maxFiles = type === "videos" ? 1 : 3; // Limit number of files
-    const maxDocuments = 1; // Limit documents to 1 file
     const validFiles = [];
     let hasError = false;
 
     // Special handling for thumbnail type
     if (type === "thumbnail") {
-      // For thumbnail, only allow one file
       if (files.length > 1) {
-        toast.error("Only one thumbnail can be uploaded", {
-          duration: 1000,
-        });
+        toast.error("Only one thumbnail can be uploaded", { duration: 1000 });
         e.target.value = "";
         return;
       }
 
-      // Check file size for thumbnail (5MB limit)
-      if (files[0].size > 2 * 1024 * 1024) {
-        toast.error(`${files[0].name} exceeds 2MB limit`, {
-          duration: 2000,
-        });
+      // Format check for thumbnail
+      const file = files[0];
+      const ext = file.name.split(".").pop()?.toLowerCase();
+      const isImage =
+        ALLOWED_IMAGE_TYPES.includes(file.type) ||
+        ALLOWED_IMAGE_TYPES.includes(`image/${ext}`);
+
+      if (!isImage) {
+        toast.error("Only JPG, PNG images allowed for thumbnail");
         e.target.value = "";
         return;
       }
 
-      // If targetBlockId is provided, update the thumbnail for that specific block
       if (targetBlockId) {
         setBlocksList((prevBlocks) =>
-          prevBlocks.map((b) => {
-            if (b.id === targetBlockId) {
-              return { ...b, thumbnail: files[0] };
-            }
-            return b;
-          }),
+          prevBlocks.map((b) =>
+            b.id === targetBlockId ? { ...b, thumbnail: file } : b,
+          ),
         );
-        toast.success("Thumbnail uploaded successfully", {
-          duration: 1000,
-        });
+        toast.success("Thumbnail uploaded successfully", { duration: 1000 });
         e.target.value = "";
         return;
       }
     }
 
-    // If targetBlockId is provided, we're updating a block in blocksList
-    // Otherwise, we're updating the current block in the form
+    // If targetBlockId is provided
     if (targetBlockId) {
-      // Find the target block in blocksList
       const targetBlock = blocksList.find((b) => b.id === targetBlockId);
       if (!targetBlock) {
         e.target.value = "";
         return;
       }
 
-      // Special handling for documents - only allow one document
       if (type === "documents") {
-        // If there's already a document, replace it with the new one
         if (targetBlock.documents && targetBlock.documents.length > 0) {
-          // For documents, we'll replace the existing one
           if (files.length > 1) {
             toast.error("Only one document can be uploaded", {
               duration: 1000,
@@ -273,7 +258,6 @@ const BlockForm = () => {
           }
         }
       } else {
-        // For other file types, check the limits
         if (targetBlock[type]?.length + files.length > maxFiles) {
           toast.error(`Maximum ${maxFiles} ${type} allowed`, {
             duration: 1000,
@@ -283,9 +267,7 @@ const BlockForm = () => {
         }
       }
     } else {
-      // Check total files won't exceed limit for the current block
       if (type === "documents") {
-        // For documents, we'll replace the existing one
         if (block.documents && block.documents.length > 0) {
           if (files.length > 1) {
             toast.error("Only one document can be uploaded", {
@@ -296,22 +278,46 @@ const BlockForm = () => {
           }
         }
       } else if (block[type].length + files.length > maxFiles) {
-        toast.error(`Maximum ${maxFiles} ${type} allowed`, {
-          duration: 1000,
-        });
+        toast.error(`Maximum ${maxFiles} ${type} allowed`, { duration: 1000 });
         e.target.value = "";
         return;
       }
     }
 
+    // ===== FORMAT VALIDATION (NO SIZE) =====
     files.forEach((file) => {
-      if (file.size > maxSize) {
-        toast.error(`${file.name} exceeds ${maxSize / (1024 * 1024)}MB limit`, {
-          duration: 2000,
-        });
+      const ext = file.name.split(".").pop()?.toLowerCase();
+
+      const isImage =
+        ALLOWED_IMAGE_TYPES.includes(file.type) ||
+        ALLOWED_IMAGE_TYPES.includes(`image/${ext}`);
+
+      const isVideo =
+        ALLOWED_VIDEO_TYPES.includes(file.type) ||
+        ALLOWED_VIDEO_TYPES.includes(`video/${ext}`);
+
+      const isPDF =
+        ALLOWED_PDF_TYPES.includes(file.type) ||
+        file.name.toLowerCase().endsWith(".pdf");
+
+      if (type === "images" && !isImage) {
+        toast.error("Only JPG, PNG images allowed");
         hasError = true;
         return;
       }
+
+      if (type === "videos" && !isVideo) {
+        toast.error("Only MP4 videos allowed");
+        hasError = true;
+        return;
+      }
+
+      if (type === "documents" && !isPDF) {
+        toast.error("Only PDF documents allowed");
+        hasError = true;
+        return;
+      }
+
       validFiles.push(file);
     });
 
@@ -320,17 +326,14 @@ const BlockForm = () => {
       return;
     }
 
-    // Update the appropriate state based on whether we're updating a block in blocksList or the current form block
+    // Update state
     if (targetBlockId) {
-      // Update blocksList
       setBlocksList((prevBlocks) =>
         prevBlocks.map((b) => {
           if (b.id === targetBlockId) {
-            // For documents, replace existing ones
             if (type === "documents") {
-              return { ...b, [type]: validFiles }; // Replace with new document
+              return { ...b, [type]: validFiles };
             } else {
-              // For other files, append to existing ones
               return { ...b, [type]: [...(b[type] || []), ...validFiles] };
             }
           }
@@ -338,15 +341,12 @@ const BlockForm = () => {
         }),
       );
     } else {
-      // Update current form block
       if (type === "documents") {
-        // For documents, replace existing ones
         setBlock({
           ...block,
-          [type]: validFiles, // Replace with new document
+          [type]: validFiles,
         });
       } else {
-        // For other files, append to existing ones
         setBlock({
           ...block,
           [type]: [...block[type], ...validFiles],
@@ -354,8 +354,169 @@ const BlockForm = () => {
       }
     }
 
-    e.target.value = ""; // Reset input
+    e.target.value = "";
   };
+  // const handleFile = (e, type, targetBlockId = null) => {
+  //   const files = Array.from(e.target.files || []);
+  //   if (files.length === 0) return;
+
+  //   const maxSize =
+  //     type === "videos"
+  //       ? 5 * 1024 * 1024
+  //       : type === "images"
+  //         ? 2 * 1024 * 1024
+  //         : 2 * 1024 * 1024;
+
+  //   const maxFiles = type === "videos" ? 1 : 3; // Limit number of files
+  //   const maxDocuments = 1; // Limit documents to 1 file
+  //   const validFiles = [];
+  //   let hasError = false;
+
+  //   // Special handling for thumbnail type
+  //   if (type === "thumbnail") {
+  //     // For thumbnail, only allow one file
+  //     if (files.length > 1) {
+  //       toast.error("Only one thumbnail can be uploaded", {
+  //         duration: 1000,
+  //       });
+  //       e.target.value = "";
+  //       return;
+  //     }
+
+  //     // Check file size for thumbnail (5MB limit)
+  //     if (files[0].size > 2 * 1024 * 1024) {
+  //       toast.error(`${files[0].name} exceeds 2MB limit`, {
+  //         duration: 2000,
+  //       });
+  //       e.target.value = "";
+  //       return;
+  //     }
+
+  //     // If targetBlockId is provided, update the thumbnail for that specific block
+  //     if (targetBlockId) {
+  //       setBlocksList((prevBlocks) =>
+  //         prevBlocks.map((b) => {
+  //           if (b.id === targetBlockId) {
+  //             return { ...b, thumbnail: files[0] };
+  //           }
+  //           return b;
+  //         }),
+  //       );
+  //       toast.success("Thumbnail uploaded successfully", {
+  //         duration: 1000,
+  //       });
+  //       e.target.value = "";
+  //       return;
+  //     }
+  //   }
+
+  //   // If targetBlockId is provided, we're updating a block in blocksList
+  //   // Otherwise, we're updating the current block in the form
+  //   if (targetBlockId) {
+  //     // Find the target block in blocksList
+  //     const targetBlock = blocksList.find((b) => b.id === targetBlockId);
+  //     if (!targetBlock) {
+  //       e.target.value = "";
+  //       return;
+  //     }
+
+  //     // Special handling for documents - only allow one document
+  //     if (type === "documents") {
+  //       // If there's already a document, replace it with the new one
+  //       if (targetBlock.documents && targetBlock.documents.length > 0) {
+  //         // For documents, we'll replace the existing one
+  //         if (files.length > 1) {
+  //           toast.error("Only one document can be uploaded", {
+  //             duration: 1000,
+  //           });
+  //           e.target.value = "";
+  //           return;
+  //         }
+  //       }
+  //     } else {
+  //       // For other file types, check the limits
+  //       if (targetBlock[type]?.length + files.length > maxFiles) {
+  //         toast.error(`Maximum ${maxFiles} ${type} allowed`, {
+  //           duration: 1000,
+  //         });
+  //         e.target.value = "";
+  //         return;
+  //       }
+  //     }
+  //   } else {
+  //     // Check total files won't exceed limit for the current block
+  //     if (type === "documents") {
+  //       // For documents, we'll replace the existing one
+  //       if (block.documents && block.documents.length > 0) {
+  //         if (files.length > 1) {
+  //           toast.error("Only one document can be uploaded", {
+  //             duration: 1000,
+  //           });
+  //           e.target.value = "";
+  //           return;
+  //         }
+  //       }
+  //     } else if (block[type].length + files.length > maxFiles) {
+  //       toast.error(`Maximum ${maxFiles} ${type} allowed`, {
+  //         duration: 1000,
+  //       });
+  //       e.target.value = "";
+  //       return;
+  //     }
+  //   }
+
+  //   files.forEach((file) => {
+  //     if (file.size > maxSize) {
+  //       toast.error(`${file.name} exceeds ${maxSize / (1024 * 1024)}MB limit`, {
+  //         duration: 2000,
+  //       });
+  //       hasError = true;
+  //       return;
+  //     }
+  //     validFiles.push(file);
+  //   });
+
+  //   if (hasError || validFiles.length === 0) {
+  //     e.target.value = "";
+  //     return;
+  //   }
+
+  //   // Update the appropriate state based on whether we're updating a block in blocksList or the current form block
+  //   if (targetBlockId) {
+  //     // Update blocksList
+  //     setBlocksList((prevBlocks) =>
+  //       prevBlocks.map((b) => {
+  //         if (b.id === targetBlockId) {
+  //           // For documents, replace existing ones
+  //           if (type === "documents") {
+  //             return { ...b, [type]: validFiles }; // Replace with new document
+  //           } else {
+  //             // For other files, append to existing ones
+  //             return { ...b, [type]: [...(b[type] || []), ...validFiles] };
+  //           }
+  //         }
+  //         return b;
+  //       }),
+  //     );
+  //   } else {
+  //     // Update current form block
+  //     if (type === "documents") {
+  //       // For documents, replace existing ones
+  //       setBlock({
+  //         ...block,
+  //         [type]: validFiles, // Replace with new document
+  //       });
+  //     } else {
+  //       // For other files, append to existing ones
+  //       setBlock({
+  //         ...block,
+  //         [type]: [...block[type], ...validFiles],
+  //       });
+  //     }
+  //   }
+
+  //   e.target.value = ""; // Reset input
+  // };
 
   const resetBlockFields = () => {
     setBlock({
@@ -1375,7 +1536,7 @@ const BlockForm = () => {
                           Upload Videos
                         </span>
                         <span className="text-[8px] text-gray-500">
-                          up to 5 MB
+                          Video mp4
                         </span>
                         <span className="mt-2 text-[8px] text-gray-600 font-semibold">
                           {block.videos.length > 0
@@ -1398,7 +1559,7 @@ const BlockForm = () => {
                           Upload Images
                         </span>
                         <span className="text-[8px] text-gray-500">
-                          up to 2 MB
+                          Image JPG, JPEG, PNG
                         </span>
                         <span className="mt-2 text-[8px] text-gray-600 font-semibold">
                           {block.images.length > 0

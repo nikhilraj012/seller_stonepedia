@@ -478,27 +478,56 @@ const CompanyDetailsForm = () => {
     }));
   };
 
+  // const handleSingleFileUpload = (e, type) => {
+  //   const file = e?.target?.files?.[0];
+  //   if (!file) return;
+  //   if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+  //     toast.error(`${file.name} exceeds ${MAX_FILE_SIZE_MB}MB limit`);
+  //     return;
+  //   }
+
+  //   const fileObj = {
+  //     file,
+  //     url: URL.createObjectURL(file),
+  //     type: file.type,
+  //     name: file.name,
+  //   };
+
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [type]: fileObj,
+  //   }));
+  // };
+
   const handleSingleFileUpload = (e, type) => {
-    const file = e?.target?.files?.[0];
-    if (!file) return;
-    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-      toast.error(`${file.name} exceeds ${MAX_FILE_SIZE_MB}MB limit`);
-      return;
-    }
+  const file = e?.target?.files?.[0];
+  if (!file) return;
 
-    const fileObj = {
-      file,
-      url: URL.createObjectURL(file),
-      type: file.type,
-      name: file.name,
-    };
+  const isPDF =
+    file.type === "application/pdf" ||
+    file.name.toLowerCase().endsWith(".pdf");
 
-    setFormData((prev) => ({
-      ...prev,
-      [type]: fileObj,
-    }));
+  if (!isPDF) {
+    toast.error("Only PDF allowed");
+    e.target.value = "";
+    return;
+  }
+
+
+  const fileObj = {
+    file,
+    url: URL.createObjectURL(file),
+    type: file.type,
+    name: file.name,
   };
 
+  setFormData((prev) => ({
+    ...prev,
+    [type]: fileObj,
+  }));
+
+  e.target.value = "";
+};
   return (
     <div className="relative">
       <form
@@ -728,9 +757,9 @@ const CompanyDetailsForm = () => {
                   <p className="text-[#2C2C2C] text-[10px] md:text-xs font-medium tracking-wide pointer-events-none mb-1">
                     Choose a file
                   </p>
-                  <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
+                  {/* <span className="text-[8px] product mb-2 text-gray-500 tracking-wide leading-relaxed pointer-events-none">
                     up to 2MB
-                  </span>
+                  </span> */}
                   <div className="h-6">
                     {formData.brochure ? (
                       <p className="text-[#2C2C2C] text-[10px] font-medium">

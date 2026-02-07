@@ -1,60 +1,90 @@
 
+// import toast from "react-hot-toast";
+// const MAX_IMAGE = 3;
+// const MAX_VIDEO = 1;
+// const MAX_PDF_SIZE_MB = 2;
+// const MAX_IMAGE_SIZE_MB = 2;
+// const MAX_VIDEO_SIZE_MB = 5;
+// export const processFiles = (files, mediaArray = []) => {
+//     if (!files?.length) return [];
+//     const imagesCount = mediaArray.filter((x) =>
+//       (x.type || "").startsWith("image/")
+//     ).length;
+//     const videosCount = mediaArray.filter((x) =>
+//       (x.type || "").startsWith("video/")
+//     ).length;
+//     const imageFiles = files.filter((f) => (f.type || "").startsWith("image/"));
+//     const videoFiles = files.filter((f) => (f.type || "").startsWith("video/"));
+//     if (imagesCount + imageFiles.length > MAX_IMAGE) {
+//       toast.error(`Maximum ${MAX_IMAGE} images allowed`);
+//       return [];
+//     }
+//     if (videosCount + videoFiles.length > MAX_VIDEO) {
+//       toast.error(`Maximum ${MAX_VIDEO} videos allowed`);
+//       return [];
+//     }
+//      return validateFiles(files).map((f) => ({
+//        file: f,
+//        url: URL.createObjectURL(f),
+//        type: f.type,
+//      }));
+//   };
+
+// ;
+
+//   const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+// const ALLOWED_VIDEO_TYPES = ["video/mp4"];
+
+// export const validateFiles = (files) => {
+//   return Array.from(files).filter((file) => {
+//     const ext = file.name.split(".").pop()?.toLowerCase();
+//     const isImage = ALLOWED_IMAGE_TYPES.includes(file.type) || ALLOWED_IMAGE_TYPES.includes(`image/${ext}`);
+//     const isVideo = ALLOWED_VIDEO_TYPES.includes(file.type) || ALLOWED_VIDEO_TYPES.includes(`video/${ext}`);
+    
+//     if (!isImage && !isVideo) {
+//       toast.error("Only JPG, PNG, MP4 allowed");
+//       return false;
+//     }
+
+//     let maxSizeMB = isImage ? MAX_IMAGE_SIZE_MB : MAX_VIDEO_SIZE_MB;
+//     if (file.size > maxSizeMB * 1024 * 1024) {
+//       toast.error(`${file.name} exceeds ${maxSizeMB}MB limit`);
+//       return false;
+//     }
+
+//     return true;
+//   });
+// };
 import toast from "react-hot-toast";
-const MAX_IMAGE = 3;
-const MAX_VIDEO = 1;
-const MAX_PDF_SIZE_MB = 2;
-const MAX_IMAGE_SIZE_MB = 2;
-const MAX_VIDEO_SIZE_MB = 5;
-export const processFiles = (files, mediaArray = []) => {
-    if (!files?.length) return [];
-    const imagesCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("image/")
-    ).length;
-    const videosCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("video/")
-    ).length;
-    const imageFiles = files.filter((f) => (f.type || "").startsWith("image/"));
-    const videoFiles = files.filter((f) => (f.type || "").startsWith("video/"));
-    if (imagesCount + imageFiles.length > MAX_IMAGE) {
-      toast.error(`Maximum ${MAX_IMAGE} images allowed`);
-      return [];
-    }
-    if (videosCount + videoFiles.length > MAX_VIDEO) {
-      toast.error(`Maximum ${MAX_VIDEO} videos allowed`);
-      return [];
-    }
-     return validateFiles(files).map((f) => ({
-       file: f,
-       url: URL.createObjectURL(f),
-       type: f.type,
-     }));
-  };
+export const processFiles = (files) => {
+  if (!files?.length) return [];
 
-;
+  return validateFiles(files).map((f) => ({
+    file: f,
+    url: URL.createObjectURL(f),
+    type: f.type,
+  }));
+};
 
-  export const validateFiles = (files) => {
-    return Array.from(files).filter((file) => {
-      const isImage = file.type.startsWith("image/");
-      const isVideo = file.type.startsWith("video/");
-      const isPDF = file.type === "application/pdf";
-  
-      let maxSizeMB = 0;  
-      if (isImage) maxSizeMB = MAX_IMAGE_SIZE_MB;
-      else if (isVideo) maxSizeMB = MAX_VIDEO_SIZE_MB;
-     else if (isPDF) maxSizeMB = MAX_PDF_SIZE_MB;
-      else {
-        toast.error("Only Image, Video allowed");
-        return false;
-      }
-  
-      if (file.size > maxSizeMB * 1024 * 1024) {
-        toast.error(
-          `${file.name} exceeds ${maxSizeMB}MB limit`,
-          { duration: 1500 }
-        );
-        return false;
-      }
-  
-      return true;
-    });
-  };
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+const ALLOWED_VIDEO_TYPES = ["video/mp4"];
+
+export const validateFiles = (files) => {
+  return Array.from(files).filter((file) => {
+    const ext = file.name.split(".").pop()?.toLowerCase();
+    const isImage =
+      ALLOWED_IMAGE_TYPES.includes(file.type) ||
+      ALLOWED_IMAGE_TYPES.includes(`image/${ext}`);
+    const isVideo =
+      ALLOWED_VIDEO_TYPES.includes(file.type) ||
+      ALLOWED_VIDEO_TYPES.includes(`video/${ext}`);
+
+    if (!isImage && !isVideo) {
+      toast.error("Only JPG, JPEG, PNG, MP4 allowed");
+      return false;
+    }
+
+   
+    return true;
+  });
+};

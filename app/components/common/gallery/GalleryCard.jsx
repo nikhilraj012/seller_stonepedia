@@ -253,13 +253,13 @@ const GalleryCard = ({
           </button>
         )}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-2 mb-4">
         {item.products?.map((product, i) => (
           <div
             key={i}
             className="border border-gray-300 rounded-xl p-3 shadow-sm"
           >
-            <div className="relative w-full h-40 mb-4 rounded-lg bg-gray-100">
+            <div className="relative w-full h-40 mb-14 rounded-lg bg-gray-100">
               {productImageLoading[i] !== false && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary" />

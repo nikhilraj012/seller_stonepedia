@@ -412,7 +412,7 @@ const ProductView = ({
                           onClick={() =>
                             handleRemoveMedia(i, "media", fileIndex)
                           }
-                          className="cursor-pointer absolute -top-2.5 -right-2 bg-white text-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                          className="cursor-pointer absolute -top-2.5 -right-2 bg-white text-red-600 rounded-full flex items-center justify-center transition"
                         >
                           <TiDeleteOutline className="w-6 h-6" />
                         </button>

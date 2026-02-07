@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { LuUserRound } from "react-icons/lu";
 import { LuFactory } from "react-icons/lu";
 import { CiMobile3 } from "react-icons/ci";
-
+import toast from "react-hot-toast";
 import { LocationSelector } from "@/app/components/LocationSelector";
 
 const CompanyDetails = ({ onDataChange, resetForm }) => {
@@ -47,6 +47,17 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    const isImage =
+      file.type === "image/jpeg" ||
+      file.type === "image/jpg" ||
+      file.type === "image/png";
+
+    if (!isImage) {
+      toast.error("Only JPG or PNG image allowed");
+      e.target.value = "";
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [type]: {
@@ -57,7 +68,6 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
       },
     }));
   };
-
   return (
     <div className="">
       <h2 className="text-xs font-medium mb-1">Company Details</h2>
@@ -89,10 +99,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
               </div>
             </div>
             <div className="w-full flex flex-col">
-              <label
-                htmlFor="shopName"
-                className="mb-0.5 text-xs font-medium "
-              >
+              <label htmlFor="shopName" className="mb-0.5 text-xs font-medium ">
                 Shop Name
               </label>
               <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
@@ -114,7 +121,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full">
             <div className="w-full flex flex-col">
               <label htmlFor="gstNumber" className="mb-0.5 text-xs font-medium">
-               GST / Government Id
+                GST / Government Id
               </label>
               <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
                 <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
@@ -260,7 +267,7 @@ const CompanyDetails = ({ onDataChange, resetForm }) => {
                 id="image"
                 type="file"
                 className="absolute inset-0 opacity-0 cursor-pointer"
-               accept="image/jpeg, image/jpg, image/png"
+                accept="image/jpeg, image/jpg, image/png"
                 name="image"
                 onChange={(e) => handleUpload(e, "image")}
                 required
