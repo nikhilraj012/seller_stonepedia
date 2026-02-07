@@ -10,10 +10,16 @@ const PublicRoute = ({ children }) => {
 
   useEffect(() => {
     if (!loading && user) {
-      router.push('/dashboard');
+      router.replace("/dashboard");
     }
   }, [user, loading, router]);
 
+
+
+
+
+
+  
   if (user) {
     return null;
   }
