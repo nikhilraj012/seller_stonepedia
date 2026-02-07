@@ -312,7 +312,7 @@ const Page = () => {
                 </p>
                 <button
                   type="button"
-                  className="absolute text-[10px] cursor-pointer top-1/2 right-2 transform -translate-y-1/2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100 z-20"
+                  className="absolute text-[10px] cursor-pointer top-1/2 right-2 transform -translate-y-1/2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors  z-20"
                   onClick={() =>
                     setBlock((prev) => ({
                       ...prev,

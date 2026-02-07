@@ -1,6 +1,7 @@
 import { FaPlus, FaPlay, FaPause } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import useMediaPlayer from "@/app/hooks/useMediaPlayer";
 const MediaUploader = ({ product, setProduct }) => {
   const {
@@ -31,17 +32,30 @@ const MediaUploader = ({ product, setProduct }) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
 
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "video/mp4"];
+
+    let hasInvalid = false;
+
     setProduct((prev) => {
       const images = [...(prev.images || [])];
       const videos = [...(prev.videos || [])];
 
       files.forEach((file) => {
+        if (!allowedTypes.includes(file.type)) {
+          hasInvalid = true; // sirf flag set karo
+          return;
+        }
+
         if (file.type.startsWith("image/")) images.push(file);
         if (file.type.startsWith("video/")) videos.push(file);
       });
 
       return { ...prev, images, videos };
     });
+
+    if (hasInvalid) {
+      toast.error("Only JPG, JPEG, PNG, MP4 allowed");
+    }
 
     e.target.value = "";
   };
@@ -94,13 +108,15 @@ const MediaUploader = ({ product, setProduct }) => {
           className="relative h-24 group rounded overflow-hidden"
         >
           <img src={getUrl(img)} className="w-full h-full object-cover" />
-          <button
-            type="button"
-            onClick={() => removeImage(i)}
-            className="cursor-pointer absolute -top-0.5 -right-0 bg-white text-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
-          >
-            <TiDeleteOutline size={20} />
-          </button>
+          {product.images.length > 1 && (
+            <button
+              type="button"
+              onClick={() => removeImage(i)}
+              className="cursor-pointer absolute -top-0.5 -right-0 bg-white text-red-600 rounded-full flex items-center justify-center  transition"
+            >
+              <TiDeleteOutline size={20} />
+            </button>
+          )}
         </div>
       ))}
 
@@ -145,11 +161,6 @@ const MediaUploader = ({ product, setProduct }) => {
 
             {/* Play Button */}
             {!playingVideos[key] && (
-              // <div className="absolute inset-0 flex items-center justify-center">
-              //   <div className="w-7 cursor-pointer h-7 bg-white/50 rounded-full flex items-center justify-center">
-              //     <FaPlay size={14} onClick={() => handleTogglePlay(key)} />
-              //   </div>
-              // </div>
               <div className="absolute top-1/2 left-1/2 transform w-7 h-7 bg-white/45 rounded-full -translate-x-1/2 -translate-y-1/2 text-white text-xl cursor-pointer">
                 <FaPlay
                   className="absolute top-1/2 ml-0.5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
@@ -192,7 +203,7 @@ const MediaUploader = ({ product, setProduct }) => {
             <button
               type="button"
               onClick={() => removeVideo(i)}
-              className="cursor-pointer absolute -top-0.5 -right-0 bg-white text-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+              className="cursor-pointer absolute -top-0.5 -right-0 bg-white text-red-600 rounded-full flex items-center justify-center  transition"
             >
               <TiDeleteOutline size={20} />
             </button>

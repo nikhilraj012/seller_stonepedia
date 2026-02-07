@@ -269,7 +269,7 @@ const Form = () => {
           onSubmit={handleSubmit}
           className="max-md:space-y-5  items-start md:flex  mt-4 md:mt-7 gap-5 xl:gap-10"
         >
-          <div className="shadow-lg md:shadow-2xl p-4 rounded-lg md:w-3/5 space-y-2 md:space-y-4">
+          <div className="shadow-lg md:shadow-2xl p-4 rounded-lg md:w-[56%] space-y-2 md:space-y-4">
             {!hasApprovedForm && (
               <CompanyDetails
                 onDataChange={setCompanyData}
@@ -292,7 +292,7 @@ const Form = () => {
             )}
           </div>
 
-          <div className="md:w-2/5">
+          <div className="md:w-[44%]">
             {productList.length === 0 && (
               <div
                 className="cursor-pointer bg-[#F4F4F4] text-[#3B3B3B] gap-1 text-xs lg:text-sm py-2 rounded-lg flex items-center justify-center"

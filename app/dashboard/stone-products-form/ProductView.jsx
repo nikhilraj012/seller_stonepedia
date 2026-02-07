@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -13,13 +12,7 @@ import useMediaPlayer from "@/app/hooks/useMediaPlayer";
 import ConfirmDialog from "@/app/components/common/ConfirmDialog";
 import { processFiles } from "@/app/utils/fileUtils";
 
-const ProductView = ({
-  productList,
-  setProductList,
-  editIndex,
-  onEdit,
-
-}) => {
+const ProductView = ({ productList, setProductList, editIndex, onEdit }) => {
   const {
     VideoRef,
     playingVideos,
@@ -39,16 +32,15 @@ const ProductView = ({
   const displayArray = (arr) => (arr && arr.length > 0 ? arr.join(", ") : "-");
 
   const handleDelete = (index) => {
-  setProductList((prev) => prev.filter((_, i) => i !== index));
-  toast("Product deleted successfully!", {
-    style: {
-      backgroundColor: "#ffe6e6",
-      color: "#d32f2f",
-      fontWeight: "500",
-    },
-  });
-};
-
+    setProductList((prev) => prev.filter((_, i) => i !== index));
+    toast("Product deleted successfully!", {
+      style: {
+        backgroundColor: "#ffe6e6",
+        color: "#d32f2f",
+        fontWeight: "500",
+      },
+    });
+  };
 
   const handleFileUpload = (e, index) => {
     const files = Array.from(e.target.files);
@@ -285,7 +277,7 @@ const ProductView = ({
                       <input
                         id={`product-file-video-${i}`}
                         type="file"
-                      accept="image/jpeg,image/jpg,image/png,video/mp4"
+                        accept="image/jpeg,image/jpg,image/png,video/mp4"
                         multiple
                         className="hidden"
                         onChange={(e) => handleFileUpload(e, i)}
@@ -407,15 +399,21 @@ const ProductView = ({
                             className="w-full h-full rounded-lg object-cover"
                           />
                         )}
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleRemoveMedia(i, "media", fileIndex)
-                          }
-                          className="cursor-pointer absolute -top-2.5 -right-2 bg-white text-red-600 rounded-full flex items-center justify-center transition"
-                        >
-                          <TiDeleteOutline className="w-6 h-6" />
-                        </button>
+                        {(file?.type?.startsWith("video/") ||
+                          (file?.type?.startsWith("image/") &&
+                            (p.media || []).filter((f) =>
+                              f?.type?.startsWith("image/"),
+                            ).length > 1)) && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleRemoveMedia(i, "media", fileIndex)
+                            }
+                            className="cursor-pointer absolute -top-2.5 -right-2 bg-white text-red-600 rounded-full flex items-center justify-center transition"
+                          >
+                            <TiDeleteOutline className="w-6 h-6" />
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>

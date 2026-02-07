@@ -1,10 +1,11 @@
-import { FaPlus, FaPlay, FaPause} from "react-icons/fa";
+import { FaPlus, FaPlay, FaPause } from "react-icons/fa";
 
 import { TiDeleteOutline } from "react-icons/ti";
 
 import { useState } from "react";
 import useMediaPlayer from "@/app/hooks/useMediaPlayer";
 import ConfirmDialog from "@/app/components/common/ConfirmDialog";
+import { processFiles } from "@/app/utils/fileUtils";
 const MediaUploader = ({ product, setProduct }) => {
   const {
     VideoRef,
@@ -50,41 +51,6 @@ const MediaUploader = ({ product, setProduct }) => {
         media: [...(prev.media || []), ...addedFiles],
       }));
     }
-  };
-
-  const processFiles = (files, mediaArray = []) => {
-    if (!files?.length) return [];
-    const imagesCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("image/"),
-    ).length;
-    const videosCount = mediaArray.filter((x) =>
-      (x.type || "").startsWith("video/"),
-    ).length;
-    const imageFiles = files.filter((f) => (f.type || "").startsWith("image/"));
-    const videoFiles = files.filter((f) => (f.type || "").startsWith("video/"));
-    if (imagesCount + imageFiles.length > 20) {
-      toast.error(`Maximum 20 images allowed`);
-      return [];
-    }
-    if (videosCount + videoFiles.length > 10) {
-      toast.error(`Maximum 10 videos allowed`);
-      return [];
-    }
-    return validateFiles(files, 20).map((f) => ({
-      file: f,
-      url: URL.createObjectURL(f),
-      type: f.type,
-    }));
-  };
-
-  const validateFiles = (files, maxSizeMB) => {
-    return Array.from(files).filter((file) => {
-      if (file.size > maxSizeMB * 1024 * 1024) {
-        toast.error(`${file.name} exceeds ${maxSizeMB}MB limit`);
-        return false;
-      }
-      return true;
-    });
   };
 
   return (
@@ -220,14 +186,19 @@ const MediaUploader = ({ product, setProduct }) => {
                   className="w-full h-full rounded-lg object-cover"
                 />
               )}
-
-              <button
-                type="button"
-                onClick={() => handleRemoveMedia(fileIndex)}
-                className="cursor-pointer absolute -top-0.5 -right-0 bg-white text-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
-              >
-                <TiDeleteOutline className="w-6 h-6" />
-              </button>
+              {(file?.type?.startsWith("video/") ||
+                (file?.type?.startsWith("image/") &&
+                  (product.media || []).filter((f) =>
+                    f?.type?.startsWith("image/"),
+                  ).length > 1)) && (
+                <button
+                  type="button"
+                  onClick={() => handleRemoveMedia(fileIndex)}
+                  className="cursor-pointer absolute -top-0.5 -right-0 bg-white text-red-600 rounded-full flex items-center justify-center  transition"
+                >
+                  <TiDeleteOutline className="w-6 h-6" />
+                </button>
+              )}
             </div>
           ))}
         </div>

@@ -67,31 +67,29 @@ const BlocksFormProducts = ({
 
   const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
-const handleFileChange = (e, blockId) => {
-  const file = e.target.files[0];
-  if (!file) return;
+  const handleFileChange = (e, blockId) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
+    const ext = file.name.split(".").pop()?.toLowerCase();
+    const isImage =
+      ALLOWED_IMAGE_TYPES.includes(file.type) ||
+      ALLOWED_IMAGE_TYPES.includes(`image/${ext}`);
 
-  const ext = file.name.split(".").pop()?.toLowerCase();
-  const isImage =
-    ALLOWED_IMAGE_TYPES.includes(file.type) ||
-    ALLOWED_IMAGE_TYPES.includes(`image/${ext}`);
+    if (!isImage) {
+      toast.error("Only JPG, JPEG, PNG images allowed");
+      e.target.value = "";
+      return;
+    }
 
-  if (!isImage) {
-    toast.error("Only JPG, JPEG, PNG images allowed");
+    setBlocksList((prevBlocks) =>
+      prevBlocks.map((block) =>
+        block.id === blockId ? { ...block, thumbnail: file } : block,
+      ),
+    );
+
     e.target.value = "";
-    return;
-  }
-
-  
-  setBlocksList((prevBlocks) =>
-    prevBlocks.map((block) =>
-      block.id === blockId ? { ...block, thumbnail: file } : block
-    )
-  );
-
-  e.target.value = "";
-};
+  };
   // Trigger file input click when thumbnail div is clicked
   const handleThumbnailClick = (blockId) => {
     if (fileInputRefs.current[blockId]) {
@@ -404,26 +402,28 @@ const handleFileChange = (e, blockId) => {
                             alt=""
                             className="h-full w-full object-cover rounded-md"
                           />
-                          <button
-                            type="button"
-                            className="absolute text-[10px] cursor-pointer -top-1 -right-2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors"
-                            onClick={() => {
-                              setBlocksList((prevBlocks) =>
-                                prevBlocks.map((b) =>
-                                  b.id === block.id
-                                    ? {
-                                        ...b,
-                                        images: b.images.filter(
-                                          (img) => img !== image,
-                                        ),
-                                      }
-                                    : b,
-                                ),
-                              );
-                            }}
-                          >
-                            <RxCross2 />
-                          </button>
+                          {block.images.length > 1 && (
+                            <button
+                              type="button"
+                              className="absolute text-[10px] cursor-pointer -top-1 -right-2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors"
+                              onClick={() => {
+                                setBlocksList((prevBlocks) =>
+                                  prevBlocks.map((b) =>
+                                    b.id === block.id
+                                      ? {
+                                          ...b,
+                                          images: b.images.filter(
+                                            (img) => img !== image,
+                                          ),
+                                        }
+                                      : b,
+                                  ),
+                                );
+                              }}
+                            >
+                              <RxCross2 />
+                            </button>
+                          )}
                         </div>
                       ))}
 
@@ -479,6 +479,7 @@ const handleFileChange = (e, blockId) => {
                             preload="metadata"
                             className="h-full w-full rounded-md object-cover"
                           />
+
                           <button
                             type="button"
                             className="absolute text-[10px] cursor-pointer -top-1 -right-2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors z-20"
@@ -552,7 +553,7 @@ const handleFileChange = (e, blockId) => {
 
                           <button
                             type="button"
-                            className="absolute text-[10px] cursor-pointer top-1/2 right-1 transform -translate-x-1/2 -translate-y-1/2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100 z-20"
+                            className="absolute text-[10px] cursor-pointer top-1/2 right-1 transform -translate-x-1/2 -translate-y-1/2 border border-red-500 bg-white/80 p-0.5 rounded-full text-red-500 hover:bg-white hover:text-red-600 transition-colors  z-20"
                             onClick={() => {
                               setBlocksList((prevBlocks) =>
                                 prevBlocks.map((b) =>

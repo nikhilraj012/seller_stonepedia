@@ -182,7 +182,7 @@ const ProductView = ({
                   id={`thumbnail-${i}`}
                   name={`thumbnail-${i}`}
                   type="file"
-               accept="image/jpeg,image/jpg,image/png"
+                  accept="image/jpeg,image/jpg,image/png"
                   className="hidden"
                   onChange={(e) => handleThumbnailChange(e, i)}
                 />
@@ -342,7 +342,9 @@ const ProductView = ({
                       >
                         <div className="flex flex-col items-center justify-center gap-2 md:h-25 h-24 border border-dashed border-primary rounded-md">
                           <FaPlus />
-                          <span className="text-[11px]">Upload Image / Video</span>
+                          <span className="text-[11px]">
+                            Upload Image / Video
+                          </span>
                         </div>
                       </label>
                     </div>
@@ -454,13 +456,19 @@ const ProductView = ({
                             className="w-full h-full rounded-lg object-cover"
                           />
                         )}
-                        <button
-                          type="button"
-                          onClick={() => handleImageDelete(i, fileIndex)}
-                          className="cursor-pointer absolute -top-2.5 -right-2 text-red-600 rounded-full w-6 h-6 flex items-center justify-center transition"
-                        >
-                          <TiDeleteOutline size={18} />
-                        </button>
+                        {(file?.type?.startsWith("video/") ||
+                          (file?.type?.startsWith("image/") &&
+                            (p.media || []).filter((f) =>
+                              f?.type?.startsWith("image/"),
+                            ).length > 1)) && (
+                          <button
+                            type="button"
+                            onClick={() => handleImageDelete(i, fileIndex)}
+                            className="cursor-pointer absolute -top-2.5 -right-2 text-red-600 rounded-full w-6 h-6 flex items-center justify-center transition"
+                          >
+                            <TiDeleteOutline size={18} />
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>

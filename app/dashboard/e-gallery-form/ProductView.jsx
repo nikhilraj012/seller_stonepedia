@@ -13,13 +13,7 @@ import useMediaPlayer from "@/app/hooks/useMediaPlayer";
 import ConfirmDialog from "@/app/components/common/ConfirmDialog";
 import { processFiles } from "@/app/utils/fileUtils";
 
-const ProductView = ({
-  productList,
-  setProductList,
-  editIndex,
-  onEdit,
-
-}) => {
+const ProductView = ({ productList, setProductList, editIndex, onEdit }) => {
   const {
     VideoRef,
     playingVideos,
@@ -414,15 +408,21 @@ const ProductView = ({
                             className="w-full h-full rounded-lg object-cover"
                           />
                         )}
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleRemoveMedia(i, "media", fileIndex)
-                          }
-                          className="cursor-pointer absolute -top-2.5 -right-2 bg-white text-red-600 rounded-full flex items-center justify-center transition"
-                        >
-                          <TiDeleteOutline className="w-6 h-6" />
-                        </button>
+                        {(file?.type?.startsWith("video/") ||
+                          (file?.type?.startsWith("image/") &&
+                            (p.media || []).filter((f) =>
+                              f?.type?.startsWith("image/"),
+                            ).length > 1)) && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleRemoveMedia(i, "media", fileIndex)
+                            }
+                            className="cursor-pointer absolute -top-2.5 -right-2 bg-white text-red-600 rounded-full flex items-center justify-center transition"
+                          >
+                            <TiDeleteOutline className="w-6 h-6" />
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>

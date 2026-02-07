@@ -115,6 +115,7 @@ export const AuthProvider = ({ children }) => {
           position: "top-center",
         });
         router.replace("/");
+        router.refresh();
         return { success: true };
       } else {
         setLoggingOut(false);
