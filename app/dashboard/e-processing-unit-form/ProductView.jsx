@@ -457,7 +457,7 @@ const ProductView = ({
                         <button
                           type="button"
                           onClick={() => handleImageDelete(i, fileIndex)}
-                          className="cursor-pointer absolute -top-2.5 -right-2 text-red-600 rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                          className="cursor-pointer absolute -top-2.5 -right-2 text-red-600 rounded-full w-6 h-6 flex items-center justify-center transition"
                         >
                           <TiDeleteOutline size={18} />
                         </button>

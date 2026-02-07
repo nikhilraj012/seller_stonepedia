@@ -29,7 +29,7 @@ const Hero = () => {
               <div>
                 <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-semibold text-[#383838] leading-tight lg:leading-10 xl:leading-12 2xl:leading-14">
                   <span>Your Global Online Stone </span>
-                  <span className="text-primary">Sell</span>
+                  <span className="text-primary">Sale</span>
                   <span> Partner - </span>
                   <span className="text-primary">Boost</span>
                   <span> your business worldwide instantly</span>
