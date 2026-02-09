@@ -24,6 +24,10 @@ const profilePages = [
     title: "My Stone Products",
     href: "/dashboard/profile/my-stone-products",
   },
+  {
+    title: "My Chemicals",
+    href: "/dashboard/profile/my-chemicals",
+  },
 ];
 
 const NavbarProfile = ({ isMobile = false }) => {

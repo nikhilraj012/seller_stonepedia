@@ -30,6 +30,10 @@ const GalleryEdit = ({ mode }) => {
       collectionName: "EGalleryForProcessingUnit",
       basePath: "/my-e-processing-unit",
     },
+    chemicals: {
+      collectionName: "chemicals",
+      basePath: "my-chemicals",
+    },
   };
   const config = MODE_CONFIG[mode];
   const { collectionName, basePath } = config;

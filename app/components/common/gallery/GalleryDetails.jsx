@@ -45,6 +45,10 @@ const GalleryDetails = ({ mode }) => {
       collectionName: "EGalleryForProcessingUnit",
       basePath: "my-e-processing-unit",
     },
+    chemicals: {
+      collectionName: "chemicals",
+      basePath: "my-chemicals",
+    },
   };
   const config = MODE_CONFIG[mode];
   const { collectionName, basePath } = config;
@@ -339,14 +343,7 @@ const GalleryDetails = ({ mode }) => {
                         ? "opacity-50 cursor-not-allowed"
                         : "cursor-pointer hover:text-gray-500"
                     }`}
-                    // onClick={() => {
-                    //   router.push(`${basePath}/edit/${item.id}/${product.id}`);
-                    // }}
-                    // onClick={() => {
-                    //   router.push(
-                    //     `/dashboard/profile/${basePath}/${companySlug}/${productSlug}/edit`,
-                    //   );
-                    // }}
+     
                     onClick={() => {
                       const newSlug = toSlug(product.stoneName);
                       router.replace(

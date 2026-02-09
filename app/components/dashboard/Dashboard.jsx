@@ -38,6 +38,14 @@ const businessCategories = [
     image: "/images/dashboard/stone-product.webp",
     route: "/dashboard/stone-products-form",
   },
+  {
+    id: 5,
+    title: "Chemicals",
+    description:
+      "A stone product allows sellers to present unique creations to customers worldwide.",
+    image: "/images/dashboard/stone-product.webp",
+    route: "/dashboard/chemicals",
+  },
 ];
 
 const Dashboard = () => {
@@ -55,6 +63,9 @@ const Dashboard = () => {
   const [stoneProductStatus, setStoneProductStatus] = useState(null);
   const [stoneProductId, setStoneProductId] = useState(null);
   const [stoneProductCount, setStoneProductCount] = useState(0);
+  const [chemicalsStatus, setChemicalsStatus] = useState(null);
+const [chemicalsId, setChemicalsId] = useState(null);
+const [chemicalsCount, setChemicalsCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -190,6 +201,38 @@ const Dashboard = () => {
             setStoneProductStatus("rejected");
           }
         }
+        // Check Chemicals status
+        const chemicalsRef = collection(
+          db,
+          "SellerDetails",
+          uid,
+          "chemicals",
+        );
+        const chemicalsSnapshot = await getDocs(chemicalsRef);
+
+        if (!chemicalsSnapshot.empty) {
+          const docs = chemicalsSnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+
+          const hasApproved = docs.some((doc) => doc.status === "approved");
+          const hasPending = docs.some((doc) => doc.status === "pending");
+          const allRejectedOrCancelled = docs.every(
+            (doc) => doc.status === "rejected" || doc.status === "cancelled",
+          );
+
+          if (hasApproved) {
+            setChemicalsStatus("approved");
+            const approved = docs.find((doc) => doc.status === "approved");
+            setChemicalsId(approved?.id || null);
+            setChemicalsCount(approved?.products?.length || 0);
+          } else if (hasPending) {
+            setChemicalsStatus("pending");
+          } else if (allRejectedOrCancelled) {
+            setChemicalsStatus("rejected");
+          }
+        }
       } catch (error) {
         console.error("Error checking registrations:", error);
       } finally {
@@ -232,17 +275,21 @@ const Dashboard = () => {
       if (stoneProductStatus === "pending") return "My Stone Products";
       return "Register";
     }
+    if (categoryId === 5) {
+  if (chemicalsStatus === "approved" && chemicalsCount < 2)
+    return "Add Product";
+  if (chemicalsStatus === "approved") return "My Chemicals";
+  if (chemicalsStatus === "pending") return "My Chemicals";
+  return "Register";
+}
     return "Register";
   };
+
 
   const getButtonRoute = (category) => {
     if (category.id === 1) {
       // Blocks
-      if (
-        blocksStatus === "approved" &&
-        blocksCount < 2 &&
-        blockId
-      ) {
+      if (blocksStatus === "approved" && blocksCount < 2 && blockId) {
         return `/dashboard/blocks-form/${blockId}/add-block`;
       }
       if (blocksStatus === "approved") return "/dashboard/profile/my-blocks"; // View Blocks
@@ -291,6 +338,16 @@ const Dashboard = () => {
         return "/dashboard/profile/my-stone-products";
       if (stoneProductStatus === "pending")
         return "/dashboard/profile/my-stone-products";
+      return category.route;
+    }
+    if (category.id === 5) {
+      if (chemicalsStatus === "approved" && chemicalsCount < 2 && chemicalsId) {
+        return `/dashboard/chemicals-form/${chemicalsId}/add-product`;
+      }
+      if (chemicalsStatus === "approved")
+        return "/dashboard/profile/my-chemicals";
+      if (chemicalsStatus === "pending")
+        return "/dashboard/profile/my-chemicals";
       return category.route;
     }
     return category.route;
