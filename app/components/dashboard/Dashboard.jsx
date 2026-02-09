@@ -42,7 +42,7 @@ const businessCategories = [
     id: 5,
     title: "Chemicals",
     description:
-      "A stone product allows sellers to present unique creations to customers worldwide.",
+      "Sell and showcase different types of industrial and construction chemicals to the right buyers..",
     image: "/images/dashboard/stone-product.webp",
     route: "/dashboard/chemicals",
   },
@@ -64,8 +64,8 @@ const Dashboard = () => {
   const [stoneProductId, setStoneProductId] = useState(null);
   const [stoneProductCount, setStoneProductCount] = useState(0);
   const [chemicalsStatus, setChemicalsStatus] = useState(null);
-const [chemicalsId, setChemicalsId] = useState(null);
-const [chemicalsCount, setChemicalsCount] = useState(0);
+  const [chemicalsId, setChemicalsId] = useState(null);
+  const [chemicalsCount, setChemicalsCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -202,12 +202,7 @@ const [chemicalsCount, setChemicalsCount] = useState(0);
           }
         }
         // Check Chemicals status
-        const chemicalsRef = collection(
-          db,
-          "SellerDetails",
-          uid,
-          "chemicals",
-        );
+        const chemicalsRef = collection(db, "SellerDetails", uid, "chemicals");
         const chemicalsSnapshot = await getDocs(chemicalsRef);
 
         if (!chemicalsSnapshot.empty) {
@@ -276,15 +271,14 @@ const [chemicalsCount, setChemicalsCount] = useState(0);
       return "Register";
     }
     if (categoryId === 5) {
-  if (chemicalsStatus === "approved" && chemicalsCount < 2)
-    return "Add Product";
-  if (chemicalsStatus === "approved") return "My Chemicals";
-  if (chemicalsStatus === "pending") return "My Chemicals";
-  return "Register";
-}
+      if (chemicalsStatus === "approved" && chemicalsCount < 2)
+        return "Add Product";
+      if (chemicalsStatus === "approved") return "My Chemicals";
+      if (chemicalsStatus === "pending") return "My Chemicals";
+      return "Register";
+    }
     return "Register";
   };
-
 
   const getButtonRoute = (category) => {
     if (category.id === 1) {
