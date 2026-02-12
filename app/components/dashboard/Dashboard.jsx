@@ -44,7 +44,7 @@ const businessCategories = [
     description:
       "Sell and showcase different types of industrial and construction chemicals to the right buyers..",
     image: "/images/dashboard/stone-product.webp",
-    route: "/dashboard/chemicals",
+    route: "/dashboard/chemicals-form",
   },
 ];
 
@@ -363,7 +363,7 @@ const Dashboard = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4 mb-5">
           {businessCategories.map((category) => (
             <div
               key={category.id}
