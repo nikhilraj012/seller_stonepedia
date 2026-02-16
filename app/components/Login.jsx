@@ -44,7 +44,9 @@ const Login = () => {
       if (loginState === "register") {
         let identifier = formData.email.trim();
 
-        const isEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(identifier);
+        const isEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+          identifier,
+        );
         const isPhone = /^\d{10}$/.test(identifier);
 
         const userData = {
@@ -53,7 +55,7 @@ const Login = () => {
           phoneNumber: isPhone ? identifier : null,
         };
 
-        if (!formData.email && !formData.phone) {
+        if (!isEmail && !isPhone) {
           toast.error("Please Enter valid Email or 10-digit Phone number");
           setIsLoading(false);
           return;
@@ -69,9 +71,9 @@ const Login = () => {
       if (loginState === "login") {
         let identifier = formData.email.trim();
 
-      const isEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
-        identifier,
-      );
+        const isEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+          identifier,
+        );
         const isPhone = /^\d{10}$/.test(identifier);
 
         if (!isEmail && !isPhone) {
