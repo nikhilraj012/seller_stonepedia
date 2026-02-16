@@ -12,7 +12,6 @@ const Login = () => {
   const { register, login } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const initialFormData = {
@@ -20,7 +19,6 @@ const Login = () => {
     email: "",
     password: "",
     phone: "",
-    confirmPassword: "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -46,7 +44,7 @@ const Login = () => {
       if (loginState === "register") {
         let identifier = formData.email.trim();
 
-        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
+        const isEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(identifier);
         const isPhone = /^\d{10}$/.test(identifier);
 
         const userData = {
@@ -71,9 +69,9 @@ const Login = () => {
       if (loginState === "login") {
         let identifier = formData.email.trim();
 
-        const isEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
-          identifier,
-        );
+      const isEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+        identifier,
+      );
         const isPhone = /^\d{10}$/.test(identifier);
 
         if (!isEmail && !isPhone) {
