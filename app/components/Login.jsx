@@ -44,15 +44,16 @@ const Login = () => {
 
     try {
       if (loginState === "register") {
+        let identifier = formData.email.trim();
+
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
+        const isPhone = /^\d{10}$/.test(identifier);
+
         const userData = {
           fullName: formData.fname,
-          phoneNumber: formData.phone,
+          email: isEmail ? identifier : null,
+          phoneNumber: isPhone ? identifier : null,
         };
-
-        let identifier = formData.email.trim() || formData.phone.trim();
-
-        // const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
-        // const isPhone = /^\d{10}$/.test(identifier);
 
         if (!formData.email && !formData.phone) {
           toast.error("Please Enter valid Email or 10-digit Phone number");
@@ -70,11 +71,13 @@ const Login = () => {
       if (loginState === "login") {
         let identifier = formData.email.trim();
 
-        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
+        const isEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+          identifier,
+        );
         const isPhone = /^\d{10}$/.test(identifier);
 
         if (!isEmail && !isPhone) {
-          alert("Enter valid Email or 10-digit Phone number");
+          toast.error("Enter valid Email or 10-digit Phone number");
           setIsLoading(false);
           return;
         }
@@ -140,7 +143,7 @@ const Login = () => {
             />
           </div>
         )}
-        {loginState === "register" && (
+        {/* {loginState === "register" && (
           <div className="w-full ">
             <input
               onChange={handleChange}
@@ -151,35 +154,20 @@ const Login = () => {
               type="email"
             />
           </div>
-        )}
-        {loginState === "login" && (
-          <div className="w-full">
-            <input
-              onChange={handleChange}
-              name="email"
-              value={formData.email}
-              placeholder="Email or Phone"
-              className="border border-gray-200 rounded w-full p-2 outline-primary text-xs"
-              type="text"
-              required
-            />
-          </div>
-        )}
-        {loginState === "register" && (
-          <div className="w-full">
-            <input
-              onChange={handleChange}
-              name="phone"
-              value={formData.phone}
-              placeholder="Phone Number"
-              className="border border-gray-200 rounded w-full p-2 outline-primary text-xs"
-              type="tel"
-              pattern="[0-9]{10}"
-              maxLength={10}
-              // required
-            />
-          </div>
-        )}
+        )} */}
+
+        <div className="w-full">
+          <input
+            onChange={handleChange}
+            name="email"
+            value={formData.email}
+            placeholder="Email or Phone"
+            className="border border-gray-200 rounded w-full p-2 outline-primary text-xs"
+            type="text"
+            required
+          />
+        </div>
+
         {loginState !== "forgotPassword" && (
           <div className="w-full relative ">
             <input
