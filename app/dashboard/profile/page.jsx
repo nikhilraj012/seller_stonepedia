@@ -4,9 +4,11 @@ import { LocationSelector } from "@/app/components/LocationSelector";
 import { auth, db } from "@/app/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { MdOutlineEdit } from "react-icons/md";
+import UnitForm from "./UnitForm";
 
 const Page = () => {
     const [companyExists, setCompanyExists] = useState(false);
@@ -14,7 +16,14 @@ const Page = () => {
     const [editMode, setEditMode] = useState(false);
     const [company, setCompany] = useState(null);
     const [companyEdit, setCompanyEdit] = useState(false);
+    const [gallery, setGallery] = useState({});
+    const [galleryExists, setGalleryExists] = useState(false);
+    const [galleryEdit, setGalleryEdit] = useState(false);
 
+    const [processingUnit, setProcessingUnit] = useState({});
+
+    const [processingExists, setProcessingExists] = useState(false);
+    const [processingEdit, setProcessingEdit] = useState(false);
     const [loading, setLoading] = useState(true);
 
     const fullNameRef = useRef(null);
@@ -65,8 +74,193 @@ const Page = () => {
         return () => unsubscribe();
     }, []);
 
+    useEffect(() => {
+        const user = auth.currentUser;
+        if (!user) return;
 
-    // SAVE CHANGES
+        const fetchGallery = async () => {
+            const ref = doc(db, "SellerDetails", user.uid, "GalleryDetails", "info");
+            const snap = await getDoc(ref);
+
+            if (snap.exists()) {
+                setGallery(snap.data());
+                setGalleryExists(true);
+            }
+        };
+
+        fetchGallery();
+    }, []);
+
+
+    const handleGalleryImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const user = auth.currentUser;
+
+        setGallery(prev => ({
+            ...prev,
+            imageName: file.name
+        }));
+
+        const url = await uploadFile(
+            file,
+            `e-gallery/${user.uid}/image.jpg`
+        );
+
+        setGallery(prev => ({
+            ...prev,
+            imageUrl: url
+        }));
+    };
+    const handleGallerySave = async (e) => {
+        e.preventDefault();
+        const user = auth.currentUser;
+        if (!user) return;
+
+        if (!gallery?.imageUrl) {
+            toast.error("Gallery Image is required");
+            return;
+        }
+
+
+        const ref = doc(db, "SellerDetails", user.uid, "GalleryDetails", "info");
+
+        await setDoc(ref, gallery, { merge: true });
+
+        setGalleryExists(true);
+        setGalleryEdit(false);
+        toast.success("E-Gallery Saved");
+    };
+
+
+    const handleBrochureUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const user = auth.currentUser;
+
+
+        setProcessingUnit((prev) => ({
+            ...(prev || {}),
+            brochureName: file.name,
+        }));
+
+        try {
+            const url = await uploadFile(
+                file,
+                `processing-units/${user.uid}/brochure.pdf`
+            );
+
+
+            setProcessingUnit((prev) => ({
+                ...(prev || {}),
+                brochureUrl: url,
+            }));
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const user = auth.currentUser;
+
+
+        setProcessingUnit((prev) => ({
+            ...(prev || {}),
+            imageName: file.name,
+        }));
+
+        try {
+            const url = await uploadFile(
+                file,
+                `processing-units/${user.uid}/image.jpg`
+            );
+
+
+            setProcessingUnit((prev) => ({
+                ...(prev || {}),
+                imageUrl: url,
+            }));
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const storage = getStorage();
+
+    const uploadFile = async (file, path) => {
+        const storageRef = ref(storage, path);
+        await uploadBytes(storageRef, file);
+        return await getDownloadURL(storageRef);
+    };
+
+    const handleProcessingSave = async (e) => {
+        e.preventDefault();
+        const user = auth.currentUser;
+        if (!user) return;
+
+        if (!processingExists && !processingUnit?.imageUrl) {
+            toast.error("Processing Unit Image is required");
+            return;
+        }
+
+        const ref = doc(db, "SellerDetails", user.uid, "ProcessingUnit", "info");
+
+        await setDoc(ref, processingUnit, { merge: true });
+
+        setProcessingExists(true);
+        setProcessingEdit(false);
+        toast.success("Processing Unit Saved");
+    };
+    useEffect(() => {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const fetchProcessing = async () => {
+            const ref = doc(db, "SellerDetails", user.uid, "ProcessingUnit", "info");
+            const snap = await getDoc(ref);
+
+            if (snap.exists()) {
+                setProcessingUnit(snap.data());
+                setProcessingExists(true);
+            } else {
+                setProcessingExists(false);
+            }
+        };
+
+        fetchProcessing();
+    }, []);
+
+    const handleGalleryBrochureUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const user = auth.currentUser;
+
+        setGallery((prev) => ({
+            ...(prev || {}),
+            brochureName: file.name,
+        }));
+
+        try {
+            const url = await uploadFile(
+                file,
+                `e-gallery/${user.uid}/brochure.pdf`
+            );
+
+            setGallery((prev) => ({
+                ...(prev || {}),
+                brochureUrl: url,
+            }));
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     const handleSave = async (e) => {
         e.preventDefault();
         try {
@@ -80,6 +274,7 @@ const Page = () => {
             console.log(err);
         }
     };
+
 
     const handleCompanySave = async (e) => {
         e.preventDefault();
@@ -95,22 +290,32 @@ const Page = () => {
 
     if (loading) return <p className="p-10">Loading...</p>;
     return (
-        <div className="mt-12  min-h-screen py-8 max-lg:px-4 lg:px-24 xl:px-32">
-            <div className="space-y-8">
+        // <div className="mt-12  min-h-screen py-8 max-lg:px-4 lg:px-24 xl:px-32">
+        <div className="mt-9 md:mt-10 lg:mt-12 
+min-h-screen 
+py-6 sm:py-8 
+px-3 sm:px-6 md:px-10 lg:px-20 xl:px-32">
+
+            <div className="space-y-6 sm:space-y-8">
+
 
                 {/* Header */}
                 <div>
-                    <h1 className="text-2xl font-semibold text-gray-800">Settings</h1>
-                    <p className="text-gray-500">
+                    <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">Settings</h1>
+                    <p className="text-sm sm:text-base text-gray-500">
+
                         Manage your personal account and company information.
                     </p>
                 </div>
                 <form onSubmit={handleSave}>
                     {/* Personal Information Card */}
-                    <div className="bg-white border-[#D7D7D7] rounded-2xl shadow-md ">
+                    <div className="bg-white border-[#D7D7D7] rounded-2xl shadow-md">
 
-                        {/* Card Header */}
-                        <div className=" bg-gray-100  px-6 py-4 flex justify-between items-center">
+                        {/* Header */}
+                        <div className="bg-gray-100 px-4 sm:px-6 py-3 sm:py-4 
+flex flex-col sm:flex-row 
+gap-2 sm:gap-0 
+justify-between sm:items-center">
                             <div >
                                 <h2 className="font-semibold text-lg text-gray-800">
                                     Personal Information
@@ -126,104 +331,94 @@ const Page = () => {
                             {editMode ? "Cancel Edit" : "Edit Profile"}
                         </button> */}
                             {!editMode && (
-                                <button
-                                    onClick={() => setEditMode(!editMode)}
-                                    className="border  px-4 cursor-pointer py-2 rounded-lg text-sm flex items-center gap-2"
-                                >
-                                    <MdOutlineEdit />
-                                    Edit Profile
-                                </button>
+                                <div className="flex justify-end">
+                                    <button
+                                        onClick={() => setEditMode(!editMode)}
+                                        className="border w-fit  px-4 cursor-pointer py-2 rounded-lg text-sm flex items-center gap-2"
+                                    >
+                                        <MdOutlineEdit />
+                                        Edit Profile
+                                    </button>
+                                </div>
                             )}
                         </div>
 
-                        <div className="p-6 space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {/* <div>
-                                <label className="text-sm text-gray-600">Full Name</label>
-                                <input
-                                    type="text"
-                                    value={seller?.fullName || ""}
-                                    disabled={!editMode}
-                                    onChange={(e) =>
-                                        setSeller({ ...seller, fullName: e.target.value })
-                                    }
-                                    className="w-full mt-1 border rounded-lg px-4 py-2 outline-none "
-                                />
-                            </div> */}
-                                <div>
-                                    <label className="mb-0.5 text-xs font-medium text-gray-600">
-                                        Full Name
-                                    </label>
+                        <div className="p-4 sm:p-6 space-y-4">                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                                    <div className="rounded-lg p-[1px] transition bg-transparent 
+                            <div>
+                                <label className="mb-0.5 text-xs font-medium text-gray-600">
+                                    Full Name
+                                </label>
+
+                                <div className="rounded-lg p-[1px] transition bg-transparent 
                   focus-within:bg-gradient-to-t 
                   focus-within:from-[#d6c9ea] 
                   focus-within:to-[#871B58]">
 
-                                        <div className="flex items-center gap-2 rounded-lg bg-white 
+                                    <div className="flex items-center gap-2 rounded-lg bg-white 
                     border border-[#D7D7D7] 
                     transition focus-within:border-transparent">
 
-                                            <input
-                                                ref={fullNameRef}
-                                                required
-                                                type="text"
-                                                placeholder="Full Name"
-                                                value={seller?.fullName || ""}
-                                                disabled={!editMode}
-                                                onChange={(e) =>
-                                                    setSeller({ ...seller, fullName: e.target.value })
-                                                }
-                                                className="flex-1 bg-transparent outline-none border-0 
+                                        <input
+                                            ref={fullNameRef}
+                                            required
+                                            type="text"
+                                            placeholder="Full Name"
+                                            value={seller?.fullName || ""}
+                                            disabled={!editMode}
+                                            onChange={(e) =>
+                                                setSeller({ ...seller, fullName: e.target.value })
+                                            }
+                                            className="flex-1 bg-transparent outline-none border-0 
                    p-3 text-xs appearance-none w-full 
                    "
-                                                style={{ WebkitAppearance: "none" }}
-                                            />
+                                            style={{ WebkitAppearance: "none" }}
+                                        />
 
-                                        </div>
                                     </div>
                                 </div>
+                            </div>
 
 
-                                <div>
-                                    <label className="mb-0.5 text-xs font-medium text-gray-600">
-                                        Phone Number
-                                    </label>
+                            <div>
+                                <label className="mb-0.5 text-xs font-medium text-gray-600">
+                                    Phone Number
+                                </label>
 
-                                    <div
-                                        className="rounded-lg p-[1px] transition bg-transparent
+                                <div
+                                    className="rounded-lg p-[1px] transition bg-transparent
                focus-within:bg-gradient-to-t
                focus-within:from-[#d6c9ea]
                focus-within:to-[#871B58]"
-                                    >
-                                        <div
-                                            className="flex items-center gap-2 rounded-lg bg-white
+                                >
+                                    <div
+                                        className="flex items-center gap-2 rounded-lg bg-white
                  border border-[#D7D7D7]
                  transition focus-within:border-transparent"
-                                        >
-                                            <input
-                                                type="tel"
-                                                pattern="[0-9]{10}"
-                                                maxLength={10}
+                                    >
+                                        <input
+                                            type="tel"
+                                            pattern="[0-9]{10}"
+                                            maxLength={10}
 
-                                                required
-                                                placeholder="Phone Number"
-                                                value={seller?.phoneNumber || ""}
-                                                disabled={!editMode}
-                                                onChange={(e) =>
-                                                    setSeller({ ...seller, phoneNumber: e.target.value })
-                                                }
-                                                className="flex-1 bg-transparent outline-none border-0
+                                            required
+                                            placeholder="Phone Number"
+                                            value={seller?.phoneNumber || ""}
+                                            disabled={!editMode}
+                                            onChange={(e) =>
+                                                setSeller({ ...seller, phoneNumber: e.target.value })
+                                            }
+                                            className="flex-1 bg-transparent outline-none border-0
                    p-3 text-xs appearance-none w-full
                  "
-                                                style={{ WebkitAppearance: "none" }}
-                                            />
-                                        </div>
+                                            style={{ WebkitAppearance: "none" }}
+                                        />
                                     </div>
                                 </div>
-
-
                             </div>
+
+
+                        </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="mb-0.5 text-xs font-medium text-gray-600">
@@ -266,13 +461,13 @@ const Page = () => {
                         <div className="flex justify-end gap-4 pt-2">
                             <button
                                 onClick={() => setEditMode(false)}
-                                className="px-6 cursor-pointer py-2 border border-gray-400 text-gray-600 rounded-lg hover:bg-gray-100"
+                                className="px-4 xl:px-6 cursor-pointer border-gray-400 text-xs font-medium md:text-sm  py-2 border rounded-lg"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
-                                className="px-6 py-2  cursor-pointer bg-primary text-white rounded-lg hover:bg-primary/80S"
+                                className="px-4 xl:px-6 py-2 cursor-pointer text-xs font-medium md:text-sm  bg-primary text-white rounded-lg"
                             >
                                 Save Changes
                             </button>
@@ -284,7 +479,10 @@ const Page = () => {
                     <div className="bg-white border-[#D7D7D7] rounded-2xl shadow-md">
 
                         {/* Header */}
-                        <div className="bg-gray-100 px-6 py-4 flex justify-between items-center">
+                        <div className="bg-gray-100 px-4 sm:px-6 py-3 sm:py-4 
+flex flex-col sm:flex-row 
+gap-2 sm:gap-0 
+justify-between sm:items-center">
                             <div>
                                 <h2 className="font-semibold text-lg text-gray-800">
                                     Company Profile
@@ -294,28 +492,21 @@ const Page = () => {
                                 </p>
                             </div>
 
-                            {/* {!companyEdit && (
-                            <button
-                                onClick={() => setCompanyEdit(true)}
-                                className="border px-4 py-2 rounded-lg text-sm flex items-center gap-2"
-                            >
-                                <MdOutlineEdit />
-                                Edit Company
-                            </button>
-                        )} */}
-                            {companyExists && !companyEdit && (
 
-                                <button
-                                    onClick={() => setCompanyEdit(true)}
-                                    className="border px-4 py-2 rounded-lg text-sm flex items-center gap-2"
-                                >
-                                    <MdOutlineEdit />
-                                    Edit Company
-                                </button>
+                            {companyExists && !companyEdit && (
+                                <div className="flex justify-end">
+                                    <button
+                                        onClick={() => setCompanyEdit(true)}
+                                        className="border  w-fit px-2 md:px-4 py-2 rounded-lg text-xs md:text-sm flex items-center gap-2"
+                                    >
+                                        <MdOutlineEdit />
+                                        Edit Company
+                                    </button>
+                                </div>
                             )}
 
                         </div>
-                        <div className="p-6 space-y-4">
+                        <div className="p-4 sm:p-6 space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                                 {/* Company Name */}
@@ -340,26 +531,34 @@ const Page = () => {
                                     </div>
                                 </div>
 
-                                {/* Website */}
                                 <div>
                                     <label className="mb-0.5 text-xs font-medium text-gray-600">
-                                        Website URL
+                                        Company Pincode
                                     </label>
                                     <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                                         <div className="flex items-center rounded-lg bg-white border border-[#D7D7D7] focus-within:border-transparent">
                                             <input
-                                                type="url"
-                                                // placeholder="https://stonepedia.in/"
-                                                value={company?.websiteUrl || ""}
+
+                                                type="text"
+                                                inputMode="numeric"
+                                                maxLength={6}
+                                                pattern="\d{6}"
+                                                value={company?.pincode || ""}
                                                 disabled={companyExists && !companyEdit}
+                                                required
                                                 onChange={(e) =>
-                                                    setCompany({ ...company, websiteUrl: e.target.value })
+                                                    setCompany({ ...company, pincode: e.target.value })
                                                 }
                                                 className="flex-1 bg-transparent outline-none border-0 p-3 text-xs w-full "
                                             />
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
                                 <LocationSelector
                                     country={company?.country}
                                     state={company?.state}
@@ -373,21 +572,41 @@ const Page = () => {
                                     }
                                 />
 
+                            </div>
 
-                                {/* Pincode */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="mb-0.5 text-xs font-medium text-gray-600">
-                                        Pincode
+                                        GST / Government Id
                                     </label>
                                     <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                                         <div className="flex items-center rounded-lg bg-white border border-[#D7D7D7] focus-within:border-transparent">
                                             <input
                                                 type="text"
-                                                value={company?.pincode || ""}
+                                                value={company?.gstNumber || ""}
                                                 disabled={companyExists && !companyEdit}
-                                                required
+
                                                 onChange={(e) =>
-                                                    setCompany({ ...company, pincode: e.target.value })
+                                                    setCompany({ ...company, gstNumber: e.target.value })
+                                                }
+                                                className="flex-1 bg-transparent outline-none border-0 p-3 text-xs w-full "
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="mb-0.5 text-xs font-medium text-gray-600">
+                                        Website URL
+                                    </label>
+                                    <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
+                                        <div className="flex items-center rounded-lg bg-white border border-[#D7D7D7] focus-within:border-transparent">
+                                            <input
+                                                type="url"
+                                                // placeholder="https://stonepedia.in/"
+                                                value={company?.websiteUrl || ""}
+                                                disabled={companyExists && !companyEdit}
+                                                onChange={(e) =>
+                                                    setCompany({ ...company, websiteUrl: e.target.value })
                                                 }
                                                 className="flex-1 bg-transparent outline-none border-0 p-3 text-xs w-full "
                                             />
@@ -417,7 +636,7 @@ const Page = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div >
 
                     {(companyEdit || !companyExists) && (
                         <div className="flex justify-end gap-4 pt-2">
@@ -425,7 +644,7 @@ const Page = () => {
                             {companyExists && (
                                 <button
                                     onClick={() => setCompanyEdit(false)}
-                                    className="px-6 py-2 border rounded-lg"
+                                    className="px-4 xl:px-6 cursor-pointer border-gray-400 text-xs font-medium md:text-sm  py-2 border rounded-lg"
                                 >
                                     Cancel
                                 </button>
@@ -434,17 +653,48 @@ const Page = () => {
                             <button
                                 type="submit"
 
-                                className="px-6 py-2 bg-primary text-white rounded-lg"
+                                className="px-4 xl:px-6 py-2 cursor-pointer text-xs font-medium md:text-sm  bg-primary text-white rounded-lg"
                             >
                                 {companyExists ? "Save Changes" : "Create Company"}
                             </button>
 
                         </div>
                     )}
-                </form>
+                </form >
 
-            </div>
-        </div>
+                <UnitForm
+                    title="Processing Unit"
+                    description="Manage your processing unit details."
+                    aboutLabel="About Processing Unit"
+                    imageLabel="Upload E-Processing Unit "
+                    brochureLabel="Upload Brochure"
+                    data={processingUnit}
+                    setData={setProcessingUnit}
+                    exists={processingExists}
+                    edit={processingEdit}
+                    setEdit={setProcessingEdit}
+                    onSave={handleProcessingSave}
+                    onImageUpload={handleImageUpload}
+                    onBrochureUpload={handleBrochureUpload}
+                />
+
+                <UnitForm
+                    title="E-Gallery"
+                    aboutLabel="About Gallery"
+                    imageLabel="Upload Shop Image"
+                    description="Manage your E-Gallery."
+                    data={gallery}
+                    setData={setGallery}
+                    exists={galleryExists}
+                    edit={galleryEdit}
+                    setEdit={setGalleryEdit}
+                    onSave={handleGallerySave}
+                    onImageUpload={handleGalleryImageUpload}
+                    onBrochureUpload={handleGalleryBrochureUpload}
+                />
+
+            </div >
+        </div >
     );
 };
 
