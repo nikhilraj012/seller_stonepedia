@@ -37,28 +37,28 @@ const Page = () => {
   };
 
   const handleFileUpload = async (file, path, setter, nameKey, urlKey) => {
-  if (!file) return;
+    if (!file) return;
 
-  // Step 1: Show file name immediately
-  setter((prev) => ({
-    ...prev,
-    [nameKey]: file.name,
-  }));
-
-  try {
-    // Step 2: Upload async
-    const url = await uploadFile(file, path);
-
-    // Step 3: Update URL after upload
+    // Step 1: Show file name immediately
     setter((prev) => ({
       ...prev,
-      [urlKey]: url,
+      [nameKey]: file.name,
     }));
-  } catch (err) {
-    console.log(err);
-    toast.error("File upload failed");
-  }
-};
+
+    try {
+      // Step 2: Upload async
+      const url = await uploadFile(file, path);
+
+      // Step 3: Update URL after upload
+      setter((prev) => ({
+        ...prev,
+        [urlKey]: url,
+      }));
+    } catch (err) {
+      console.log(err);
+      toast.error("File upload failed");
+    }
+  };
 
   const fetchSubDoc = async (path, setter, existsSetter) => {
     const user = auth.currentUser;
@@ -264,9 +264,6 @@ const Page = () => {
   return (
     <div className="mt-9 md:mt-10 lg:mt-12 min-h-screen py-6 sm:py-8 px-3 sm:px-6 md:px-10 lg:px-20 xl:px-32">
       <div className="space-y-6 sm:space-y-8">
-        {/* Personal + Company UI SAME AS YOUR CODE */}
-        {/* (No JSX changed here, only logic above) */}
-
         <div>
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
             Settings
@@ -276,10 +273,8 @@ const Page = () => {
           </p>
         </div>
         <form onSubmit={handleSave}>
-          {/* Personal Information Card */}
           <div className="bg-white border-[#D7D7D7] rounded-2xl shadow-md">
-            {/* Header */}
-            <div className="bg-gray-100 px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between sm:items-center">
+            <div className="bg-gray-100 px-4 sm:px-6 rounded-t-xl py-3 sm:py-4 flex flex-col sm:flex-row gap-2 sm:gap-0 justify-between sm:items-center">
               <div>
                 <h2 className="font-semibold text-lg text-gray-800">
                   Personal Information
@@ -417,7 +412,7 @@ const Page = () => {
             <div
               className="bg-gray-100 px-4 sm:px-6 py-3 sm:py-4 
 flex flex-col sm:flex-row 
-gap-2 sm:gap-0 
+gap-2 sm:gap-0  rounded-t-xl
 justify-between sm:items-center"
             >
               <div>

@@ -29,7 +29,7 @@ const UnitForm = ({ title, description, config, aboutLabel, imageLabel }) => {
         <div
           className="bg-gray-100 px-4 sm:px-6 py-3 sm:py-4 
 flex flex-col sm:flex-row 
-gap-2 sm:gap-0 
+gap-2 sm:gap-0  rounded-t-xl
 justify-between sm:items-center"
         >
           <div>
