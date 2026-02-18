@@ -411,9 +411,9 @@ export default Login;
 //               value={formData.phone}
 //               placeholder="Phone Number"
 //               className="border border-gray-200 rounded w-full p-2 outline-primary text-xs"
-//               type="tel"
-//               pattern="[0-9]{10}"
-//               maxLength={10}
+              // type="tel"
+              // pattern="[0-9]{10}"
+              // maxLength={10}
 //               required
 //             />
 //           </div>

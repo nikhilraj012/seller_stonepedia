@@ -38,14 +38,14 @@ const businessCategories = [
     image: "/images/dashboard/stone-product.webp",
     route: "/dashboard/stone-products-form",
   },
-  {
-    id: 5,
-    title: "Chemicals",
-    description:
-      "Sell and showcase different types of industrial and construction chemicals to the right buyers..",
-    image: "/images/dashboard/stone-product.webp",
-    route: "/dashboard/chemicals",
-  },
+  // {
+  //   id: 5,
+  //   title: "Chemicals",
+  //   description:
+  //     "Sell and showcase different types of industrial and construction chemicals to the right buyers..",
+  //   image: "/images/dashboard/stone-product.webp",
+  //   route: "/dashboard/chemicals",
+  // },
 ];
 
 const Dashboard = () => {

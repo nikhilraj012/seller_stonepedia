@@ -8,6 +8,7 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 import { useUi } from "./context/UiContext";
 import { useAuth } from "./context/AuthContext";
 import NavbarProfile from "./NavbarProfile";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const {
@@ -23,8 +24,9 @@ const Navbar = () => {
   const { user } = useAuth();
   const router = useRouter();
   const photoUrl = user?.photoURL;
-
+  const pathname = usePathname();
   const dropdownRef = useRef(null);
+  const hideUserSection = pathname === "/dashboard/profile";
 
   const handleNavClickAndClose = (href) => {
     setIsMenuOpen(false);
@@ -97,49 +99,54 @@ const Navbar = () => {
           )}
 
           <div className="hidden md:flex text-xs lg:text-sm space-x-4 lg:space-x-6 xl:space-x-8">
-            {user ? (
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                  className="flex items-center gap-2 cursor-pointer"
-                >
-                  <div className="relative w-10 h-10 rounded-full overflow-hidden border border-gray-200">
-                    {photoUrl ? (
-                      <Image
-                        src={photoUrl}
-                        alt="avatar"
-                        fill
-                        priority
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <IoPersonCircleOutline
-                          size={40}
-                          className="text-gray-400"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </button>
+            {/* {user ? ( */}
 
-                {showProfileDropdown && <NavbarProfile />}
-              </div>
-            ) : (
-              <>
-                <button
-                  className="cursor-pointer hover:text-primary"
-                  onClick={openLogin}
-                >
-                  Log in
-                </button>
-                <button
-                  onClick={openSignup}
-                  className="bg-[#1E1E1E] text-white px-4 py-2 rounded cursor-pointer"
-                >
-                  Register
-                </button>
-              </>
+            {!hideUserSection && (
+              user ? (
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden border border-gray-200">
+                      {photoUrl ? (
+                        <Image
+                          src={photoUrl}
+                          alt="avatar"
+                          fill
+                          priority
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <IoPersonCircleOutline
+                            size={40}
+                            className="text-gray-400"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </button>
+
+                  {showProfileDropdown && <NavbarProfile />}
+                </div>
+              ) : (
+                <>
+                  <button
+                    className="cursor-pointer hover:text-primary"
+                    onClick={openLogin}
+                  >
+                    Log in
+                  </button>
+                  <button
+                    onClick={openSignup}
+                    className="bg-[#1E1E1E] text-white px-4 py-2 rounded cursor-pointer"
+                  >
+                    Register
+                  </button>
+                </>
+                // )}
+              )
             )}
           </div>
 
@@ -153,15 +160,13 @@ const Navbar = () => {
 
       <div
         onClick={() => setIsMenuOpen(false)}
-        className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
-          isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
       />
 
       <div
-        className={`fixed top-0 left-0 z-50 h-full w-72 bg-white transform transition-transform duration-300 ease-in-out ${
-          isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 z-50 h-full w-72 bg-white transform transition-transform duration-300 ease-in-out ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="flex items-center justify-between h-14 px-4 border-b border-gray-200">
           <div

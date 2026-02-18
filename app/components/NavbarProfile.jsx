@@ -24,10 +24,10 @@ const profilePages = [
     title: "My Stone Products",
     href: "/dashboard/profile/my-stone-products",
   },
-  {
-    title: "My Chemicals",
-    href: "/dashboard/profile/my-chemicals",
-  },
+  // {
+  //   title: "My Chemicals",
+  //   href: "/dashboard/profile/my-chemicals",
+  // },
 ];
 
 const NavbarProfile = ({ isMobile = false }) => {
@@ -99,6 +99,12 @@ const NavbarProfile = ({ isMobile = false }) => {
             <p className="text-xs text-gray-500 truncate">
               {sellerDetails?.email}
             </p>
+            <button
+              onClick={() => handleNavigation("/dashboard/profile")}
+              className="mt-1 text-xs text-blue-600 hover:underline"
+            >
+              View Profile
+            </button>
           </div>
         </div>
 
@@ -136,6 +142,12 @@ const NavbarProfile = ({ isMobile = false }) => {
             <p className="text-xs text-gray-500 truncate">
               {sellerDetails?.email}
             </p>
+            <button
+              onClick={() => handleNavigation("/dashboard/profile")}
+              className="mt-1 text-xs text-primary hover:underline"
+            >
+              View Profile
+            </button>
           </div>
         </div>
       </div>

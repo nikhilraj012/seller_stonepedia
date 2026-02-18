@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useState } from "react";
 import { IoLocation } from "react-icons/io5";
 import { RiDeleteBin5Line } from "react-icons/ri";

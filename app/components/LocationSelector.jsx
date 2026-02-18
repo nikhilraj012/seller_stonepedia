@@ -8,6 +8,7 @@ export const LocationSelector = ({
   state,
   city,
   onChange,
+  disabled
 }) => {
   const { countries, states, cities } = useLocation(country, state);
 
@@ -25,6 +26,7 @@ export const LocationSelector = ({
           className="text-xs"
           required
           isSearchable={true}
+          isDisabled={disabled}
           formatOptionLabel={(option) => (
             <div className="flex items-center gap-2">
               <img src={option.flag} alt="" className="w-5 h-4" />
@@ -38,7 +40,8 @@ export const LocationSelector = ({
         <Select
           options={states}
           value={state}
-          isDisabled={!country}
+          // isDisabled={!country}
+          isDisabled={disabled || !country}
           onChange={(v) => onChange({ state: v, city: null })}
           styles={selectCommonStyles}
           theme={selectCommonTheme}
@@ -53,7 +56,8 @@ export const LocationSelector = ({
         <Select
           options={cities}
           value={city}
-          isDisabled={!state}
+          // isDisabled={!state}
+          isDisabled={disabled || !state}
           onChange={(v) => onChange({ city: v })}
           styles={selectCommonStyles}
           theme={selectCommonTheme}
