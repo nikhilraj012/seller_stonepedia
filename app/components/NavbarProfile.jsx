@@ -101,7 +101,7 @@ const NavbarProfile = ({ isMobile = false }) => {
             </p>
             <button
               onClick={() => handleNavigation("/dashboard/profile")}
-              className="mt-1 text-xs text-blue-600 hover:underline"
+              className="mt-1 text-xs hover:cursor-pointer text-blue-600 hover:underline"
             >
               View Profile
             </button>
@@ -144,7 +144,7 @@ const NavbarProfile = ({ isMobile = false }) => {
             </p>
             <button
               onClick={() => handleNavigation("/dashboard/profile")}
-              className="mt-1 text-xs text-primary hover:underline"
+              className="mt-1 hover:cursor-pointer text-xs text-primary hover:underline"
             >
               View Profile
             </button>
