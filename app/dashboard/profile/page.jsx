@@ -104,47 +104,6 @@ const Page = () => {
     if (companyEdit && companyNameRef.current) companyNameRef.current.focus();
   }, [companyEdit]);
 
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
-  //     if (!user) {
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     try {
-  //       await user.reload(); // refresh latest emailVerified status
-
-  //       // Set seller state with existing Firestore data + emailVerified
-  //       const snap = await getDoc(doc(db, "SellerDetails", user.uid));
-  //       const sellerData = snap.exists() ? snap.data() : {};
-
-  //       setSeller({
-  //         ...sellerData,
-  //         emailVerified: user.emailVerified, // live status
-  //       });
-
-  //       // Update email in Firestore if verified
-  //       if (user.emailVerified) {
-  //         await updateDoc(doc(db, "SellerDetails", user.uid), {
-  //           email: user.email,
-  //           emailVerified: true,
-  //         });
-  //       }
-
-
-  //       // Fetch sub-documents
-  //       await fetchSubDoc(["CompanyData", "info"], setCompany, setCompanyExists);
-  //       await fetchSubDoc(["GalleryDetails", "info"], setGallery, setGalleryExists);
-  //       await fetchSubDoc(["ProcessingUnit", "info"], setProcessingUnit, setProcessingExists);
-  //     } catch (err) {
-  //       console.log(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   });
-
-  //   return () => unsubscribe();
-  // }, []);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -153,40 +112,37 @@ const Page = () => {
         return;
       }
 
-      await user.reload(); // 🔥 MOST IMPORTANT LINE
+      try {
+        await user.reload();
+        const sellerRef = doc(db, "SellerDetails", user.uid);
+        const snap = await getDoc(sellerRef);
 
-      const sellerRef = doc(db, "SellerDetails", user.uid);
-      const snap = await getDoc(sellerRef);
+        if (snap.exists()) {
+          const data = snap.data();
+          setSeller({ ...data, emailVerified: user.emailVerified });
+          setNewEmail(user.email);
+          if (data.email !== user.email) {
+            await updateDoc(sellerRef, {
+              email: user.email,
+              emailVerified: user.emailVerified,
+            });
+            toast.success("Email synced successfully!");
+          }
 
-      if (!snap.exists()) {
-        setLoading(false);
-        return;
+          // Fetch sub-documents
+          await fetchSubDoc(["CompanyData", "info"], setCompany, setCompanyExists);
+          await fetchSubDoc(["GalleryDetails", "info"], setGallery, setGalleryExists);
+          await fetchSubDoc(["ProcessingUnit", "info"], setProcessingUnit, setProcessingExists);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false); // ✅ Important: stop spinner
       }
-
-      const sellerData = snap.data();
-
-      // 🔥🔥🔥 REAL FIX
-      if (user.email !== sellerData.email) {
-        await updateDoc(sellerRef, {
-          email: user.email,
-          emailVerified: user.emailVerified,
-        });
-      }
-
-      setSeller({
-        ...sellerData,
-        email: user.email, // ALWAYS AUTH EMAIL
-      });
-
-      setNewEmail(user.email);
-      setEmailVerified(user.emailVerified);
-
-      setLoading(false);
     });
 
     return () => unsub();
   }, []);
-
 
   const handleImageUpload = (e) =>
     handleFileUpload(
@@ -250,46 +206,6 @@ const Page = () => {
   };
 
 
-  // const handleSave = async (e) => {
-  //   e.preventDefault();
-  //   const user = auth.currentUser;
-  //   if (!user) return;
-
-  //   const error = await checkDuplicate(seller.email, seller.phoneNumber, user.uid);
-  //   if (error) {
-  //     toast.error(error);
-  //     return;
-  //   }
-
-  //   await updateDoc(doc(db, "SellerDetails", user.uid), seller);
-
-  //   setEditMode(false);
-  //   toast.success("Profile Updated");
-  // };
-  // const handleSave = async (e) => {
-  //   e.preventDefault();
-  //   const user = auth.currentUser;
-  //   if (!user) return;
-
-  //   // if (emailChanged) {
-  //   //   toast.error("Please verify new email first!");
-  //   //   return;
-  //   // }
-
-  //   const error = await checkDuplicate(seller.phoneNumber, user.uid);
-  //   if (error) {
-  //     toast.error(error);
-  //     return;
-  //   }
-
-  //   await updateDoc(doc(db, "SellerDetails", user.uid), {
-  //     ...seller,
-  //     email: user.email, // Always Auth email
-  //   });
-
-  //   setEditMode(false);
-  //   toast.success("Profile Updated");
-  // };
   const handleSave = async (e) => {
     e.preventDefault();
     const user = auth.currentUser;
@@ -301,13 +217,13 @@ const Page = () => {
       return;
     }
 
-    // 🔴 Stop save if email changed but not verified
+    
     if (newEmail !== user.email) {
       toast.error("Please verify new email first!");
       return;
     }
 
-    // ✅ Save profile
+ 
     await updateDoc(doc(db, "SellerDetails", user.uid), {
       ...seller,
       email: user.email,
@@ -384,119 +300,7 @@ const Page = () => {
       return false;
     }
   };
-  // const handleEmailVerification = async () => {
-  //   const user = auth.currentUser;
-  //   if (!user) return;
-
-  //   if (!currentPassword) {
-  //     toast.error("Enter your current password first");
-  //     return;
-  //   }
-
-  //   if (newEmail === user.email) {
-  //     toast.error("New email must be different from current email");
-  //     return;
-  //   }
-
-  //   try {
-  //     const credential = EmailAuthProvider.credential(
-  //       user.email,
-  //       currentPassword
-  //     );
-
-  //     await reauthenticateWithCredential(user, credential);
-
-  //     await verifyBeforeUpdateEmail(user, newEmail);
-  //     setIsVerifyingEmail(true);
-  //     toast.success("Verification email sent to new email!");
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error(error.message);
-  //   }
-  // };
-  // const handleEmailVerification = async () => {
-  //   const user = auth.currentUser;
-  //   if (!user) return;
-
-  //   try {
-  //     const credential = EmailAuthProvider.credential(
-  //       user.email,
-  //       password
-  //     );
-
-  //     await reauthenticateWithCredential(user, credential);
-  //     await verifyBeforeUpdateEmail(user, newEmail);
-
-  //     toast.success("Verification email sent!");
-
-  //     // 🔁 Start polling to check verification
-  //     const interval = setInterval(async () => {
-  //       await user.reload();
-
-  //       if (user.email === newEmail && user.emailVerified) {
-  //         clearInterval(interval);
-
-  //         await updateDoc(doc(db, "SellerDetails", user.uid), {
-  //           ...seller,
-  //           email: newEmail,
-  //           emailVerified: true,
-  //         });
-
-  //         toast.success("Email verified & updated!");
-  //         setShowEmailModal(false);
-  //         setPassword("");
-  //       }
-  //     }, 3000);
-
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
-  // const handleEmailVerification = async () => {
-  //   const user = auth.currentUser;
-  //   if (!user) return;
-
-  //   try {
-  //     const credential = EmailAuthProvider.credential(
-  //       user.email,
-  //       passwordForVerification
-  //     );
-
-  //     await reauthenticateWithCredential(user, credential);
-
-  //     await verifyBeforeUpdateEmail(user, newEmail);
-
-  //     toast.success("Verification email sent!");
-
-  //     const interval = setInterval(async () => {
-  //       await user.reload();
-
-  //       if (user.emailVerified && user.email === newEmail) {
-  //         clearInterval(interval);
-
-  //         // Update Firestore with new verified email
-  //         await updateDoc(doc(db, "SellerDetails", user.uid), {
-  //           email: newEmail,
-  //           emailVerified: true,
-  //         });
-
-  //         setSeller((prev) => ({
-  //           ...prev,
-  //           email: newEmail,
-  //         }));
-
-  //         setNewEmail(newEmail);
-  //         setEmailVerified(true);
-  //         setEmailChanged(false);
-
-  //         toast.success("Email verified & updated successfully!");
-  //       }
-  //     }, 3000);
-
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
+  
   const handleEmailVerification = async () => {
     const user = auth.currentUser;
     if (!user) return;
@@ -507,37 +311,95 @@ const Page = () => {
         passwordForVerification
       );
 
+      
       await reauthenticateWithCredential(user, credential);
+
+    
       await verifyBeforeUpdateEmail(user, newEmail);
 
-      toast.success("Verification email sent. Please verify and come back.");
+      toast.success("Verification email sent. Please verify.");
+
+      const interval = setInterval(async () => {
+        try {
+          await user.reload();
+        } catch (error) {
+          clearInterval(interval);
+          if (error.code === "auth/user-token-expired") {
+            toast.error("Session expired. Please login again.");
+            await auth.signOut();
+          }
+          return;
+        }
+
+
+        if (user.email === newEmail) {
+          clearInterval(interval);
+
+          // ✅ Update Firestore
+          await updateDoc(doc(db, "SellerDetails", user.uid), {
+            email: newEmail,
+            emailVerified: true,
+          });
+
+          setSeller((prev) => ({
+            ...prev,
+            email: newEmail,
+          }));
+
+          setNewEmail(newEmail);
+          setEmailVerified(true);
+          setEmailChanged(false);
+
+          toast.success("Email verified & updated successfully!");
+        }
+      }, 3000);
+
     } catch (err) {
       toast.error(err.message);
     }
   };
+  const startVerificationCheck = () => {
+    const interval = setInterval(async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        clearInterval(interval);
+        return;
+      }
 
-  // const handleEmailVerification = async () => {
-  //   const user = auth.currentUser;
-  //   if (!user) return;
+      try {
+        await user.reload();
 
-  //   try {
-  //     const credential = EmailAuthProvider.credential(
-  //       user.email,
-  //       passwordForVerification   // ✅ correct state
-  //     );
+        if (user.emailVerified) {
+          clearInterval(interval);
+          setEmailVerified(true);
+          toast.success("Email verified successfully ");
+        }
+      } catch (error) {
+        clearInterval(interval);
 
-  //     await reauthenticateWithCredential(user, credential);
+        if (error.code === "auth/user-token-expired") {
+          toast.error("Session expired. Please login again.");
+          await auth.signOut();
+        }
+      }
+    }, 3000);
+  };
 
-  //     await verifyBeforeUpdateEmail(user, newEmail);
 
-  //     setIsVerifyingEmail(true);
+  const handleResendVerification = async () => {
+    try {
+      const user = auth.currentUser;
+      if (!user) return;
 
-  //     toast.success("Verification email sent to new email!");
+      await sendEmailVerification(user);
+      toast.success("Verification email sent!");
 
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
+      startVerificationCheck(); // 👈 yaha se checking start hogi
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   const processingConfig = useMemo(
     () => ({
       data: processingUnit,
@@ -750,23 +612,27 @@ const Page = () => {
                         }}
                         className="flex-1 bg-transparent outline-none border-0 p-3 text-xs w-full"
                       />
-
                       {emailVerified ? (
                         <span className="text-green-600 mr-2 font-bold text-sm ml-2">
                           ✔ Verified
                         </span>
                       ) : (
-                        editMode &&
-                        emailChanged && (
-                          <button
-                            type="button"
-                            onClick={() => setShowEmailModal(true)}
-                            className="px-3 mr-2 py-1.5 cursor-pointer text-xs text-white font-medium bg-primary rounded-lg ml-2"
-                          >
-                            Send Verification
-                          </button>
-                        )
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (editMode && emailChanged) {
+                              setShowEmailModal(true);   // password modal
+                            } else {
+                              handleResendVerification(); // direct resend
+                            }
+                          }}
+                          className="px-3 mr-2 py-1.5 cursor-pointer text-xs text-white font-medium bg-primary rounded-lg ml-2"
+                        >
+                          Send Verification
+                        </button>
                       )}
+
+
                     </div>
                   </div>
                 </div>
