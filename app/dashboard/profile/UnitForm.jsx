@@ -54,7 +54,8 @@ justify-between sm:items-center"
         <div className="p-6 space-y-5">
           {/* ABOUT */}
           <div>
-            <label className="mb-0.5 text-xs font-medium">{aboutLabel}</label>
+            <label className="mb-0.5 text-xs font-medium text-gray-600 flex items-center gap-1">
+              <span className="text-red-500 text-[17px] mt-1">*</span> {aboutLabel}</label>
 
             <textarea
               ref={aboutRef}
@@ -103,7 +104,8 @@ justify-between sm:items-center"
 
           {/* IMAGE */}
           <div>
-            <label className="mb-0.5 text-xs font-medium">{imageLabel}</label>
+            <label className="mb-0.5 text-xs font-medium text-gray-600 flex items-center gap-1">
+              <span className="text-red-500 text-[17px] mt-1">*</span> {imageLabel}</label>
 
             <div className="flex items-center justify-between border border-gray-200 rounded-lg bg-white p-3 transition relative">
               <input
@@ -135,7 +137,7 @@ justify-between sm:items-center"
 
       {/* SAVE / CANCEL */}
       {(edit || !exists) && (
-        <div className="flex justify-end gap-4 pt-2">
+        <div className="flex justify-end gap-4 pt-4">
           {exists && (
             <button
               type="button"

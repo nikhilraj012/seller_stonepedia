@@ -26,6 +26,7 @@ const Navbar = () => {
   const photoUrl = user?.photoURL;
   const pathname = usePathname();
   const dropdownRef = useRef(null);
+  
   const hideUserSection = pathname === "/dashboard/profile";
 
   const handleNavClickAndClose = (href) => {
@@ -99,10 +100,10 @@ const Navbar = () => {
           )}
 
           <div className="hidden md:flex text-xs lg:text-sm space-x-4 lg:space-x-6 xl:space-x-8">
-            {/* {user ? ( */}
+            {user ? (
 
-            {!hideUserSection && (
-              user ? (
+              // {!hideUserSection && (
+              // user ? (
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setShowProfileDropdown(!showProfileDropdown)}
@@ -145,9 +146,9 @@ const Navbar = () => {
                     Register
                   </button>
                 </>
-                // )}
-              )
-            )}
+              )}
+            {/* //   )
+          // )} */}
           </div>
 
           <div className="md:hidden">

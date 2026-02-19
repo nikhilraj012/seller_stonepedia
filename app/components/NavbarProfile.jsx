@@ -6,6 +6,7 @@ import { useUi } from "./context/UiContext";
 import { useRouter } from "next/navigation";
 import ProfileAvatar from "./common/ProfileAvatar";
 import { db } from "../firebase/config";
+import { usePathname } from "next/navigation";
 
 const profilePages = [
   {
@@ -31,10 +32,11 @@ const profilePages = [
 ];
 
 const NavbarProfile = ({ isMobile = false }) => {
+    const pathname = usePathname();
   const { sellerDetails, logout } = useAuth();
   const { setIsMenuOpen, setShowProfileDropdown } = useUi();
   const router = useRouter();
-
+  const hideUserSection = pathname === "/dashboard/profile";
   const handleLogout = async () => {
     await logout();
     if (isMobile) {
@@ -99,12 +101,14 @@ const NavbarProfile = ({ isMobile = false }) => {
             <p className="text-xs text-gray-500 truncate">
               {sellerDetails?.email}
             </p>
+            {!hideUserSection  && (
             <button
               onClick={() => handleNavigation("/dashboard/profile")}
               className="mt-1 text-xs cursor-pointer text-primary underline"
             >
               View Profile
             </button>
+            )}
           </div>
         </div>
 
@@ -142,12 +146,14 @@ const NavbarProfile = ({ isMobile = false }) => {
             <p className="text-xs text-gray-500 truncate">
               {sellerDetails?.email}
             </p>
+              {!hideUserSection  && (
             <button
               onClick={() => handleNavigation("/dashboard/profile")}
               className="mt-1 hover:cursor-pointer text-xs text-primary hover:underline"
             >
               View Profile
             </button>
+              )}
           </div>
         </div>
       </div>

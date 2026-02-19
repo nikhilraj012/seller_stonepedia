@@ -1,7 +1,7 @@
 "use client";
 import { LocationSelector } from "@/app/components/LocationSelector";
 import { auth, db } from "@/app/firebase/config";
-import { onAuthStateChanged, updateEmail, EmailAuthProvider, reauthenticateWithCredential, verifyBeforeUpdateEmail } from "firebase/auth";
+import { onAuthStateChanged, updateEmail, EmailAuthProvider, reauthenticateWithCredential, verifyBeforeUpdateEmail, sendEmailVerification } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -12,6 +12,9 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 // import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 
 const Page = () => {
+
+  const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
   const [companyExists, setCompanyExists] = useState(false);
   const [seller, setSeller] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -24,10 +27,16 @@ const Page = () => {
   const [processingExists, setProcessingExists] = useState(false);
   const [processingEdit, setProcessingEdit] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [newEmail, setNewEmail] = useState("");
+  const [emailChanged, setEmailChanged] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [passwordForVerification, setPasswordForVerification] = useState("");
 
   const fullNameRef = useRef(null);
   const companyNameRef = useRef(null);
   const storage = getStorage();
+
 
   const uploadFile = async (file, path) => {
     const storageRef = ref(storage, path);
@@ -95,40 +104,88 @@ const Page = () => {
     if (companyEdit && companyNameRef.current) companyNameRef.current.focus();
   }, [companyEdit]);
 
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
+  //     if (!user) {
+  //       setLoading(false);
+  //       return;
+  //     }
+
+  //     try {
+  //       await user.reload(); // refresh latest emailVerified status
+
+  //       // Set seller state with existing Firestore data + emailVerified
+  //       const snap = await getDoc(doc(db, "SellerDetails", user.uid));
+  //       const sellerData = snap.exists() ? snap.data() : {};
+
+  //       setSeller({
+  //         ...sellerData,
+  //         emailVerified: user.emailVerified, // live status
+  //       });
+
+  //       // Update email in Firestore if verified
+  //       if (user.emailVerified) {
+  //         await updateDoc(doc(db, "SellerDetails", user.uid), {
+  //           email: user.email,
+  //           emailVerified: true,
+  //         });
+  //       }
+
+
+  //       // Fetch sub-documents
+  //       await fetchSubDoc(["CompanyData", "info"], setCompany, setCompanyExists);
+  //       await fetchSubDoc(["GalleryDetails", "info"], setGallery, setGalleryExists);
+  //       await fetchSubDoc(["ProcessingUnit", "info"], setProcessingUnit, setProcessingExists);
+  //     } catch (err) {
+  //       console.log(err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   });
+
+  //   return () => unsubscribe();
+  // }, []);
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) {
         setLoading(false);
         return;
       }
 
-      try {
+      await user.reload(); // 🔥 MOST IMPORTANT LINE
 
-        await user.reload();
+      const sellerRef = doc(db, "SellerDetails", user.uid);
+      const snap = await getDoc(sellerRef);
 
-        if (user.emailVerified) {
-
-          await updateDoc(doc(db, "SellerDetails", user.uid), {
-            email: user.email
-          });
-        }
-
-        const snap = await getDoc(doc(db, "SellerDetails", user.uid));
-        if (snap.exists()) setSeller(snap.data());
-
-        await fetchSubDoc(["CompanyData", "info"], setCompany, setCompanyExists);
-        await fetchSubDoc(["GalleryDetails", "info"], setGallery, setGalleryExists);
-        await fetchSubDoc(["ProcessingUnit", "info"], setProcessingUnit, setProcessingExists);
-      } catch (err) {
-        console.log(err);
-      } finally {
+      if (!snap.exists()) {
         setLoading(false);
+        return;
       }
+
+      const sellerData = snap.data();
+
+      // 🔥🔥🔥 REAL FIX
+      if (user.email !== sellerData.email) {
+        await updateDoc(sellerRef, {
+          email: user.email,
+          emailVerified: user.emailVerified,
+        });
+      }
+
+      setSeller({
+        ...sellerData,
+        email: user.email, // ALWAYS AUTH EMAIL
+      });
+
+      setNewEmail(user.email);
+      setEmailVerified(user.emailVerified);
+
+      setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => unsub();
   }, []);
-
 
 
   const handleImageUpload = (e) =>
@@ -168,16 +225,16 @@ const Page = () => {
     );
 
 
-  const checkDuplicate = async (email, phone, uid) => {
-    const q1 = query(
-      collection(db, "SellerDetails"),
-      where("email", "==", email)
-    );
-    const s1 = await getDocs(q1);
+  const checkDuplicate = async (phone, uid) => {
+    // const q1 = query(
+    //   collection(db, "SellerDetails"),
+    //   where("email", "==", email)
+    // );
+    // const s1 = await getDocs(q1);
 
-    if (!s1.empty && s1.docs[0].id !== uid) {
-      return "Email already used by another user";
-    }
+    // if (!s1.empty && s1.docs[0].id !== uid) {
+    //   return "Email already used by another user";
+    // }
 
     const q2 = query(
       collection(db, "SellerDetails"),
@@ -193,21 +250,72 @@ const Page = () => {
   };
 
 
+  // const handleSave = async (e) => {
+  //   e.preventDefault();
+  //   const user = auth.currentUser;
+  //   if (!user) return;
+
+  //   const error = await checkDuplicate(seller.email, seller.phoneNumber, user.uid);
+  //   if (error) {
+  //     toast.error(error);
+  //     return;
+  //   }
+
+  //   await updateDoc(doc(db, "SellerDetails", user.uid), seller);
+
+  //   setEditMode(false);
+  //   toast.success("Profile Updated");
+  // };
+  // const handleSave = async (e) => {
+  //   e.preventDefault();
+  //   const user = auth.currentUser;
+  //   if (!user) return;
+
+  //   // if (emailChanged) {
+  //   //   toast.error("Please verify new email first!");
+  //   //   return;
+  //   // }
+
+  //   const error = await checkDuplicate(seller.phoneNumber, user.uid);
+  //   if (error) {
+  //     toast.error(error);
+  //     return;
+  //   }
+
+  //   await updateDoc(doc(db, "SellerDetails", user.uid), {
+  //     ...seller,
+  //     email: user.email, // Always Auth email
+  //   });
+
+  //   setEditMode(false);
+  //   toast.success("Profile Updated");
+  // };
   const handleSave = async (e) => {
     e.preventDefault();
     const user = auth.currentUser;
     if (!user) return;
 
-    const error = await checkDuplicate(seller.email, seller.phoneNumber, user.uid);
+    const error = await checkDuplicate(seller.phoneNumber, user.uid);
     if (error) {
       toast.error(error);
       return;
     }
 
-    await updateDoc(doc(db, "SellerDetails", user.uid), seller);
+    // 🔴 Stop save if email changed but not verified
+    if (newEmail !== user.email) {
+      toast.error("Please verify new email first!");
+      return;
+    }
+
+    // ✅ Save profile
+    await updateDoc(doc(db, "SellerDetails", user.uid), {
+      ...seller,
+      email: user.email,
+      emailVerified: user.emailVerified,
+    });
 
     setEditMode(false);
-    toast.success("Profile Updated");
+    toast.success("Profile Updated Successfully");
   };
 
   const handleCompanySave = (e) => {
@@ -259,7 +367,177 @@ const Page = () => {
       msg,
     );
   };
+  const reauthenticateUser = async () => {
+    const user = auth.currentUser;
+    if (!user) return false;
 
+    try {
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
+
+      await reauthenticateWithCredential(user, credential);
+      return true;
+    } catch (error) {
+      toast.error("Wrong password");
+      return false;
+    }
+  };
+  // const handleEmailVerification = async () => {
+  //   const user = auth.currentUser;
+  //   if (!user) return;
+
+  //   if (!currentPassword) {
+  //     toast.error("Enter your current password first");
+  //     return;
+  //   }
+
+  //   if (newEmail === user.email) {
+  //     toast.error("New email must be different from current email");
+  //     return;
+  //   }
+
+  //   try {
+  //     const credential = EmailAuthProvider.credential(
+  //       user.email,
+  //       currentPassword
+  //     );
+
+  //     await reauthenticateWithCredential(user, credential);
+
+  //     await verifyBeforeUpdateEmail(user, newEmail);
+  //     setIsVerifyingEmail(true);
+  //     toast.success("Verification email sent to new email!");
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(error.message);
+  //   }
+  // };
+  // const handleEmailVerification = async () => {
+  //   const user = auth.currentUser;
+  //   if (!user) return;
+
+  //   try {
+  //     const credential = EmailAuthProvider.credential(
+  //       user.email,
+  //       password
+  //     );
+
+  //     await reauthenticateWithCredential(user, credential);
+  //     await verifyBeforeUpdateEmail(user, newEmail);
+
+  //     toast.success("Verification email sent!");
+
+  //     // 🔁 Start polling to check verification
+  //     const interval = setInterval(async () => {
+  //       await user.reload();
+
+  //       if (user.email === newEmail && user.emailVerified) {
+  //         clearInterval(interval);
+
+  //         await updateDoc(doc(db, "SellerDetails", user.uid), {
+  //           ...seller,
+  //           email: newEmail,
+  //           emailVerified: true,
+  //         });
+
+  //         toast.success("Email verified & updated!");
+  //         setShowEmailModal(false);
+  //         setPassword("");
+  //       }
+  //     }, 3000);
+
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
+  // const handleEmailVerification = async () => {
+  //   const user = auth.currentUser;
+  //   if (!user) return;
+
+  //   try {
+  //     const credential = EmailAuthProvider.credential(
+  //       user.email,
+  //       passwordForVerification
+  //     );
+
+  //     await reauthenticateWithCredential(user, credential);
+
+  //     await verifyBeforeUpdateEmail(user, newEmail);
+
+  //     toast.success("Verification email sent!");
+
+  //     const interval = setInterval(async () => {
+  //       await user.reload();
+
+  //       if (user.emailVerified && user.email === newEmail) {
+  //         clearInterval(interval);
+
+  //         // Update Firestore with new verified email
+  //         await updateDoc(doc(db, "SellerDetails", user.uid), {
+  //           email: newEmail,
+  //           emailVerified: true,
+  //         });
+
+  //         setSeller((prev) => ({
+  //           ...prev,
+  //           email: newEmail,
+  //         }));
+
+  //         setNewEmail(newEmail);
+  //         setEmailVerified(true);
+  //         setEmailChanged(false);
+
+  //         toast.success("Email verified & updated successfully!");
+  //       }
+  //     }, 3000);
+
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
+  const handleEmailVerification = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        passwordForVerification
+      );
+
+      await reauthenticateWithCredential(user, credential);
+      await verifyBeforeUpdateEmail(user, newEmail);
+
+      toast.success("Verification email sent. Please verify and come back.");
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  // const handleEmailVerification = async () => {
+  //   const user = auth.currentUser;
+  //   if (!user) return;
+
+  //   try {
+  //     const credential = EmailAuthProvider.credential(
+  //       user.email,
+  //       passwordForVerification   // ✅ correct state
+  //     );
+
+  //     await reauthenticateWithCredential(user, credential);
+
+  //     await verifyBeforeUpdateEmail(user, newEmail);
+
+  //     setIsVerifyingEmail(true);
+
+  //     toast.success("Verification email sent to new email!");
+
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
   const processingConfig = useMemo(
     () => ({
       data: processingUnit,
@@ -299,13 +577,68 @@ const Page = () => {
   )
   return (
     <div className="mt-9 md:mt-10 lg:mt-12 min-h-screen py-6 sm:py-8 px-3 sm:px-6 md:px-10 lg:px-20 xl:px-32">
+      {showEmailModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          {/* Modal Card */}
+          <div className="bg-white rounded-2xl shadow-2xl w-96 max-w-full p-6 relative animate-fadeIn">
+            {/* Close Button */}
+
+
+            {/* Header */}
+            <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+              Verify Your Password
+            </h3>
+            <p className="text-sm text-gray-500 mb-4 text-center">
+              For security, please enter your current password before sending verification.
+            </p>
+
+            {/* Password Input */}
+            <input
+              type="password"
+              placeholder="Enter current password"
+              value={passwordForVerification}
+              onChange={(e) => setPasswordForVerification(e.target.value)}
+              className="w-full border border-gray-300 p-3 rounded-lg mb-5 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
+            />
+
+            {/* Buttons */}
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowEmailModal(false);
+                  setPasswordForVerification("");
+                }}
+                className="px-4 cursor-pointer py-2 text-sm font-medium border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={async () => {
+                  if (!passwordForVerification) {
+                    toast.error("Please enter your password");
+                    return;
+                  }
+
+                  await handleEmailVerification();
+                  setShowEmailModal(false);
+                  setPasswordForVerification("");
+                }}
+                className="px-4 cursor-pointer py-2 text-sm font-medium bg-primary  text-white font-medium rounded-lg   transition"
+              >
+                Verify & Send
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="space-y-6 sm:space-y-8">
         <div>
-          <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
+          {/* <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
             Settings
-          </h1>
+          </h1> */}
           <p className="text-sm sm:text-base text-gray-500">
-            Manage your personal account and company information.
+            Manage your personal information and account settings.
           </p>
         </div>
         <form onSubmit={handleSave}>
@@ -342,7 +675,8 @@ const Page = () => {
               {" "}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-0.5 text-xs font-medium text-gray-600">
+                  <label className="mb-0.5 text-xs font-medium text-gray-600 flex items-center gap-1">
+                    <span className="text-red-500 text-[17px] mt-1">*</span>
                     Full Name
                   </label>
 
@@ -367,7 +701,8 @@ const Page = () => {
                 </div>
 
                 <div>
-                  <label className="mb-0.5 text-xs font-medium text-gray-600">
+                  <label className="mb-0.5 text-xs font-medium text-gray-600 flex items-center gap-1">
+                    <span className="text-red-500 text-[17px] mt-1">*</span>
                     Phone Number
                   </label>
 
@@ -396,36 +731,52 @@ const Page = () => {
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="w-full">
                   <label className="mb-0.5 text-xs font-medium text-gray-600">
                     Email
                   </label>
 
-                  <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
-                    <div className="flex items-center rounded-lg bg-white border border-[#D7D7D7] focus-within:border-transparent">
+                  <div className="rounded-lg p-[1px]">
+                    <div className="flex items-center rounded-lg bg-white border border-[#D7D7D7]">
                       <input
                         type="email"
-                        required
-                        placeholder="Email Address"
-                        value={seller?.email || ""}
+                        value={newEmail}
                         disabled={!editMode}
-                        onChange={(e) =>
-                          setSeller({ ...seller, email: e.target.value })
-                        }
-                        className="flex-1 bg-transparent outline-none border-0
-                   p-3 text-xs appearance-none w-full
-                   "
-                        style={{ WebkitAppearance: "none" }}
+                        onChange={(e) => {
+                          setNewEmail(e.target.value);
+                          setEmailChanged(e.target.value !== auth.currentUser.email);
+                          setEmailVerified(false);
+                        }}
+                        className="flex-1 bg-transparent outline-none border-0 p-3 text-xs w-full"
                       />
+
+                      {emailVerified ? (
+                        <span className="text-green-600 mr-2 font-bold text-sm ml-2">
+                          ✔ Verified
+                        </span>
+                      ) : (
+                        editMode &&
+                        emailChanged && (
+                          <button
+                            type="button"
+                            onClick={() => setShowEmailModal(true)}
+                            className="px-3 mr-2 py-1.5 cursor-pointer text-xs text-white font-medium bg-primary rounded-lg ml-2"
+                          >
+                            Send Verification
+                          </button>
+                        )
+                      )}
                     </div>
                   </div>
                 </div>
+
               </div>
+
             </div>
           </div>
           {editMode && (
-            <div className="flex justify-end gap-4 pt-2">
+            <div className="flex justify-end gap-4 pt-4">
               <button
                 onClick={() => setEditMode(false)}
                 className="px-4 xl:px-6 cursor-pointer border-gray-400 text-xs font-medium md:text-sm  py-2 border rounded-lg"
@@ -474,8 +825,8 @@ justify-between sm:items-center"
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Company Name */}
                 <div>
-                  <label className="mb-0.5 text-xs font-medium text-gray-600">
-                    Company Name
+                  <label className="mb-0.5 text-xs font-medium text-gray-600 flex items-center gap-1">
+                    <span className="text-red-500 text-[17px] mt-1">*</span>  Company Name
                   </label>
                   <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
                     <div className="flex items-center rounded-lg bg-white border border-[#D7D7D7] focus-within:border-transparent">
@@ -498,7 +849,8 @@ justify-between sm:items-center"
                 </div>
 
                 <div>
-                  <label className="mb-0.5 text-xs font-medium text-gray-600">
+                  <label className="mb-0.5 text-xs font-medium text-gray-600 flex items-center gap-1">
+                    <span className="text-red-500 text-[17px] mt-1">*</span>
                     Company Pincode
                   </label>
                   <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
@@ -582,7 +934,8 @@ justify-between sm:items-center"
                 </div>
               </div>
               <div>
-                <label className="mb-0.5 text-xs font-medium text-gray-600">
+                <label className="mb-0.5 text-xs font-medium text-gray-600 flex items-center gap-1">
+                  <span className="text-red-500 text-[17px] mt-1">*</span>
                   Address
                 </label>
                 <div className="rounded-lg p-[1px] transition bg-transparent focus-within:bg-gradient-to-t focus-within:from-[#d6c9ea] focus-within:to-[#871B58]">
@@ -603,7 +956,7 @@ justify-between sm:items-center"
             </div>
           </div>
           {(companyEdit || !companyExists) && (
-            <div className="flex justify-end gap-4 pt-2">
+            <div className="flex justify-end gap-4 pt-4">
               {companyExists && (
                 <button
                   onClick={() => setCompanyEdit(false)}
