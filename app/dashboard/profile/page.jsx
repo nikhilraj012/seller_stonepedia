@@ -1,13 +1,15 @@
 "use client";
 import { LocationSelector } from "@/app/components/LocationSelector";
 import { auth, db } from "@/app/firebase/config";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, updateEmail, EmailAuthProvider, reauthenticateWithCredential, verifyBeforeUpdateEmail } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { MdOutlineEdit } from "react-icons/md";
 import UnitForm from "./UnitForm";
+import { collection, query, where, getDocs } from "firebase/firestore";
+// import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 
 const Page = () => {
   const [companyExists, setCompanyExists] = useState(false);
@@ -39,17 +41,16 @@ const Page = () => {
   const handleFileUpload = async (file, path, setter, nameKey, urlKey) => {
     if (!file) return;
 
-    // Step 1: Show file name immediately
+
     setter((prev) => ({
       ...prev,
       [nameKey]: file.name,
     }));
 
     try {
-      // Step 2: Upload async
+
       const url = await uploadFile(file, path);
 
-      // Step 3: Update URL after upload
       setter((prev) => ({
         ...prev,
         [urlKey]: url,
@@ -88,7 +89,7 @@ const Page = () => {
     toast.success(msg);
   };
 
-  // ---------- Autofocus ----------
+
 
   useEffect(() => {
     if (editMode && fullNameRef.current) fullNameRef.current.focus();
@@ -98,8 +99,6 @@ const Page = () => {
     if (companyEdit && companyNameRef.current) companyNameRef.current.focus();
   }, [companyEdit]);
 
-  // ---------- Auth & Initial Load ----------
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -108,24 +107,22 @@ const Page = () => {
       }
 
       try {
+
+        await user.reload();
+
+        if (user.emailVerified) {
+
+          await updateDoc(doc(db, "SellerDetails", user.uid), {
+            email: user.email
+          });
+        }
+
         const snap = await getDoc(doc(db, "SellerDetails", user.uid));
         if (snap.exists()) setSeller(snap.data());
 
-        await fetchSubDoc(
-          ["CompanyData", "info"],
-          setCompany,
-          setCompanyExists,
-        );
-        await fetchSubDoc(
-          ["GalleryDetails", "info"],
-          setGallery,
-          setGalleryExists,
-        );
-        await fetchSubDoc(
-          ["ProcessingUnit", "info"],
-          setProcessingUnit,
-          setProcessingExists,
-        );
+        await fetchSubDoc(["CompanyData", "info"], setCompany, setCompanyExists);
+        await fetchSubDoc(["GalleryDetails", "info"], setGallery, setGalleryExists);
+        await fetchSubDoc(["ProcessingUnit", "info"], setProcessingUnit, setProcessingExists);
       } catch (err) {
         console.log(err);
       } finally {
@@ -136,7 +133,7 @@ const Page = () => {
     return () => unsubscribe();
   }, []);
 
-  // ---------- Handlers ----------
+
 
   const handleImageUpload = (e) =>
     handleFileUpload(
@@ -174,25 +171,62 @@ const Page = () => {
       "brochureUrl",
     );
 
+
+  const checkDuplicate = async (email, phone, uid) => {
+    const q1 = query(
+      collection(db, "SellerDetails"),
+      where("email", "==", email)
+    );
+    const s1 = await getDocs(q1);
+
+    if (!s1.empty && s1.docs[0].id !== uid) {
+      return "Email already used by another user";
+    }
+
+    const q2 = query(
+      collection(db, "SellerDetails"),
+      where("phoneNumber", "==", phone)
+    );
+    const s2 = await getDocs(q2);
+
+    if (!s2.empty && s2.docs[0].id !== uid) {
+      return "Phone already used by another user";
+    }
+
+    return null;
+  };
+
+
   const handleSave = async (e) => {
     e.preventDefault();
     const user = auth.currentUser;
     if (!user) return;
 
+    const error = await checkDuplicate(seller.email, seller.phoneNumber, user.uid);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+
+    // sirf Firestore update
     await updateDoc(doc(db, "SellerDetails", user.uid), seller);
+
     setEditMode(false);
     toast.success("Profile Updated");
   };
 
-  const handleCompanySave = (e) =>
+  const handleCompanySave = (e) => {
+    const msg = companyExists ? "Company Updated" : "Company Created";
     saveSubDoc(
       e,
       ["CompanyData", "info"],
       company,
       setCompanyExists,
       setCompanyEdit,
-      "Company Saved",
+      msg,
     );
+  };
+
 
   const handleProcessingSave = (e) => {
     if (!processingExists && !processingUnit?.imageUrl) {
@@ -201,13 +235,15 @@ const Page = () => {
       return;
     }
 
+    const msg = processingExists ? "Processing Unit Updated" : "Processing Unit Created";
+
     saveSubDoc(
       e,
       ["ProcessingUnit", "info"],
       processingUnit,
       setProcessingExists,
       setProcessingEdit,
-      "Processing Unit Saved",
+      msg,
     );
   };
 
@@ -218,13 +254,15 @@ const Page = () => {
       return;
     }
 
+    const msg = galleryExists ? "E-Gallery Updated" : "E-Gallery Created";
+
     saveSubDoc(
       e,
       ["GalleryDetails", "info"],
       gallery,
       setGalleryExists,
       setGalleryEdit,
-      "E-Gallery Saved",
+      msg,
     );
   };
 
@@ -257,9 +295,16 @@ const Page = () => {
     [gallery, galleryExists, galleryEdit],
   );
 
-  if (loading) return <p className="p-10">Loading...</p>;
+  if (loading) return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-gray-900 mx-auto"></div>
+        <p className="mt-6 text-gray-600 text-lg">Loading...</p>
+      </div>
+    </div>
+  )
 
-  // ---------- UI (UNCHANGED) ----------
+
 
   return (
     <div className="mt-9 md:mt-10 lg:mt-12 min-h-screen py-6 sm:py-8 px-3 sm:px-6 md:px-10 lg:px-20 xl:px-32">
