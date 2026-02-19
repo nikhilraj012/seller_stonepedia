@@ -121,6 +121,7 @@ const Page = () => {
           const data = snap.data();
           setSeller({ ...data, emailVerified: user.emailVerified });
           setNewEmail(user.email);
+          setEmailVerified(user.emailVerified);
           if (data.email !== user.email) {
             await updateDoc(sellerRef, {
               email: user.email,
@@ -217,13 +218,13 @@ const Page = () => {
       return;
     }
 
-    
+
     if (newEmail !== user.email) {
       toast.error("Please verify new email first!");
       return;
     }
 
- 
+
     await updateDoc(doc(db, "SellerDetails", user.uid), {
       ...seller,
       email: user.email,
@@ -300,7 +301,7 @@ const Page = () => {
       return false;
     }
   };
-  
+
   const handleEmailVerification = async () => {
     const user = auth.currentUser;
     if (!user) return;
@@ -311,10 +312,10 @@ const Page = () => {
         passwordForVerification
       );
 
-      
+
       await reauthenticateWithCredential(user, credential);
 
-    
+
       await verifyBeforeUpdateEmail(user, newEmail);
 
       toast.success("Verification email sent. Please verify.");
