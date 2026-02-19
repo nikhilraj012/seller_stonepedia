@@ -27,10 +27,7 @@ const Page = () => {
 
   const fullNameRef = useRef(null);
   const companyNameRef = useRef(null);
-
   const storage = getStorage();
-
-  // ---------- Generic Helpers ----------
 
   const uploadFile = async (file, path) => {
     const storageRef = ref(storage, path);
@@ -71,6 +68,7 @@ const Page = () => {
     if (snap.exists()) {
       setter(snap.data());
       existsSetter(true);
+
     } else {
       existsSetter(false);
     }
@@ -88,8 +86,6 @@ const Page = () => {
     setEdit(false);
     toast.success(msg);
   };
-
-
 
   useEffect(() => {
     if (editMode && fullNameRef.current) fullNameRef.current.focus();
@@ -208,7 +204,6 @@ const Page = () => {
       return;
     }
 
-    // sirf Firestore update
     await updateDoc(doc(db, "SellerDetails", user.uid), seller);
 
     setEditMode(false);
@@ -226,7 +221,6 @@ const Page = () => {
       msg,
     );
   };
-
 
   const handleProcessingSave = (e) => {
     if (!processingExists && !processingUnit?.imageUrl) {
@@ -303,9 +297,6 @@ const Page = () => {
       </div>
     </div>
   )
-
-
-
   return (
     <div className="mt-9 md:mt-10 lg:mt-12 min-h-screen py-6 sm:py-8 px-3 sm:px-6 md:px-10 lg:px-20 xl:px-32">
       <div className="space-y-6 sm:space-y-8">
@@ -590,8 +581,6 @@ justify-between sm:items-center"
                   </div>
                 </div>
               </div>
-
-              {/* Address */}
               <div>
                 <label className="mb-0.5 text-xs font-medium text-gray-600">
                   Address
@@ -613,7 +602,6 @@ justify-between sm:items-center"
               </div>
             </div>
           </div>
-
           {(companyEdit || !companyExists) && (
             <div className="flex justify-end gap-4 pt-2">
               {companyExists && (
@@ -642,7 +630,6 @@ justify-between sm:items-center"
           brochureLabel="Upload Brochure"
           config={processingConfig}
         />
-
         <UnitForm
           title="E-Gallery"
           description="Manage your E-Gallery."
@@ -654,5 +641,4 @@ justify-between sm:items-center"
     </div>
   );
 };
-
 export default Page;
