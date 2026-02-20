@@ -26,13 +26,16 @@ const PersonalInfoForm = ({
   setSeller,
   editMode,
   setEditMode,
+  newEmail,
+  setNewEmail,
+  emailVerified,
+  setEmailVerified,
 }) => {
-      const router = useRouter();
+  const router = useRouter();
   const fullNameRef = useRef(null);
 
-  const [newEmail, setNewEmail] = useState("");
   const [emailChanged, setEmailChanged] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(false);
+
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [passwordForVerification, setPasswordForVerification] = useState("");
   const [verificationSent, setVerificationSent] = useState(false);
@@ -43,6 +46,7 @@ const PersonalInfoForm = ({
       setEmailVerified(seller.emailVerified || false);
     }
   }, [seller]);
+
   useEffect(() => {
     if (editMode && fullNameRef.current) fullNameRef.current.focus();
   }, [editMode]);

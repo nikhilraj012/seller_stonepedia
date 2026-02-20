@@ -12,10 +12,12 @@ import PersonalInfoForm from "./PersonalInfoForm";
 const Page = () => {
   const [companyExists, setCompanyExists] = useState(false);
   const [seller, setSeller] = useState(null);
+  const [emailVerified, setEmailVerified] = useState(false)
   const [editMode, setEditMode] = useState(false);
   const [company, setCompany] = useState(null);
   const [companyEdit, setCompanyEdit] = useState(false);
   const [gallery, setGallery] = useState({});
+  const [newEmail, setNewEmail] = useState("");
   const [galleryExists, setGalleryExists] = useState(false);
   const [galleryEdit, setGalleryEdit] = useState(false);
   const [processingUnit, setProcessingUnit] = useState({});
@@ -157,26 +159,37 @@ const Page = () => {
     return () => unsub();
   }, []);
 
-const handleCompanySave = (e) => {
-  e.preventDefault();
-  const msg = companyExists ? "Company Updated" : "Company Created";
+  // const handleCompanySave = (e) => {
+  //   const msg = companyExists ? "Company Updated" : "Company Created";
+  //   saveSubDoc(
+  //     e,
+  //     ["CompanyData", "info"],
+  //     company,
+  //     setCompanyExists,
+  //     setCompanyEdit,
+  //     msg,
+  //   );
+  // };
+  const handleCompanySave = (e) => {
+    e.preventDefault();
+    const msg = companyExists ? "Company Updated" : "Company Created";
 
-  const dataToSave = {
-    ...company,
-    country: company.country?.label ,
-    state: company.state?.label ,
-    city: company.city?.label ,
+    const dataToSave = {
+      ...company,
+      country: company.country?.label || company.country || "",
+      state: company.state?.label || company.state || "",
+      city: company.city?.label || company.city || "",
+    };
+
+    saveSubDoc(
+      e,
+      ["CompanyData", "info"],
+      dataToSave,
+      setCompanyExists,
+      setCompanyEdit,
+      msg,
+    );
   };
-
-  saveSubDoc(
-    e,
-    ["CompanyData", "info"],
-    dataToSave,
-    setCompanyExists,
-    setCompanyEdit,
-    msg
-  );
-};
   const saveUnitData = async ({
     e,
     data,
@@ -329,6 +342,10 @@ const handleCompanySave = (e) => {
           setSeller={setSeller}
           editMode={editMode}
           setEditMode={setEditMode}
+          newEmail={newEmail}
+          setNewEmail={setNewEmail}
+          emailVerified={emailVerified}
+          setEmailVerified={setEmailVerified}
         />
 
         <CompanyProfileForm
