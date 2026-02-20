@@ -24,8 +24,13 @@ import { useAuth } from "@/app/components/context/AuthContext";
 import { db, storage } from "@/app/firebase/config";
 
 const GalleryForm = () => {
+
   const { isSubmitting, setIsSubmitting } = useUi();
   const { uid, authEmail } = useAuth();
+
+  const [checking, setChecking] = useState(true);
+  const [companyExists, setCompanyExists] = useState(false);
+  const [galleryExists, setGalleryExists] = useState(true);
   const [resetForm, setResetForm] = useState(false);
   const [productList, setProductList] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
@@ -34,6 +39,50 @@ const GalleryForm = () => {
   const companyRef = useRef();
   const router = useRouter();
   const { galleryId } = useParams();
+
+  useEffect(() => {
+    const checkData = async () => {
+      if (!uid) return;
+
+      try {
+        // Company check
+        const companyRef = doc(db, "SellerDetails", uid, "CompanyData", "info");
+        const companySnap = await getDoc(companyRef);
+        setCompanyExists(companySnap.exists());
+
+        // Gallery check (only if editing)
+        if (!galleryId) {
+          const galleryRef = doc(
+            db,
+            "SellerDetails",
+            uid,
+            "GalleryDetails",
+            "info",
+          );
+          const gallerySnap = await getDoc(galleryRef);
+          setGalleryExists(gallerySnap.exists());
+        }
+
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setChecking(false);
+      }
+    };
+
+    checkData();
+  }, [uid, galleryId]);
+
+  useEffect(() => {
+    if (isSubmitting) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isSubmitting]);
 
   const hasApprovedForm = Boolean(galleryId);
   const handleEdit = (i) => {
@@ -58,14 +107,14 @@ const GalleryForm = () => {
         const file = f.file || f;
         const name = file.name || `file_${Date.now()}`;
         const fileRef = ref(storage, `EGallery/${uid}/${path}/${name}`);
-       const isPDF = file.type === "application/pdf";
+        const isPDF = file.type === "application/pdf";
 
-      const metadata = {
-        contentType: file.type,
-        ...(isPDF && {
-          contentDisposition: `attachment; filename="${file.name}"`,
-        }),
-      };
+        const metadata = {
+          contentType: file.type,
+          ...(isPDF && {
+            contentDisposition: `attachment; filename="${file.name}"`,
+          }),
+        };
 
         await uploadBytes(fileRef, file, metadata);
         return { url: await getDownloadURL(fileRef), type: file.type };
@@ -101,30 +150,30 @@ const GalleryForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    let companyData = null;
+    // let companyData = null;
 
-    if (!hasApprovedForm) {
-      if (!companyRef.current) {
-        toast.error("Company form not loaded");
-        return;
-      }
-      companyData = companyRef.current.getData();
-      if (!companyData.image || companyData.image.length === 0) {
-        toast.error("Upload at least 1 Shop Image");
-        setIsSubmitting(false);
-        return;
-      }
-    }
+    // if (!hasApprovedForm) {
+    //   if (!companyRef.current) {
+    //     toast.error("Company form not loaded");
+    //     return;
+    //   }
+    //   companyData = companyRef.current.getData();
+    //   if (!companyData.image || companyData.image.length === 0) {
+    //     toast.error("Upload at least 1 Shop Image");
+    //     setIsSubmitting(false);
+    //     return;
+    //   }
+    // }
 
     try {
       // NEW FORM SUBMISSION
 
       if (!hasApprovedForm) {
-        const brochureUrls = companyData.brochure
-          ? await uploadFiles([companyData.brochure.file], "brochure")
-          : [];
+        // const brochureUrls = companyData.brochure
+        //   ? await uploadFiles([companyData.brochure.file], "brochure")
+        //   : [];
 
-        const shopImage = await uploadFiles(companyData.image, "images");
+        // const shopImage = await uploadFiles(companyData.image, "images");
 
         const uploadedProducts = await Promise.all(
           productList.map((p) => uploadProduct(p)),
@@ -132,20 +181,20 @@ const GalleryForm = () => {
 
         const orderId = uuidv4().replace(/\D/g, "").slice(0, 6);
 
-        const companyDataFormatted = {
-          ...companyData,
-          country: companyData.country?.label,
-          state: companyData.state?.label,
-          city: companyData.city?.label,
-          brochure: brochureUrls[0] || [],
-          image: shopImage[0],
-        };
+        // const companyDataFormatted = {
+        //   ...companyData,
+        //   country: companyData.country?.label,
+        //   state: companyData.state?.label,
+        //   city: companyData.city?.label,
+        //   brochure: brochureUrls[0] || [],
+        //   image: shopImage[0],
+        // };
 
         const galleryData = {
           userEmail: authEmail,
           userUid: uid,
           orderId,
-          companyDetails: companyDataFormatted,
+          // companyDetails: companyDataFormatted,
           products: uploadedProducts,
           status: "pending",
           createdAt: serverTimestamp(),
@@ -212,16 +261,57 @@ const GalleryForm = () => {
       setIsSubmitting(false);
     }
   };
-  useEffect(() => {
-    if (isSubmitting) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isSubmitting]);
+  if (!companyExists && !galleryId && !galleryExists) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-screen text-center">
+        <p className="text-gray-500 mb-4">
+          Add Company and Gallery details first in Profile page
+        </p>
+
+        <button
+          onClick={() => router.push("/dashboard/profile")}
+          className="border border-primary cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"
+        >
+          Go to Profile Page
+        </button>
+      </div>
+    );
+  }
+
+  if (!companyExists) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-screen text-center">
+        <p className="text-gray-500 mb-4">
+          Add Company details first
+        </p>
+
+        <button
+          onClick={() => router.push("/dashboard/profile")}
+          className="border border-primary cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"
+        >
+          Add Company Data
+        </button>
+      </div>
+    );
+  }
+
+  if (!galleryId && !galleryExists) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-screen text-center">
+        <p className="text-gray-500 mb-4">
+          Add Gallery details first in Profile page
+        </p>
+
+        <button
+          onClick={() => router.push("/dashboard/profile")}
+          className="border border-primary cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"
+        >
+          Go to Profile Page
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="py-16 max-lg:px-4 lg:mx-24 xl:mx-32">
       {isSubmitting && (
@@ -257,22 +347,22 @@ const GalleryForm = () => {
           className="max-md:space-y-5 items-start md:flex  mt-4 md:mt-7 gap-5 xl:gap-10"
         >
           <div className="shadow-lg md:shadow-2xl p-4 rounded-lg md:w-3/5 space-y-2 md:space-y-4">
-            {!hasApprovedForm && (
+            {/* {!hasApprovedForm && (
               <CompanyDetails ref={companyRef} resetForm={resetForm} />
-            )}
+            )} */}
             {(hasApprovedForm ||
               (!hasApprovedForm &&
                 (productList.length < 2 || editIndex !== null))) && (
-              <SlabDetails
-                ref={slabRef}
-                setProductList={setProductList}
-                editIndex={editIndex}
-                setEditIndex={setEditIndex}
-                productList={productList}
-                editProduct={editProduct}
-                hasApprovedForm={hasApprovedForm}
-              />
-            )}
+                <SlabDetails
+                  ref={slabRef}
+                  setProductList={setProductList}
+                  editIndex={editIndex}
+                  setEditIndex={setEditIndex}
+                  productList={productList}
+                  editProduct={editProduct}
+                  hasApprovedForm={hasApprovedForm}
+                />
+              )}
           </div>
 
           <div className="md:w-2/5">
@@ -303,9 +393,8 @@ const GalleryForm = () => {
             {productList.length > 0 && (
               <div className="flex justify-end gap-2 mt-5 text-xs md:text-sm">
                 <button
-                  className={`cursor-pointer px-4 py-1 border border-gray-400 rounded-lg ${
-                    isSubmitting ? "cursor-not-allowed opacity-50" : ""
-                  }`}
+                  className={`cursor-pointer px-4 py-1 border border-gray-400 rounded-lg ${isSubmitting ? "cursor-not-allowed opacity-50" : ""
+                    }`}
                   onClick={() => {
                     setProductList([]);
                     setResetForm(true);
@@ -321,9 +410,8 @@ const GalleryForm = () => {
                 </button>
                 <button
                   type="submit"
-                  className={`cursor-pointer px-4 py-1 bg-primary hover:bg-[#6a1545] rounded-lg text-white ${
-                    isSubmitting ? "cursor-not-allowed opacity-50" : ""
-                  }`}
+                  className={`cursor-pointer px-4 py-1 bg-primary hover:bg-[#6a1545] rounded-lg text-white ${isSubmitting ? "cursor-not-allowed opacity-50" : ""
+                    }`}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

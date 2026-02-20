@@ -111,6 +111,8 @@ const CompanyDetailsForm = () => {
     width: () => refs.current.widthWrapper,
   };
 
+
+   
   useEffect(() => {
     const onPointer = (e) => {
       if (!openDropdown) return;
@@ -143,6 +145,7 @@ const CompanyDetailsForm = () => {
       setSelected([...selected, value]);
     }
   };
+  
   const addCustomThickness = () => {
     if (!customThickness) return;
 
@@ -173,13 +176,13 @@ const CompanyDetailsForm = () => {
       //   setIsSubmitting(false);
       //   return;
       // }
-      if (!formData.image || formData.image.length === 0) {
-        toast.error("Upload at least 1 Processing Unit Image", {
-          duration: 1000,
-        });
-        setIsSubmitting(false);
-        return;
-      }
+      // if (!formData.image || formData.image.length === 0) {
+      //   toast.error("Upload at least 1 Processing Unit Image", {
+      //     duration: 1000,
+      //   });
+      //   setIsSubmitting(false);
+      //   return;
+      // }
 
       const uploadFiles = async (files, folderName) => {
         const fileArray = Array.isArray(files) ? files : [files];
@@ -192,14 +195,14 @@ const CompanyDetailsForm = () => {
               storage,
               `EGalleryForProcessingUnit/${uid}/${folderName}/${fileName}`,
             );
-           const isPDF = file.type === "application/pdf";
+            const isPDF = file.type === "application/pdf";
 
-      const metadata = {
-        contentType: file.type,
-        ...(isPDF && {
-          contentDisposition: `attachment; filename="${file.name}"`,
-        }),
-      };
+            const metadata = {
+              contentType: file.type,
+              ...(isPDF && {
+                contentDisposition: `attachment; filename="${file.name}"`,
+              }),
+            };
 
             await uploadBytes(fileRef, file, metadata);
             const url = await getDownloadURL(fileRef);
@@ -207,14 +210,14 @@ const CompanyDetailsForm = () => {
           }),
         );
       };
-      const brochureUrls = formData.brochure
-        ? await uploadFiles([formData.brochure.file], "brochure")
-        : [];
+      // const brochureUrls = formData.brochure
+      //   ? await uploadFiles([formData.brochure.file], "brochure")
+      //   : [];
 
       // const brochureUrls = await uploadFiles(formData.brochure, "brochure");
       // const processingImages = await uploadFiles(formData.image, "images");
 
-      const processingImages = await uploadFiles(formData.image, "images");
+      // const processingImages = await uploadFiles(formData.image, "images");
 
       const uploadedProducts = await Promise.all(
         productList.map(async (product) => {
@@ -235,7 +238,7 @@ const CompanyDetailsForm = () => {
           ) {
             uploadedThumbnail = {
               url: product.thumbnail.url,
-           
+
               name: product.thumbnail.name || `file_${Date.now()}`,
             };
           }
@@ -276,21 +279,21 @@ const CompanyDetailsForm = () => {
         userEmail: authEmail,
         userUid: uid,
         orderId,
-        companyDetails: {
-          name: formData.name,
-          shopName: formData.shopName,
-          gstNumber: formData.gstNumber,
-          email: formData.email,
-          phone: formData.phone,
-          country: formData.country?.label || "",
-          state: formData.state?.label || "",
-          city: formData.city?.label || "",
-          address: formData.address,
-          pincode: formData.pincode,
-          about: formData.about,
-          brochure: brochureUrls[0] || [],
-          image: processingImages[0],
-        },
+        // companyDetails: {
+        //   name: formData.name,
+        //   shopName: formData.shopName,
+        //   gstNumber: formData.gstNumber,
+        //   email: formData.email,
+        //   phone: formData.phone,
+        //   country: formData.country?.label || "",
+        //   state: formData.state?.label || "",
+        //   city: formData.city?.label || "",
+        //   address: formData.address,
+        //   pincode: formData.pincode,
+        //   about: formData.about,
+        //   brochure: brochureUrls[0] || [],
+        //   image: processingImages[0],
+        // },
         products: uploadedProducts,
         status: "pending",
         createdAt: serverTimestamp(),
@@ -471,7 +474,7 @@ const CompanyDetailsForm = () => {
       file.type === "image/jpg" ||
       file.type === "image/png";
 
-    
+
     if (type === "image" && !isImage) {
       toast.error("Only JPG, JPEG, PNG image allowed");
       e.target.value = "";
@@ -511,42 +514,46 @@ const CompanyDetailsForm = () => {
   // };
 
   const handleSingleFileUpload = (e, type) => {
-  const file = e?.target?.files?.[0];
-  if (!file) return;
+    const file = e?.target?.files?.[0];
+    if (!file) return;
 
-  const isPDF =
-    file.type === "application/pdf" ||
-    file.name.toLowerCase().endsWith(".pdf");
+    const isPDF =
+      file.type === "application/pdf" ||
+      file.name.toLowerCase().endsWith(".pdf");
 
-  if (!isPDF) {
-    toast.error("Only PDF allowed");
+    if (!isPDF) {
+      toast.error("Only PDF allowed");
+      e.target.value = "";
+      return;
+    }
+
+
+    const fileObj = {
+      file,
+      url: URL.createObjectURL(file),
+      type: file.type,
+      name: file.name,
+    };
+
+    setFormData((prev) => ({
+      ...prev,
+      [type]: fileObj,
+    }));
+
     e.target.value = "";
-    return;
-  }
-
-
-  const fileObj = {
-    file,
-    url: URL.createObjectURL(file),
-    type: file.type,
-    name: file.name,
   };
 
-  setFormData((prev) => ({
-    ...prev,
-    [type]: fileObj,
-  }));
 
-  e.target.value = "";
-};
+  
   return (
+
     <div className="relative">
       <form
         onSubmit={handleSubmit}
         className="max-md:space-y-5 items-start md:flex justify-center mt-4 md:mt-7 gap-5 xl:gap-10"
       >
         <div className="shadow-lg md:shadow-2xl p-4 rounded-lg md:w-3/5 space-y-2 md:space-y-4">
-          <h2 className="text-xs font-medium mb-1">Processing Unit Details</h2>
+          {/* <h2 className="text-xs font-medium mb-1">Processing Unit Details</h2>
           <div className="border border-dashed border-[#000000]/20 rounded-lg p-2 md:p-4 space-y-1 md:space-y-2">
             <div className="space-y-1 md:space-y-2">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full">
@@ -598,26 +605,26 @@ const CompanyDetailsForm = () => {
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full">
-             <div className="w-full flex flex-col">
-              <label htmlFor="gstNumber" className="mb-0.5 text-xs font-medium">
-               GST / Government Id
-              </label>
-              <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
-                <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
-                  <input
-                    id="gstNumber"
-                    type="text"
-                    name="gstNumber"
-                    onInput={(e) => e.target.setCustomValidity("")}
-                    placeholder="GST Number"
-                    value={formData.gstNumber}
-                    onChange={handleInputChange}
-                    className="flex-1 bg-transparent outline-none border-0 p-3 text-xs appearance-none w-full"
-                    style={{ WebkitAppearance: "none" }}
-                  />
+                <div className="w-full flex flex-col">
+                  <label htmlFor="gstNumber" className="mb-0.5 text-xs font-medium">
+                    GST / Government Id
+                  </label>
+                  <div className="rounded-lg p-px transition bg-transparent focus-within:bg-linear-to-t focus-within:from-[#d6c9ea] focus-within:to-primary">
+                    <div className="flex items-center gap-2 rounded-lg bg-white border border-[#D7D7D7] transition focus-within:border-transparent">
+                      <input
+                        id="gstNumber"
+                        type="text"
+                        name="gstNumber"
+                        onInput={(e) => e.target.setCustomValidity("")}
+                        placeholder="GST Number"
+                        value={formData.gstNumber}
+                        onChange={handleInputChange}
+                        className="flex-1 bg-transparent outline-none border-0 p-3 text-xs appearance-none w-full"
+                        style={{ WebkitAppearance: "none" }}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
                 <div className="w-full flex flex-col">
                   <label htmlFor="email" className="mb-0.5 text-xs font-medium">
                     Email Address
@@ -797,10 +804,7 @@ const CompanyDetailsForm = () => {
                     <span className="font-medium mb-0.5">
                       Upload Processing Unit Image
                     </span>
-                    {/* <span className="text-[11px] mb-2 text-[#8F8F8F] font-normal">
-                      <span className="text-red-500 ml-0.5">*</span> For
-                      Processing Unit profile Image
-                    </span> */}
+                    
                   </div>
                 </label>
 
@@ -812,7 +816,7 @@ const CompanyDetailsForm = () => {
                     id="image"
                     type="file"
                     className="absolute inset-0 opacity-0 cursor-pointer"
-                   accept="image/jpeg,image/jpg,image/png"
+                    accept="image/jpeg,image/jpg,image/png"
                     name="image"
                     onChange={(e) => handleUpload(e, "image")}
                     required
@@ -837,7 +841,7 @@ const CompanyDetailsForm = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           {(productList.length < 2 || editIndex !== null) && (
             <div>
               <h2 className="text-xs font-medium mb-1">
@@ -905,9 +909,8 @@ const CompanyDetailsForm = () => {
           {productList.length > 0 && editIndex === null && (
             <div className="flex justify-end gap-2 mt-5 text-xs md:text-sm">
               <button
-                className={`cursor-pointer px-4 py-1 border border-gray-400 rounded-lg ${
-                  isSubmitting ? "cursor-not-allowed opacity-50" : ""
-                }`}
+                className={`cursor-pointer px-4 py-1 border border-gray-400 rounded-lg ${isSubmitting ? "cursor-not-allowed opacity-50" : ""
+                  }`}
                 onClick={() => {
                   setFormData(initialFormData);
                   setProductList([]);
@@ -923,9 +926,8 @@ const CompanyDetailsForm = () => {
               </button>
               <button
                 type="submit"
-                className={`cursor-pointer px-4 py-1 bg-primary hover:bg-[#6a1545] rounded-lg text-white ${
-                  isSubmitting ? "cursor-not-allowed opacity-50" : ""
-                }`}
+                className={`cursor-pointer px-4 py-1 bg-primary hover:bg-[#6a1545] rounded-lg text-white ${isSubmitting ? "cursor-not-allowed opacity-50" : ""
+                  }`}
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

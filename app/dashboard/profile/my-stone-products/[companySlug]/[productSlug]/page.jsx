@@ -35,6 +35,8 @@ const page = () => {
   const [item, setItem] = useState(null);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [company, setCompany] = useState(null);
+
   const mode = "stoneProduct";
   const MODE_CONFIG = {
     stoneProduct: {
@@ -59,6 +61,25 @@ const page = () => {
       setLoading(true);
 
       try {
+        const companyRef = doc(db, "SellerDetails", uid, "CompanyData", "info");
+
+        const companySnap = await getDoc(companyRef);
+
+        if (!companySnap.exists()) {
+          setLoading(false);
+          return;
+        }
+
+        const companyData = companySnap.data();
+        setCompany(companyData);
+
+        if (toSlug(companyData.companyName) !== companySlug) {
+          setLoading(false);
+          return;
+        }
+        // const qSnap = await getDocs(
+        //   collection(db, "SellerDetails", uid, config.collectionName),
+        // );
         const qSnap = await getDocs(
           collection(db, "SellerDetails", uid, config.collectionName),
         );
@@ -66,17 +87,29 @@ const page = () => {
         qSnap.forEach((docSnap) => {
           const data = docSnap.data();
 
-          if (toSlug(data.companyDetails.shopName) === companySlug) {
-            const prod = data.products.find(
-              (p) => toSlug(p.productName) === productSlug,
-            );
+          const prod = data.products.find(
+            (p) => toSlug(p.productName) === productSlug,
+          );
 
-            if (prod) {
-              setItem({ id: docSnap.id, ...data });
-              setProduct(prod);
-            }
+          if (prod) {
+            setItem({ id: docSnap.id, ...data });
+            setProduct(prod);
           }
         });
+        // qSnap.forEach((docSnap) => {
+        //   const data = docSnap.data();
+
+        //   if (toSlug(data.companyDetails.shopName) === companySlug) {
+        //     const prod = data.products.find(
+        //       (p) => toSlug(p.productName) === productSlug,
+        //     );
+
+        //     if (prod) {
+        //       setItem({ id: docSnap.id, ...data });
+        //       setProduct(prod);
+        //     }
+        //   }
+        // });
       } catch (err) {
         console.error("Error fetching data:", err);
       } finally {
@@ -306,10 +339,7 @@ const page = () => {
                         />
                       </svg>
                     </div>
-                    <span>
-                      {" "}
-                      {canEdit ? "Add Thumbnail" : "No Thumbnail"}
-                    </span>
+                    <span> {canEdit ? "Add Thumbnail" : "No Thumbnail"}</span>
                   </>
                 )}
                 {isUpdating && (
@@ -327,7 +357,7 @@ const page = () => {
 
                 <p className="text-xs lg:mt-3  sm:text-[15px] text-[#8F8F8F] font-medium">
                   <span className="text-[#414141]">Location:</span>{" "}
-                  {item.companyDetails.city}, {item.companyDetails.country}
+                  {company?.city}, {company?.country}
                 </p>
               </div>
             </div>

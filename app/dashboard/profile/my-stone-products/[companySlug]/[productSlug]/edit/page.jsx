@@ -1,7 +1,13 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import MediaUploader from "@/app/components/common/gallery/MediaUploader";
@@ -38,6 +44,17 @@ const page = () => {
       try {
         if (!isAuthenticated) return;
 
+        // 1️⃣ Fetch Company
+        const companyRef = doc(db, "SellerDetails", uid, "CompanyData", "info");
+        const companySnap = await getDoc(companyRef);
+
+        if (!companySnap.exists()) return;
+
+        const companyData = companySnap.data();
+
+        if (toSlug(companyData.companyName) !== companySlug) return;
+
+        // 2️⃣ Fetch Products
         const qSnap = await getDocs(
           collection(db, "SellerDetails", uid, collectionName),
         );
@@ -45,26 +62,19 @@ const page = () => {
         qSnap.forEach((docSnap) => {
           const data = docSnap.data();
 
-          if (
-            data?.companyDetails?.shopName &&
-            toSlug(data.companyDetails.shopName) === companySlug
-          ) {
-            if (!Array.isArray(data.products)) return;
+          if (!Array.isArray(data.products)) return;
 
-            const slab = data.products.find(
-              (p) => toSlug(p.productName) === productSlug,
-            );
+          const slab = data.products.find(
+            (p) => toSlug(p.productName) === productSlug,
+          );
 
-            if (slab) {
-              setGallery({
-                id: docSnap.id,
-                ...data,
-              });
+          if (slab) {
+            setGallery({
+              id: docSnap.id,
+              ...data,
+            });
 
-              setProduct({
-                ...slab,
-              });
-            }
+            setProduct({ ...slab });
           }
         });
       } catch (err) {
@@ -76,7 +86,51 @@ const page = () => {
     };
 
     fetchData();
-  }, [companySlug, productSlug]);
+  }, [companySlug, productSlug, uid, isAuthenticated]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       if (!isAuthenticated) return;
+
+  //       const qSnap = await getDocs(
+  //         collection(db, "SellerDetails", uid, collectionName),
+  //       );
+
+  //       qSnap.forEach((docSnap) => {
+  //         const data = docSnap.data();
+
+  //         if (
+  //           data?.companyDetails?.shopName &&
+  //           toSlug(data.companyDetails.shopName) === companySlug
+  //         ) {
+  //           if (!Array.isArray(data.products)) return;
+
+  //           const slab = data.products.find(
+  //             (p) => toSlug(p.productName) === productSlug,
+  //           );
+
+  //           if (slab) {
+  //             setGallery({
+  //               id: docSnap.id,
+  //               ...data,
+  //             });
+
+  //             setProduct({
+  //               ...slab,
+  //             });
+  //           }
+  //         }
+  //       });
+  //     } catch (err) {
+  //       console.log(err);
+  //       toast.error("Failed to load data");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [companySlug, productSlug]);
 
   useEffect(() => {
     if (isSubmitting) {

@@ -18,33 +18,79 @@ const useGallery = (collectionName ) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-
+const [company, setCompany] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+  const user = auth.currentUser;
+  if (!user) {
+    setLoading(false);
+    return;
+  }
 
-      try {
-        const refCol = collection(db, "SellerDetails", user.uid, collectionName);
-        const q = query(refCol, orderBy("createdAt", "desc"));
-        const snap = await getDocs(q);
+  try {
+    // 🔹 Fetch products
+    const refCol = collection(
+      db,
+      "SellerDetails",
+      user.uid,
+      collectionName
+    );
 
-        setData(
-          snap.docs.map((d) => ({
-            id: d.id,
-            ...d.data(),
-          }))
-        );
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const q = query(refCol, orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
+
+    setData(
+      snap.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }))
+    );
+
+    // 🔹 Fetch company data
+    const companyRef = doc(
+      db,
+      "SellerDetails",
+      user.uid,
+      "CompanyData",
+      "info"
+    );
+
+    const companySnap = await getDoc(companyRef);
+
+    if (companySnap.exists()) {
+      setCompany(companySnap.data());
+    }
+  } catch (e) {
+    console.error(e);
+  } finally {
+    setLoading(false);
+  }
+};
+    // const fetchData = async () => {
+    //   const user = auth.currentUser;
+    //   if (!user) {
+    //     setLoading(false);
+    //     return;
+    //   }
+
+    //   try {
+    //     const refCol = collection(db, "SellerDetails", user.uid, collectionName);
+    //     const q = query(refCol, orderBy("createdAt", "desc"));
+    //     const snap = await getDocs(q);
+
+    //     setData(
+    //       snap.docs.map((d) => ({
+    //         id: d.id,
+    //         ...d.data(),
+    //       }))
+    //     );
+    //   } catch (e) {
+    //     console.error(e);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
 
     fetchData();
   }, [collectionName]);
@@ -322,6 +368,7 @@ const handleProductFeedback = async (itemId, productId, status) => {
     handleCancel,
     updating,
     data,
+    company,
     deleteItem,
     deleteProduct,
     updateThumbnail,

@@ -44,7 +44,7 @@ const ProductCard = ({
   return (
     <div className="  rounded-xl ">
       <div className={`flex   flex-col md:flex-row md:justify-between`}>
-        <div className="flex flex-row gap-4">
+        {/* <div className="flex flex-row gap-4">
           <input
             ref={fileRef}
             disabled={updating}
@@ -131,10 +131,10 @@ const ProductCard = ({
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex mt-2 justify-between  flex-row md:flex-col md:justify-start md:mt-0">
-          <div
+          {/* <div
             className={`flex items-end md:justify-end gap-2 h-[40px] ${
               status !== "approved" && status !== "pending"
                 ? "invisible"
@@ -154,9 +154,9 @@ const ProductCard = ({
               }`}
               >
                 Edit
-                {/* <MdOutlineEdit className="text-sm lg:text-xl" /> */}
+                
               </button>
-            )}
+            )} */}
             {/* {(status === "approved" || status === "pending") && (
               <button
                 disabled={updating}
@@ -179,7 +179,7 @@ const ProductCard = ({
                 Cancel
               </button>
             )} */}
-          </div>
+          {/* </div> */}
 
           <div>
             <div

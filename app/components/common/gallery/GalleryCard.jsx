@@ -44,7 +44,7 @@ const GalleryCard = ({
   return (
     <div className="  rounded-xl ">
       <div className={`flex   flex-col md:flex-row md:justify-between`}>
-        <div className="flex flex-row gap-4">
+        {/* <div className="flex flex-row gap-4">
           <input
             ref={fileRef}
             disabled={updating}
@@ -131,10 +131,10 @@ const GalleryCard = ({
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex mt-2 justify-between  flex-row md:flex-col md:justify-start md:mt-0">
-          <div
+          {/* <div
             className={`flex items-end md:justify-end gap-2 h-[40px] ${
               status !== "approved" && status !== "pending"
                 ? "invisible"
@@ -155,9 +155,9 @@ const GalleryCard = ({
               >
                 Edit
                 {/* <MdOutlineEdit className="text-sm lg:text-xl" /> */}
-              </button>
-            )}
-            {/* {(status === "approved" || status === "pending") && (
+          {/* </button>
+            )} */}
+          {/* {(status === "approved" || status === "pending") && (
               <button
                 disabled={updating}
                 onClick={() => onDelete(item.id)}
@@ -171,39 +171,37 @@ const GalleryCard = ({
                 <RiDeleteBin5Line className="text-sm lg:text-xl" />
               </button>
             )} */}
-            {/* {(status === "pending" || status === "approved") && (
+          {/* {(status === "pending" || status === "approved") && (
               <button
                 onClick={() => handleCancel(item.id)}
                 className="p-2 cursor-pointer bg-gray-100 text-red-500 rounded-lg"
               >
                 Cancel
               </button>
-            )} */}
-          </div>
+            )} 
+          </div> */}
 
           <div>
             <div
               className={`hidden  md:flex   mt-17 items-center  capitalize  gap-2 text-[13px] font-medium px-3 py-1.5 rounded-md
-                 ${
-                   status === "approved"
-                     ? "bg-[#F0FFEF] text-[#05A100]"
-                     : status === "cancelled"
-                       ? "bg-[#FFE7E7] text-red-600"
-                       : status === "rejected"
-                         ? "bg-gray-100 text-[#6B7280]"
-                         : "bg-yellow-50 text-[#FF9D00]"
-                 }`}
+                 ${status === "approved"
+                  ? "bg-[#F0FFEF] text-[#05A100]"
+                  : status === "cancelled"
+                    ? "bg-[#FFE7E7] text-red-600"
+                    : status === "rejected"
+                      ? "bg-gray-100 text-[#6B7280]"
+                      : "bg-yellow-50 text-[#FF9D00]"
+                }`}
             >
               <span
-                className={`h-2 w-2 rounded-full ${
-                  status === "approved"
+                className={`h-2 w-2 rounded-full ${status === "approved"
                     ? "bg-green-500"
                     : status === "cancelled"
                       ? "bg-red-500"
                       : status === "rejected"
                         ? "bg-gray-500"
                         : "bg-yellow-500"
-                }`}
+                  }`}
               />
               <span className="text-[#282828]">Status:</span>
               {status}
@@ -211,26 +209,24 @@ const GalleryCard = ({
           </div>
           <div
             className={` flex md:hidden   capitalize items-center gap-2 text-[10px]  font-medium px-3 py-1 rounded-md
-                ${
-                  status === "approved"
-                    ? "bg-[#F0FFEF] text-[#05A100]"
-                    : status === "cancelled"
-                      ? "bg-[#FFE7E7] text-red-600"
-                      : status === "rejected"
-                        ? "bg-gray-100 text-[#6B7280]"
-                        : "bg-yellow-50 text-[#FF9D00]"
-                }`}
+                ${status === "approved"
+                ? "bg-[#F0FFEF] text-[#05A100]"
+                : status === "cancelled"
+                  ? "bg-[#FFE7E7] text-red-600"
+                  : status === "rejected"
+                    ? "bg-gray-100 text-[#6B7280]"
+                    : "bg-yellow-50 text-[#FF9D00]"
+              }`}
           >
             <span
-              className={`h-2 w-2 rounded-full ${
-                status === "approved"
+              className={`h-2 w-2 rounded-full ${status === "approved"
                   ? "bg-green-500"
                   : status === "cancelled"
                     ? "bg-red-500"
                     : status === "rejected"
                       ? "bg-gray-500 "
                       : "bg-yellow-500"
-              }`}
+                }`}
             />
             <span className="text-[#282828]"> Status:</span> {status}
           </div>
@@ -278,9 +274,8 @@ const GalleryCard = ({
                 onError={() =>
                   setProductImageLoading((prev) => ({ ...prev, [i]: false }))
                 }
-                className={`w-full h-50  rounded-lg transition ${
-                  productImageLoading[i] !== false ? "opacity-0" : "opacity-100"
-                }`}
+                className={`w-full h-50  rounded-lg transition ${productImageLoading[i] !== false ? "opacity-0" : "opacity-100"
+                  }`}
               />
             </div>
 

@@ -1,3 +1,4 @@
+"use client";
 import { selectCommonStyles, selectCommonTheme } from "@/app/components/styles/select.config";
 import React from "react";
 import { FiUpload } from "react-icons/fi";

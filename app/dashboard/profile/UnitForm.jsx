@@ -2,7 +2,15 @@
 import React, { useEffect, useRef } from "react";
 import { MdOutlineEdit } from "react-icons/md";
 
-const UnitForm = ({ title, description, config, aboutLabel, imageLabel }) => {
+const UnitForm = ({
+  title,
+  description,
+  config,
+  aboutLabel,
+  imageLabel,
+  textFieldName = "about",
+  showBrochure = true,
+}) => {
   const {
     data,
     setData,
@@ -10,8 +18,6 @@ const UnitForm = ({ title, description, config, aboutLabel, imageLabel }) => {
     edit,
     setEdit,
     onSave,
-    onImageUpload,
-    onBrochureUpload,
   } = config;
 
   const aboutRef = useRef(null);
@@ -22,6 +28,16 @@ const UnitForm = ({ title, description, config, aboutLabel, imageLabel }) => {
     }
   }, [edit]);
 
+  const handleFileUpload = (type) => (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setData((prev) => ({
+      ...prev,
+      [`${type}File`]: file,
+      [`${type}Name`]: file.name,
+    }));
+  };
   return (
     <form onSubmit={onSave}>
       <div className="bg-white border-[#D7D7D7] rounded-2xl shadow-md">
@@ -55,57 +71,64 @@ justify-between sm:items-center"
           {/* ABOUT */}
           <div>
             <label className="mb-0.5 text-xs font-medium text-gray-600 flex items-center gap-1">
-              <span className="text-red-500 text-[17px] mt-1">*</span> {aboutLabel}</label>
+              <span className="text-red-500 text-[17px] mt-1">*</span>{" "}
+              {aboutLabel}
+            </label>
 
             <textarea
               ref={aboutRef}
               required
               rows={4}
               disabled={exists && !edit}
-              value={data?.about || ""}
-              onChange={(e) => setData({ ...data, about: e.target.value })}
+              value={data?.[textFieldName] || ""}
+              onChange={(e) =>
+                setData({ ...data, [textFieldName]: e.target.value })
+              }
               className="w-full border border-gray-300 rounded-md p-2 text-xs outline-none"
               placeholder="Write here"
             />
           </div>
 
-          {/* BROCHURE */}
-          <div>
-            <label className="mb-0.5 text-xs font-medium">
-              Upload Brochure <span className="text-[#BCBCBC]">(Optional)</span>
-            </label>
+          {showBrochure && (
+            <div>
+              <label className="mb-0.5 text-xs font-medium">
+                Upload Brochure{" "}
+                <span className="text-[#BCBCBC]">(Optional)</span>
+              </label>
 
-            <div className="border border-dashed border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white transition min-h-[100px] flex flex-col justify-center items-center">
-              <input
-                type="file"
-                accept="application/pdf"
-                disabled={exists && !edit}
-                className="absolute inset-0 opacity-0 cursor-pointer"
-                onChange={onBrochureUpload}
-              />
-
-              <p className="text-[#2C2C2C] text-xs font-medium tracking-wide mb-1">
-                {data?.brochureName || "Choose a file"}
-              </p>
-
-              <span className="text-[10px] text-gray-500 mb-2">PDF Only</span>
-
-              {!data?.brochureName && (
-                <button
-                  type="button"
+              <div className="border border-dashed border-primary rounded-lg p-6 text-center text-gray-600 relative bg-white transition min-h-[100px] flex flex-col justify-center items-center">
+                <input
+                  type="file"
+                  accept="application/pdf"
                   disabled={exists && !edit}
-                  className="border font-medium text-sm px-6 py-1 rounded-xl hover:border-primary hover:shadow-md transition-colors"
-                >
-                  Browse
-                </button>
-              )}
-            </div>
-          </div>
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  onChange={handleFileUpload("brochure")}
+                />
 
+                <p className="text-[#2C2C2C] text-xs font-medium tracking-wide mb-1">
+                  {data?.brochureName || "Choose a file"}
+                </p>
+
+                <span className="text-[10px] text-gray-500 mb-2">PDF Only</span>
+
+                {!data?.brochureName && (
+                  <button
+                    type="button"
+                    disabled={exists && !edit}
+                    className="border font-medium text-sm px-6 py-1 rounded-xl hover:border-primary hover:shadow-md transition-colors"
+                  >
+                    Browse
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
           {/* IMAGE */}
           <div>
             <label className="mb-0.5 text-xs font-medium text-gray-600 flex items-center gap-1">
-              <span className="text-red-500 text-[17px] mt-1">*</span> {imageLabel}</label>
+              <span className="text-red-500 text-[17px] mt-1">*</span>{" "}
+              {imageLabel}
+            </label>
 
             <div className="flex items-center justify-between border border-gray-200 rounded-lg bg-white p-3 transition relative">
               <input
@@ -113,7 +136,7 @@ justify-between sm:items-center"
                 accept="image/jpeg,image/png"
                 disabled={exists && !edit}
                 className="absolute inset-0 opacity-0 cursor-pointer"
-                onChange={onImageUpload}
+                onChange={handleFileUpload("image")}
               />
 
               <div className="flex gap-2 items-center">

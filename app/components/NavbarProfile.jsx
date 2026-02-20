@@ -1,6 +1,6 @@
 import React from "react";
 import { doc, updateDoc } from "firebase/firestore";
-
+import { FaChevronRight } from "react-icons/fa";
 import { useAuth } from "./context/AuthContext";
 import { useUi } from "./context/UiContext";
 import { useRouter } from "next/navigation";
@@ -32,7 +32,7 @@ const profilePages = [
 ];
 
 const NavbarProfile = ({ isMobile = false }) => {
-    const pathname = usePathname();
+  const pathname = usePathname();
   const { sellerDetails, logout } = useAuth();
   const { setIsMenuOpen, setShowProfileDropdown } = useUi();
   const router = useRouter();
@@ -101,13 +101,13 @@ const NavbarProfile = ({ isMobile = false }) => {
             <p className="text-xs text-gray-500 truncate">
               {sellerDetails?.email}
             </p>
-            {!hideUserSection  && (
-            <button
-              onClick={() => handleNavigation("/dashboard/profile")}
-              className="mt-1 text-xs cursor-pointer text-primary underline"
-            >
-              View Profile
-            </button>
+            {!hideUserSection && (
+              <button
+                onClick={() => handleNavigation("/dashboard/profile")}
+                className="mt-1 text-xs cursor-pointer text-primary flex items-center gap-1"
+              >
+                View Profile   <FaChevronRight size={12} />
+              </button>
             )}
           </div>
         </div>
@@ -146,14 +146,21 @@ const NavbarProfile = ({ isMobile = false }) => {
             <p className="text-xs text-gray-500 truncate">
               {sellerDetails?.email}
             </p>
-              {!hideUserSection  && (
-            <button
-              onClick={() => handleNavigation("/dashboard/profile")}
-              className="mt-1 hover:cursor-pointer text-xs text-primary hover:underline"
-            >
-              View Profile
-            </button>
-              )}
+            {!hideUserSection && (
+              // <button
+              //   onClick={() => handleNavigation("/dashboard/profile")}
+              //   className="mt-1 hover:cursor-pointer text-xs text-primary hover:underline"
+              // >
+              //   View Profile <FaChevronRight />
+              // </button>
+              <button
+                onClick={() => handleNavigation("/dashboard/profile")}
+                className="mt-1 text-xs cursor-pointer text-primary  flex items-center gap-1"
+              >
+                View Profile
+                <FaChevronRight size={12} />
+              </button>
+            )}
           </div>
         </div>
       </div>

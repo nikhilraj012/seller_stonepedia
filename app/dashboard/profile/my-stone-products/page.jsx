@@ -28,6 +28,7 @@ const page = () => {
     updating,
     data: stoneProduct,
     deleteItem,
+    company,
     deleteProduct,
     handleCancel,
     updateThumbnail,
@@ -41,7 +42,8 @@ const page = () => {
   });
 
   const handleViewDetails = (item, product) => {
-    const companySlug = toSlug(item.companyDetails.shopName);
+    // const companySlug = toSlug(item.companyDetails.shopName);
+    const companySlug = toSlug(company?.companyName);
     const productSlug = toSlug(product.productName);
 
     router.push(
