@@ -20,22 +20,26 @@ import {
 } from "firebase/auth";
 import { auth, db } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/components/context/AuthContext";
+import { useUi } from "@/app/components/context/UiContext";
 
 const PersonalInfoForm = ({
   seller,
   setSeller,
-  editMode,
-  setEditMode,
   newEmail,
   setNewEmail,
   emailVerified,
   setEmailVerified,
+  
 }) => {
+    const { isSubmitting, setIsSubmitting } = useUi();
+  
+  const { updateAppUser } = useAuth();
   const router = useRouter();
   const fullNameRef = useRef(null);
 
   const [emailChanged, setEmailChanged] = useState(false);
-
+  const [editMode, setEditMode] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [passwordForVerification, setPasswordForVerification] = useState("");
   const [verificationSent, setVerificationSent] = useState(false);
@@ -129,6 +133,13 @@ const PersonalInfoForm = ({
               emailVerified: true,
             });
 
+            updateAppUser({
+              sellerDetails: {
+                ...seller,
+                email: currentUser.email,
+                emailVerified: true,
+              },
+            });
             toast.success("Email verified successfully!");
             setTimeout(() => {
               router.refresh();
@@ -196,15 +207,18 @@ const PersonalInfoForm = ({
     e.preventDefault();
     const user = auth.currentUser;
     if (!user) return;
+setIsSubmitting(true);
 
     const error = await checkDuplicate(seller.phoneNumber, user.uid);
     if (error) {
       toast.error(error);
+      setIsSubmitting(false);
       return;
     }
 
     if (newEmail !== user.email) {
       toast.error("Please verify new email first!");
+       setIsSubmitting(false);
       return;
     }
 
@@ -216,6 +230,7 @@ const PersonalInfoForm = ({
 
     setEditMode(false);
     toast.success("Profile Updated Successfully");
+     setIsSubmitting(false);
   };
 
   return (
@@ -411,6 +426,7 @@ const PersonalInfoForm = ({
         {editMode && (
           <div className="flex justify-end gap-4 pt-4">
             <button
+              disabled={isSubmitting}
               onClick={() => {
                 setNewEmail(seller?.email);
                 setEditMode(false);
@@ -422,9 +438,10 @@ const PersonalInfoForm = ({
             </button>
             <button
               type="submit"
-              className="px-4 xl:px-6 py-2 cursor-pointer text-xs font-medium md:text-sm  bg-primary text-white rounded-lg"
+                disabled={isSubmitting}
+              className="px-4 xl:px-6 py-2 cursor-pointer  text-xs font-medium md:text-sm  bg-primary text-white rounded-lg disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Save Changes
+              {isSubmitting ? "saving" : "Save Changes"}
             </button>
           </div>
         )}

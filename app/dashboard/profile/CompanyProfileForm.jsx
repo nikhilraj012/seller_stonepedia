@@ -8,6 +8,7 @@ const CompanyProfileForm = ({
   companyEdit,
   setCompanyEdit,
   onSave,
+  isSubmitting,
 }) => {
   const companyNameRef = useRef(null);
 
@@ -183,6 +184,7 @@ const CompanyProfileForm = ({
         <div className="flex justify-end gap-4 pt-4">
           {companyExists && (
             <button
+              disabled={isSubmitting}
               onClick={() => setCompanyEdit(false)}
               className="px-4 xl:px-6 cursor-pointer border-gray-400 text-xs font-medium md:text-sm  py-2 border rounded-lg"
             >
@@ -190,11 +192,24 @@ const CompanyProfileForm = ({
             </button>
           )}
 
-          <button
+          {/* <button
             type="submit"
             className="px-4 xl:px-6 py-2 cursor-pointer text-xs font-medium md:text-sm  bg-primary text-white rounded-lg"
           >
             {companyExists ? "Save Changes" : "Create Company"}
+          </button> */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-4 xl:px-6 py-2 cursor-pointer text-xs font-medium md:text-sm  bg-primary text-white rounded-lg disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {isSubmitting
+              ? companyExists
+                ? "Updating..."
+                : "Creating..."
+              : companyExists
+                ? "Save Changes"
+                : "Create Company"}
           </button>
         </div>
       )}

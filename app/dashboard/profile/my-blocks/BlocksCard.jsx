@@ -135,7 +135,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
         />
       )}
       <div className={`flex   flex-col md:flex-row md:justify-between`}>
-        <div className="flex flex-row gap-4">
+        {/* <div className="flex flex-row gap-4">
           <div className="text-[10px] md:text-[13px] text-[#8A8A8A] lg:text-sm space-y-0.5">
             <h1 className="capitalize font-semibold text-[13px] md:text-[20px] lg:text-[22px] text-[#3B3B3B] wrap-break-word whitespace-normal">
               {item.quarryDetails.quarryName}
@@ -162,10 +162,10 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex mt-2 justify-between  flex-row md:flex-col md:justify-start md:mt-0">
-          <div
+          {/* <div
             className={`flex items-end md:justify-end gap-2 h-[40px] ${
               status !== "approved" && status !== "pending"
                 ? "invisible"
@@ -186,7 +186,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
               >
                 <MdOutlineEdit className="text-sm lg:text-xl" />
               </button>
-            )}
+            )} */}
             {/* { status === "pending" && (
               <button
                 disabled={updating}
@@ -201,7 +201,7 @@ const BlocksCard = ({ item, addBlockRoute, setData, onEdit }) => {
                 <RiDeleteBin5Line className="text-sm lg:text-xl" />
               </button>
             )} */}
-          </div>
+          {/* </div> */}
           <div>
             <div
               className={`hidden  md:flex   mt-17 items-center  capitalize  gap-2 text-[13px] font-medium px-3 py-1.5 rounded-md

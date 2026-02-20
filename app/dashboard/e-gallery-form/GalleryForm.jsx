@@ -24,7 +24,6 @@ import { useAuth } from "@/app/components/context/AuthContext";
 import { db, storage } from "@/app/firebase/config";
 
 const GalleryForm = () => {
-
   const { isSubmitting, setIsSubmitting } = useUi();
   const { uid, authEmail } = useAuth();
 
@@ -62,7 +61,6 @@ const GalleryForm = () => {
           const gallerySnap = await getDoc(galleryRef);
           setGalleryExists(gallerySnap.exists());
         }
-
       } catch (err) {
         console.log(err);
       } finally {
@@ -261,6 +259,18 @@ const GalleryForm = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (checking) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-gray-900 mx-auto"></div>
+          <p className="mt-6 text-gray-600 text-lg">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!companyExists && !galleryId && !galleryExists) {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen text-center">
@@ -281,9 +291,7 @@ const GalleryForm = () => {
   if (!companyExists) {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen text-center">
-        <p className="text-gray-500 mb-4">
-          Add Company details first
-        </p>
+        <p className="text-gray-500 mb-4">Add Company details first</p>
 
         <button
           onClick={() => router.push("/dashboard/profile")}
@@ -353,16 +361,16 @@ const GalleryForm = () => {
             {(hasApprovedForm ||
               (!hasApprovedForm &&
                 (productList.length < 2 || editIndex !== null))) && (
-                <SlabDetails
-                  ref={slabRef}
-                  setProductList={setProductList}
-                  editIndex={editIndex}
-                  setEditIndex={setEditIndex}
-                  productList={productList}
-                  editProduct={editProduct}
-                  hasApprovedForm={hasApprovedForm}
-                />
-              )}
+              <SlabDetails
+                ref={slabRef}
+                setProductList={setProductList}
+                editIndex={editIndex}
+                setEditIndex={setEditIndex}
+                productList={productList}
+                editProduct={editProduct}
+                hasApprovedForm={hasApprovedForm}
+              />
+            )}
           </div>
 
           <div className="md:w-2/5">
@@ -393,8 +401,9 @@ const GalleryForm = () => {
             {productList.length > 0 && (
               <div className="flex justify-end gap-2 mt-5 text-xs md:text-sm">
                 <button
-                  className={`cursor-pointer px-4 py-1 border border-gray-400 rounded-lg ${isSubmitting ? "cursor-not-allowed opacity-50" : ""
-                    }`}
+                  className={`cursor-pointer px-4 py-1 border border-gray-400 rounded-lg ${
+                    isSubmitting ? "cursor-not-allowed opacity-50" : ""
+                  }`}
                   onClick={() => {
                     setProductList([]);
                     setResetForm(true);
@@ -410,8 +419,9 @@ const GalleryForm = () => {
                 </button>
                 <button
                   type="submit"
-                  className={`cursor-pointer px-4 py-1 bg-primary hover:bg-[#6a1545] rounded-lg text-white ${isSubmitting ? "cursor-not-allowed opacity-50" : ""
-                    }`}
+                  className={`cursor-pointer px-4 py-1 bg-primary hover:bg-[#6a1545] rounded-lg text-white ${
+                    isSubmitting ? "cursor-not-allowed opacity-50" : ""
+                  }`}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

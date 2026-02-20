@@ -1,4 +1,5 @@
 "use client";
+import { useUi } from "@/app/components/context/UiContext";
 import React, { useEffect, useRef } from "react";
 import { MdOutlineEdit } from "react-icons/md";
 
@@ -11,14 +12,7 @@ const UnitForm = ({
   textFieldName = "about",
   showBrochure = true,
 }) => {
-  const {
-    data,
-    setData,
-    exists,
-    edit,
-    setEdit,
-    onSave,
-  } = config;
+  const { data, setData, exists, edit, setEdit, onSave, isSubmitting } = config;
 
   const aboutRef = useRef(null);
 
@@ -164,6 +158,7 @@ justify-between sm:items-center"
           {exists && (
             <button
               type="button"
+              disabled={isSubmitting}
               onClick={() => setEdit(false)}
               className="px-4 xl:px-6 cursor-pointer border-gray-400 text-xs font-medium md:text-sm  py-2 border rounded-lg"
             >
@@ -171,11 +166,24 @@ justify-between sm:items-center"
             </button>
           )}
 
-          <button
+          {/* <button
             type="submit"
             className="px-4 xl:px-6 py-2 cursor-pointer text-xs font-medium md:text-sm  bg-primary text-white rounded-lg"
           >
             {exists ? "Save Changes" : `Create ${title}`}
+          </button> */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-4 xl:px-6 py-2  cursor-pointer text-xs font-medium md:text-sm bg-primary text-white rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isSubmitting
+              ? exists
+                ? "Updating..."
+                : "Creating..."
+              : exists
+                ? "Save Changes"
+                : `Create ${title}`}
           </button>
         </div>
       )}

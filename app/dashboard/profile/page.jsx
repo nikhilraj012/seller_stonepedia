@@ -4,16 +4,18 @@ import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import UnitForm from "./UnitForm";
 import CompanyProfileForm from "./CompanyProfileForm";
 import PersonalInfoForm from "./PersonalInfoForm";
+import { useUi } from "@/app/components/context/UiContext";
 
 const Page = () => {
+  const { isSubmitting, setIsSubmitting } = useUi();
+
   const [companyExists, setCompanyExists] = useState(false);
   const [seller, setSeller] = useState(null);
-  const [emailVerified, setEmailVerified] = useState(false)
-  const [editMode, setEditMode] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
   const [company, setCompany] = useState(null);
   const [companyEdit, setCompanyEdit] = useState(false);
   const [gallery, setGallery] = useState({});
@@ -71,20 +73,27 @@ const Page = () => {
       existsSetter(false);
     }
   };
-
-  const saveSubDoc = async (e, path, data, setExists, setEdit, msg) => {
-    e.preventDefault();
+  const saveSubDoc = async (path, data, setExists, setEdit, msg) => {
     const user = auth.currentUser;
     if (!user) return;
 
-    const ref = doc(db, "SellerDetails", user.uid, ...path);
-    await setDoc(ref, data, { merge: true });
+    setIsSubmitting(true);
+    const toastId = toast.loading("Please wait...");
 
-    setExists(true);
-    setEdit(false);
-    toast.success(msg);
+    try {
+      const ref = doc(db, "SellerDetails", user.uid, ...path);
+      await setDoc(ref, data, { merge: true });
+
+      setExists(true);
+      setEdit(false);
+
+      toast.success(msg, { id: toastId });
+    } catch (err) {
+      toast.error("Something went wrong", { id: toastId });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -170,9 +179,12 @@ const Page = () => {
   //     msg,
   //   );
   // };
-  const handleCompanySave = (e) => {
+  const handleCompanySave = async (e) => {
     e.preventDefault();
-    const msg = companyExists ? "Company Updated" : "Company Created";
+
+    const msg = companyExists
+      ? "Company Updated Successfully"
+      : "Company Created Successfully";
 
     const dataToSave = {
       ...company,
@@ -181,8 +193,7 @@ const Page = () => {
       city: company.city?.label || company.city || "",
     };
 
-    saveSubDoc(
-      e,
+    await saveSubDoc(
       ["CompanyData", "info"],
       dataToSave,
       setCompanyExists,
@@ -211,17 +222,19 @@ const Page = () => {
       return;
     }
 
+    setIsSubmitting(true);
+
+    const toastId = toast.loading(exists ? "Updating..." : "Creating...");
+
     let updatedData = { ...data };
 
     try {
-      // Upload Image
       if (data.imageFile) {
         const [img] = await uploadFiles(data.imageFile, folderName, "image");
         updatedData.imageUrl = img.url;
         delete updatedData.imageFile;
       }
 
-      // Upload Brochure
       if (allowBrochure && data.brochureFile) {
         const [pdf] = await uploadFiles(
           data.brochureFile,
@@ -244,12 +257,14 @@ const Page = () => {
         exists
           ? `${docName} Updated Successfully`
           : `${docName} Created Successfully`,
+        { id: toastId },
       );
     } catch (err) {
-      toast.error("Upload failed");
+      toast.error("Upload failed", { id: toastId });
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
   const processingConfig = useMemo(
     () => ({
       data: processingUnit,
@@ -257,6 +272,8 @@ const Page = () => {
       exists: processingExists,
       edit: processingEdit,
       setEdit: setProcessingEdit,
+      isSubmitting,
+
       onSave: (e) =>
         saveUnitData({
           e,
@@ -270,7 +287,7 @@ const Page = () => {
           exists: processingExists,
         }),
     }),
-    [processingUnit, processingExists, processingEdit],
+    [processingUnit, processingExists, processingEdit, isSubmitting],
   );
 
   const galleryConfig = useMemo(
@@ -280,6 +297,7 @@ const Page = () => {
       exists: galleryExists,
       edit: galleryEdit,
       setEdit: setGalleryEdit,
+    isSubmitting,
       onSave: (e) =>
         saveUnitData({
           e,
@@ -293,7 +311,7 @@ const Page = () => {
           exists: galleryExists,
         }),
     }),
-    [gallery, galleryExists, galleryEdit],
+    [gallery, galleryExists, galleryEdit, isSubmitting],
   );
   const stoneConfig = useMemo(
     () => ({
@@ -302,6 +320,7 @@ const Page = () => {
       exists: stoneExists,
       edit: stoneEdit,
       setEdit: setStoneEdit,
+      isSubmitting,
       onSave: (e) =>
         saveUnitData({
           e,
@@ -315,7 +334,7 @@ const Page = () => {
           exists: stoneExists,
         }),
     }),
-    [stoneProduct, stoneExists, stoneEdit],
+    [stoneProduct, stoneExists, stoneEdit, isSubmitting],
   );
   if (loading)
     return (
@@ -340,8 +359,6 @@ const Page = () => {
         <PersonalInfoForm
           seller={seller}
           setSeller={setSeller}
-          editMode={editMode}
-          setEditMode={setEditMode}
           newEmail={newEmail}
           setNewEmail={setNewEmail}
           emailVerified={emailVerified}
@@ -355,6 +372,7 @@ const Page = () => {
           companyEdit={companyEdit}
           setCompanyEdit={setCompanyEdit}
           onSave={handleCompanySave}
+          isSubmitting={isSubmitting}
         />
 
         <UnitForm
