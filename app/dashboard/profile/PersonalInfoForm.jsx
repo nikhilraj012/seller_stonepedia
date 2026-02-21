@@ -30,10 +30,9 @@ const PersonalInfoForm = ({
   setNewEmail,
   emailVerified,
   setEmailVerified,
-  
 }) => {
-    const { isSubmitting, setIsSubmitting } = useUi();
-  
+  const { isSubmitting, setIsSubmitting } = useUi();
+
   const { updateAppUser } = useAuth();
   const router = useRouter();
   const fullNameRef = useRef(null);
@@ -207,7 +206,7 @@ const PersonalInfoForm = ({
     e.preventDefault();
     const user = auth.currentUser;
     if (!user) return;
-setIsSubmitting(true);
+    setIsSubmitting(true);
 
     const error = await checkDuplicate(seller.phoneNumber, user.uid);
     if (error) {
@@ -218,7 +217,7 @@ setIsSubmitting(true);
 
     if (newEmail !== user.email) {
       toast.error("Please verify new email first!");
-       setIsSubmitting(false);
+      setIsSubmitting(false);
       return;
     }
 
@@ -230,7 +229,7 @@ setIsSubmitting(true);
 
     setEditMode(false);
     toast.success("Profile Updated Successfully");
-     setIsSubmitting(false);
+    setIsSubmitting(false);
   };
 
   return (
@@ -432,14 +431,16 @@ setIsSubmitting(true);
                 setEditMode(false);
                 setEmailChanged(false);
               }}
-              className="px-4 xl:px-6 cursor-pointer border-gray-400 text-xs font-medium md:text-sm     py-2 border rounded-lg"
+              className={`px-4 xl:px-6 text-xs font-medium md:text-sm py-2 border border-gray-400 rounded-lg
+  ${isSubmitting ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
             >
               Cancel
             </button>
             <button
               type="submit"
-                disabled={isSubmitting}
-              className="px-4 xl:px-6 py-2 cursor-pointer  text-xs font-medium md:text-sm  bg-primary text-white rounded-lg disabled:opacity-60 disabled:cursor-not-allowed"
+              disabled={isSubmitting}
+              className={`px-4 xl:px-6 py-2 text-xs font-medium md:text-sm bg-primary text-white rounded-lg
+         ${isSubmitting ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
             >
               {isSubmitting ? "saving" : "Save Changes"}
             </button>

@@ -1,4 +1,3 @@
-
 import Select from "react-select";
 import { selectCommonStyles, selectCommonTheme } from "./styles/select.config";
 import useLocation from "../hooks/useLocation";
@@ -8,7 +7,7 @@ export const LocationSelector = ({
   state,
   city,
   onChange,
-  disabled
+  disabled,
 }) => {
   const { countries, states, cities } = useLocation(country, state);
 

@@ -281,53 +281,31 @@ const Form = () => {
     );
   }
 
-  if (!companyExists && !galleryId && !galleryExists) {
-    return (
-      <div className="flex flex-col justify-center items-center min-h-screen text-center">
-        <p className="text-gray-500 mb-4">
-          Add Company and Gallery details first in Profile page
-        </p>
+  // Only check when creating NEW sell request
+  if (!hasApprovedForm) {
+    if (!companyExists || !galleryExists) {
+      return (
+        <div className="flex flex-col items-center justify-center min-h-screen text-center px-6">
+          <div className="bg-white shadow-xl rounded-2xl p-8 max-w-md w-full">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-3">
+              Complete Your Profile First
+            </h2>
 
-        <button
-          onClick={() => router.push("/dashboard/profile")}
-          className="border border-primary cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"
-        >
-          Go to Profile Page
-        </button>
-      </div>
-    );
-  }
+            <p className="text-gray-600 text-sm mb-6">
+              Before listing products, please complete your Company details and
+              Stone Product setup from your profile.
+            </p>
 
-  if (!companyExists) {
-    return (
-      <div className="flex flex-col justify-center items-center min-h-screen text-center">
-        <p className="text-gray-500 mb-4">Add Company details first</p>
-
-        <button
-          onClick={() => router.push("/dashboard/profile")}
-          className="border border-primary cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"
-        >
-          Add Company Data
-        </button>
-      </div>
-    );
-  }
-
-  if (!galleryId && !galleryExists) {
-    return (
-      <div className="flex flex-col justify-center items-center min-h-screen text-center">
-        <p className="text-gray-500 mb-4">
-          Add Gallery details first in Profile page
-        </p>
-
-        <button
-          onClick={() => router.push("/dashboard/profile")}
-          className="border border-primary cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"
-        >
-          Go to Profile Page
-        </button>
-      </div>
-    );
+            <button
+              onClick={() => router.push("/dashboard/profile")}
+              className="w-full cursor-pointer bg-primary text-white py-3 rounded-xl hover:bg-[#6a1545] transition"
+            >
+              Go to Profile Setup
+            </button>
+          </div>
+        </div>
+      );
+    }
   }
 
   return (

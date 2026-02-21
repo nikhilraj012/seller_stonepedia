@@ -9,7 +9,7 @@ import UnitForm from "./UnitForm";
 import CompanyProfileForm from "./CompanyProfileForm";
 import PersonalInfoForm from "./PersonalInfoForm";
 import { useUi } from "@/app/components/context/UiContext";
-
+import { Country, State, City } from "country-state-city";
 const Page = () => {
   const { isSubmitting, setIsSubmitting } = useUi();
 
@@ -136,10 +136,36 @@ const Page = () => {
             toast.success("Email synced successfully!");
           }
 
-          // Fetch sub-documents
           await fetchSubDoc(
             ["CompanyData", "info"],
-            setCompany,
+            (data) => {
+              const countryObj = data.country
+                ? Country.getAllCountries().find(
+                    (c) =>
+                      c.name === data.country || c.isoCode === data.country,
+                  )
+                : null;
+
+              const stateObj = data.state
+                ? State.getStatesOfCountry(countryObj?.isoCode).find(
+                    (s) => s.name === data.state || s.isoCode === data.state,
+                  )
+                : null;
+
+              const cityObj = data.city
+                ? City.getCitiesOfState(
+                    countryObj?.isoCode,
+                    stateObj?.isoCode,
+                  ).find((c) => c.name === data.city)
+                : null;
+
+              setCompany({
+                ...data,
+                country: countryObj || null,
+                state: stateObj || null,
+                city: cityObj || null,
+              });
+            },
             setCompanyExists,
           );
           await fetchSubDoc(
@@ -282,7 +308,7 @@ const Page = () => {
           setExists: setProcessingExists,
           setEdit: setProcessingEdit,
           folderName: "ProcessingUnit",
-          docName: "ProcessingUnit",
+          docName: "Processing Unit",
           allowBrochure: true,
           exists: processingExists,
         }),
@@ -297,7 +323,7 @@ const Page = () => {
       exists: galleryExists,
       edit: galleryEdit,
       setEdit: setGalleryEdit,
-    isSubmitting,
+      isSubmitting,
       onSave: (e) =>
         saveUnitData({
           e,
@@ -306,7 +332,7 @@ const Page = () => {
           setExists: setGalleryExists,
           setEdit: setGalleryEdit,
           folderName: "GalleryDetails",
-          docName: "GalleryDetails",
+          docName: "Gallery Details",
           allowBrochure: false,
           exists: galleryExists,
         }),
@@ -329,13 +355,14 @@ const Page = () => {
           setExists: setStoneExists,
           setEdit: setStoneEdit,
           folderName: "StoneProduct",
-          docName: "StoneProduct",
+          docName: "Stone Product",
           allowBrochure: false,
           exists: stoneExists,
         }),
     }),
     [stoneProduct, stoneExists, stoneEdit, isSubmitting],
   );
+
   if (loading)
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
@@ -349,11 +376,11 @@ const Page = () => {
     <div className="mt-9 md:mt-10 lg:mt-12 min-h-screen py-6 sm:py-8 px-3 sm:px-6 md:px-10 lg:px-20 xl:px-32">
       <div className="space-y-6 sm:space-y-8">
         <div>
-          {/* <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
-            Settings
-          </h1> */}
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
+            Account Overview
+          </h1>
           <p className="text-sm sm:text-base text-gray-500">
-            Manage your personal information and account settings.
+            Manage your profile and business information
           </p>
         </div>
         <PersonalInfoForm

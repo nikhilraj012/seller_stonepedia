@@ -160,7 +160,8 @@ justify-between sm:items-center"
               type="button"
               disabled={isSubmitting}
               onClick={() => setEdit(false)}
-              className="px-4 xl:px-6 cursor-pointer border-gray-400 text-xs font-medium md:text-sm  py-2 border rounded-lg"
+              className={`px-4 xl:px-6 text-xs font-medium md:text-sm py-2 border border-gray-400 rounded-lg
+  ${isSubmitting ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
             >
               Cancel
             </button>
@@ -175,7 +176,8 @@ justify-between sm:items-center"
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-4 xl:px-6 py-2  cursor-pointer text-xs font-medium md:text-sm bg-primary text-white rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+            className={`px-4 xl:px-6 py-2 text-xs font-medium md:text-sm bg-primary text-white rounded-lg
+         ${isSubmitting ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
           >
             {isSubmitting
               ? exists

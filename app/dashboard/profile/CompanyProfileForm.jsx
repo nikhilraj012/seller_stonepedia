@@ -186,7 +186,8 @@ const CompanyProfileForm = ({
             <button
               disabled={isSubmitting}
               onClick={() => setCompanyEdit(false)}
-              className="px-4 xl:px-6 cursor-pointer border-gray-400 text-xs font-medium md:text-sm  py-2 border rounded-lg"
+              className={`px-4 xl:px-6 text-xs font-medium md:text-sm py-2 border border-gray-400 rounded-lg
+  ${isSubmitting ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
             >
               Cancel
             </button>
@@ -201,7 +202,8 @@ const CompanyProfileForm = ({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-4 xl:px-6 py-2 cursor-pointer text-xs font-medium md:text-sm  bg-primary text-white rounded-lg disabled:opacity-60 disabled:cursor-not-allowed"
+            className={`px-4 xl:px-6 py-2 text-xs font-medium md:text-sm bg-primary text-white rounded-lg
+         ${isSubmitting ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
           >
             {isSubmitting
               ? companyExists
