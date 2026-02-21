@@ -9,7 +9,7 @@ import UnitForm from "./UnitForm";
 import CompanyProfileForm from "./CompanyProfileForm";
 import PersonalInfoForm from "./PersonalInfoForm";
 import { useUi } from "@/app/components/context/UiContext";
-import { Country, State, City } from "country-state-city";
+import useLocation from "@/app/hooks/useLocation";
 const Page = () => {
   const { isSubmitting, setIsSubmitting } = useUi();
 
@@ -30,6 +30,17 @@ const Page = () => {
   const [stoneExists, setStoneExists] = useState(false);
   const [stoneEdit, setStoneEdit] = useState(false);
   const storage = getStorage();
+  const { countries, states, cities } = useLocation(
+    company?.country,
+    company?.state,
+  );
+  const normalize = (str) =>
+    typeof str === "string"
+      ? str
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+      : "";
 
   const uploadFiles = async (files, baseFolder, subFolder) => {
     if (!files) return [];
@@ -139,31 +150,11 @@ const Page = () => {
           await fetchSubDoc(
             ["CompanyData", "info"],
             (data) => {
-              const countryObj = data.country
-                ? Country.getAllCountries().find(
-                    (c) =>
-                      c.name === data.country || c.isoCode === data.country,
-                  )
-                : null;
-
-              const stateObj = data.state
-                ? State.getStatesOfCountry(countryObj?.isoCode).find(
-                    (s) => s.name === data.state || s.isoCode === data.state,
-                  )
-                : null;
-
-              const cityObj = data.city
-                ? City.getCitiesOfState(
-                    countryObj?.isoCode,
-                    stateObj?.isoCode,
-                  ).find((c) => c.name === data.city)
-                : null;
-
               setCompany({
                 ...data,
-                country: countryObj || null,
-                state: stateObj || null,
-                city: cityObj || null,
+                country: data.country,
+                state: data.state,
+                city: data.city,
               });
             },
             setCompanyExists,
@@ -194,17 +185,52 @@ const Page = () => {
     return () => unsub();
   }, []);
 
-  // const handleCompanySave = (e) => {
-  //   const msg = companyExists ? "Company Updated" : "Company Created";
-  //   saveSubDoc(
-  //     e,
-  //     ["CompanyData", "info"],
-  //     company,
-  //     setCompanyExists,
-  //     setCompanyEdit,
-  //     msg,
-  //   );
-  // };
+  useEffect(() => {
+    if (!company) return;
+
+    const companyCountryLabel =
+      typeof company.country === "string"
+        ? company.country
+        : company.country?.label || "";
+
+    const companyStateLabel =
+      typeof company.state === "string"
+        ? company.state
+        : company.state?.label || "";
+
+    const companyCityLabel =
+      typeof company.city === "string"
+        ? company.city
+        : company.city?.label || "";
+
+    const countryObj = countries.find(
+      (c) => normalize(c.label) === normalize(companyCountryLabel),
+    );
+
+    const stateObj = countryObj
+      ? states.find((s) => normalize(s.label) === normalize(companyStateLabel))
+      : null;
+
+    const cityObj =
+      countryObj && stateObj
+        ? cities.find((c) => normalize(c.label) === normalize(companyCityLabel))
+        : null;
+
+    // Only update if anything changed
+    if (
+      countryObj !== company.country ||
+      stateObj !== company.state ||
+      cityObj !== company.city
+    ) {
+      setCompany((prev) => ({
+        ...prev,
+        country: countryObj || prev.country,
+        state: stateObj || prev.state,
+        city: cityObj || prev.city,
+      }));
+    }
+  }, [countries, states, cities]); 
+  
   const handleCompanySave = async (e) => {
     e.preventDefault();
 
