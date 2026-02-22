@@ -860,7 +860,7 @@ const BlockForm = () => {
   //   return <div className="text-center py-20">Loading...</div>;
   // }
 
-  if (checking) {
+  if (checkingCompany) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
         <div className="text-center">
@@ -870,25 +870,25 @@ const BlockForm = () => {
       </div>
     );
   }
-  
+
   if (!companyExists) {
     return (
-     
-       <div className="flex flex-col justify-center items-center min-h-screen text-center">
+
+      <div className="flex flex-col justify-center items-center min-h-screen text-center">
         <p className="text-gray-500 mb-4">
           You need to add company details before adding blocks.
         </p>
-       
+
 
         <button
-         onClick={() => router.push("/dashboard/profile")}
-         
+          onClick={() => router.push("/dashboard/profile")}
+
           className="border border-primary cursor-pointer text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition"
         >
           Add Company Data
         </button>
       </div>
-      
+
     );
   }
 

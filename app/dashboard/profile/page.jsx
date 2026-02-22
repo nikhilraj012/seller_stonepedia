@@ -1,7 +1,7 @@
 "use client";
 import { auth, db } from "@/app/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -10,9 +10,12 @@ import CompanyProfileForm from "./CompanyProfileForm";
 import PersonalInfoForm from "./PersonalInfoForm";
 import { useUi } from "@/app/components/context/UiContext";
 import useLocation from "@/app/hooks/useLocation";
+import { useAuth } from "@/app/components/context/AuthContext";
 const Page = () => {
-  const { isSubmitting, setIsSubmitting } = useUi();
 
+
+  const { isSubmitting, setIsSubmitting } = useUi();
+  const { updateAppUser } = useAuth();
   const [companyExists, setCompanyExists] = useState(false);
   const [seller, setSeller] = useState(null);
   const [emailVerified, setEmailVerified] = useState(false);
@@ -30,6 +33,8 @@ const Page = () => {
   const [stoneExists, setStoneExists] = useState(false);
   const [stoneEdit, setStoneEdit] = useState(false);
   const storage = getStorage();
+  const prevEmailRef = useRef(seller?.email);
+
   const { countries, states, cities } = useLocation(
     company?.country,
     company?.state,
@@ -37,9 +42,9 @@ const Page = () => {
   const normalize = (str) =>
     typeof str === "string"
       ? str
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
       : "";
 
   const uploadFiles = async (files, baseFolder, subFolder) => {
@@ -111,41 +116,46 @@ const Page = () => {
         setLoading(false);
         return;
       }
-
+      console.log(auth.currentUser);
       try {
-        await user.reload();
+        // await user.reload();
         const sellerRef = doc(db, "SellerDetails", user.uid);
         const snap = await getDoc(sellerRef);
 
         if (snap.exists()) {
           const data = snap.data();
           // Check if email was recently verified and needs to be updated in Firestore
-          if (user.emailVerified && !data.emailVerified) {
-            await updateDoc(sellerRef, {
-              email: user.email,
-              emailVerified: true,
-            });
-            toast.success("Email verified successfully!");
-            // Update local state
-            setSeller((prev) => ({
-              ...prev,
-              email: user.email,
-              emailVerified: true,
-            }));
-            setNewEmail(user.email);
-            setEmailVerified(true);
-            setEmailChanged(false);
-          }
-          setSeller({ ...data, emailVerified: user.emailVerified });
-          setNewEmail(user.email);
-          setEmailVerified(user.emailVerified);
-          if (data.email !== user.email) {
-            await updateDoc(sellerRef, {
-              email: user.email,
-              emailVerified: user.emailVerified,
-            });
-            toast.success("Email synced successfully!");
-          }
+          // if (user.emailVerified && !data.emailVerified) {
+          //   await updateDoc(sellerRef, {
+          //     email: user.email,
+          //     emailVerified: true,
+          //   });
+          //   toast.success("Email verified successfully!");
+          //   // Update local state
+          //   setSeller((prev) => ({
+          //     ...prev,
+          //     email: user.email,
+          //     emailVerified: true,
+          //   }));
+          //   setNewEmail(user.email);
+          //   setEmailVerified(true);
+          //   setEmailChanged(false);
+          // }
+
+
+          setSeller({
+            ...data, email: data.email,
+            emailVerified: data.emailVerified ?? user.emailVerified
+          });
+          setNewEmail(data.email);
+          setEmailVerified(data.emailVerified ?? user.emailVerified);
+          // if (data.email !== user.email) {
+          //   await updateDoc(sellerRef, {
+          //     email: user.email,
+          //     emailVerified: user.emailVerified,
+          //   });
+          //   toast.success("Email synced successfully!");
+          // }
 
           await fetchSubDoc(
             ["CompanyData", "info"],
@@ -229,8 +239,8 @@ const Page = () => {
         city: cityObj || prev.city,
       }));
     }
-  }, [countries, states, cities]); 
-  
+  }, [countries, states, cities]);
+
   const handleCompanySave = async (e) => {
     e.preventDefault();
 
@@ -388,6 +398,60 @@ const Page = () => {
     }),
     [stoneProduct, stoneExists, stoneEdit, isSubmitting],
   );
+  // useEffect(() => {
+  //   if (!seller?.uid) return;
+
+  //   const sellerDocRef = doc(db, "SellerDetails", seller.uid);
+
+  //   const unsub = onSnapshot(sellerDocRef, (snap) => {
+  //     if (!snap.exists()) return;
+
+  //     const data = snap.data();
+
+  //     // Update local state only from Firestore
+  //     setSeller(prev => ({ ...prev, ...data }));
+  //     setNewEmail(data.email);
+  //     setEmailVerified(!!data.emailVerified);
+
+  //     // Toast only when email becomes verified
+  //     if (!prevEmailRef.currentVerified && data.emailVerified) {
+  //       toast.success("Email verified successfully!");
+  //     }
+
+  //     prevEmailRef.currentVerified = data.emailVerified;
+  //   });
+
+  //   return () => unsub();
+  // }, [seller?.uid]);
+
+  // useEffect(() => {
+
+  //   const user = auth.currentUser;
+  //   if (!user?.uid) return;
+  //   console.log("ddyuyd")
+  //   const sellerDocRef = doc(db, "SellerDetails", user.uid);
+  //   const unsub = onSnapshot(sellerDocRef, (snap) => {
+  //     if (!snap.exists()) return;
+
+  //     const data = snap.data();
+  //     setSeller({ ...data, emailVerified: user.emailVerified });
+  //     setNewEmail(user.email);
+  //     setEmailVerified(user.emailVerified);
+
+  //     updateAppUser(prev => ({
+  //       ...prev,
+  //       sellerDetails: { ...prev.sellerDetails, ...data },
+  //     }));
+  //     console.log("ddyuyd")
+  //     console.log(prevEmailRef.current !== data.email && data.emailVerified)
+  //     if (prevEmailRef.current !== data.email && data.emailVerified) {
+  //       toast.success("Email verified successfully!");
+  //     }
+  //     prevEmailRef.current = data.email;
+  //   });
+
+  //   return () => unsub();
+  // }, [auth.currentUser?.uid]);
 
   if (loading)
     return (
